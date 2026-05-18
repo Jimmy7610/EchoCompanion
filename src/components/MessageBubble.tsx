@@ -1,0 +1,59 @@
+// ============================================================
+// MessageBubble.tsx — Visar ett chattmeddelande
+// ============================================================
+
+import type { ChatMessage } from "../features/chat/chatTypes";
+
+interface MessageBubbleProps {
+  message: ChatMessage;
+}
+
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString("sv-SE", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function MessageBubble({ message }: MessageBubbleProps) {
+  const isUser = message.role === "user";
+
+  return (
+    <div className={`message-row ${isUser ? "user" : "ai"}`}>
+      {/* Avatar */}
+      <div className={`message-avatar ${isUser ? "user" : "ai"}`}>
+        {isUser ? "J" : "⬡"}
+      </div>
+
+      {/* Innehåll */}
+      <div className="message-content">
+        <div className={`message-bubble selectable ${isUser ? "user" : "ai"}`}>
+          {message.isStreaming ? (
+            <>
+              {message.content || (
+                <span className="streaming-placeholder-text">
+                  EchoCompanion skriver…
+                </span>
+              )}
+              <span className="typing-indicator" style={{ display: "inline-flex", marginLeft: 4 }}>
+                <span className="typing-dot" />
+                <span className="typing-dot" />
+                <span className="typing-dot" />
+              </span>
+            </>
+          ) : (
+            message.content
+          )}
+        </div>
+        <span className="message-time">
+          {formatTime(message.timestamp)}
+          {message.model && !isUser && (
+            <span style={{ marginLeft: 6, opacity: 0.6 }}>
+              · {message.model}
+            </span>
+          )}
+        </span>
+      </div>
+    </div>
+  );
+}

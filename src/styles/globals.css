@@ -1,0 +1,2487 @@
+/* ============================================================
+   EchoCompanion — Global Stylesheet
+   Dark premium AI-cockpit design
+   ============================================================ */
+
+/* ---- Design Tokens (CSS Variables) ---- */
+:root {
+  /* --- Bakgrundsfärger --- */
+  --bg-app: #08080f;           /* INSTÄLLNING - Appens huvudbakgrund */
+  --bg-sidebar: #09090f;       /* INSTÄLLNING - Sidopanelens bakgrund */
+  --bg-main: #0b0b14;          /* INSTÄLLNING - Chattområdets bakgrund */
+  --bg-right: #09090f;         /* INSTÄLLNING - Höger panels bakgrund */
+  --bg-card: #111120;          /* INSTÄLLNING - Kortbakgrund */
+  --bg-card-hover: #181830;    /* INSTÄLLNING - Kortbakgrund vid hover */
+  --bg-input: #0d0d1c;         /* INSTÄLLNING - Inmatningsfältets bakgrund */
+  --bg-overlay: rgba(8,8,15,0.85);
+
+  /* --- Kantlinjer --- */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-medium: rgba(255, 255, 255, 0.09);
+  --border-accent: rgba(124, 58, 237, 0.35);
+  --border-active: rgba(139, 92, 246, 0.6);
+
+  /* --- Accentfärger (lila/indigo) --- */
+  --accent:        #7c3aed;    /* INSTÄLLNING - Huvudaccentfärg */
+  --accent-bright: #8b5cf6;   /* INSTÄLLNING - Ljusare accent */
+  --accent-dim:    rgba(124, 58, 237, 0.12);
+  --accent-glow:   0 0 24px rgba(124, 58, 237, 0.25);
+  --accent-text:   #a78bfa;
+
+  /* --- Textfärger --- */
+  --text-primary:   #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted:     #4a5568;
+  --text-accent:    #a78bfa;
+  --text-logo:      #c4b5fd;
+
+  /* --- Statusfärger --- */
+  --status-online:  #10b981;
+  --status-offline: #ef4444;
+  --status-warning: #f59e0b;
+  --status-unknown: #4a5568;
+
+  /* --- Layout-mått --- */
+  --sidebar-width:       220px;  /* INSTÄLLNING - Sidopanelens bredd */
+  --right-panel-width:   272px;  /* INSTÄLLNING - Höger panels bredd */
+  --status-bar-height:   30px;   /* INSTÄLLNING - Statusradens höjd */
+  --input-area-height:   72px;   /* INSTÄLLNING - Inmatningsområdets höjd */
+
+  /* --- Rundade hörn --- */
+  --radius:    10px;  /* INSTÄLLNING - Standardradie för kort */
+  --radius-sm: 6px;   /* INSTÄLLNING - Liten radie */
+  --radius-lg: 14px;  /* INSTÄLLNING - Stor radie */
+  --radius-xl: 20px;  /* INSTÄLLNING - Extra stor radie */
+
+  /* --- Typografi --- */
+  --font-ui:   'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+
+  /* --- Animationer --- */
+  --ease: 150ms ease;
+  --ease-slow: 300ms ease;
+}
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-size: 13.5px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Välj ingen text av misstag i appen (desktop-känsla) */
+body { user-select: none; }
+/* Men tillåt val i chattmeddelanden och input */
+.selectable { user-select: text; }
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input, textarea {
+  font-family: var(--font-ui);
+  outline: none;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.25);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.45);
+}
+
+/* ============================================================
+   APP LAYOUT
+   ============================================================ */
+
+.app-container {
+  display: grid;
+  grid-template-areas:
+    "sidebar main right"
+    "sidebar statusbar right";
+  grid-template-columns: var(--sidebar-width) 1fr var(--right-panel-width);
+  grid-template-rows: 1fr var(--status-bar-height);
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-app);
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-logo-icon {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: var(--accent-glow);
+  flex-shrink: 0;
+}
+
+.sidebar-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-logo);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.sidebar-logo-tagline {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+/* Kompakt nav-variant (Bash 3) — ger utrymme åt chatthistoriken */
+.sidebar-nav.sidebar-nav-compact {
+  flex: 0 0 auto;  /* väx inte — innehållet bestämmer höjden */
+  overflow-y: visible;
+  padding-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--ease);
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+.nav-item.active {
+  background: var(--accent-dim);
+  color: var(--accent-text);
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.nav-item.active .nav-icon {
+  color: var(--accent-bright);
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.nav-item.active .nav-icon {
+  opacity: 1;
+}
+
+.nav-label {
+  flex: 1;
+}
+
+.nav-badge {
+  font-size: 9px;
+  background: var(--accent-dim);
+  color: var(--accent-text);
+  border: 1px solid var(--border-accent);
+  padding: 1px 5px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 12px 10px 4px;
+}
+
+.sidebar-footer {
+  padding: 10px 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
+   MAIN AREA (grid-area: main + statusbar shares right side)
+   ============================================================ */
+
+.main-area {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ---- Main Header ---- */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 48px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.main-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.main-header-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   CHAT AREA
+   ============================================================ */
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- Welcome State ---- */
+.chat-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 0;
+}
+
+.welcome-glow-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.05) 60%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.welcome-glow-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(124,58,237,0.3);
+  animation: pulse-ring 3s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+.welcome-icon-inner {
+  font-size: 28px;
+}
+
+.welcome-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.welcome-tagline {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 320px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.welcome-status-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-card);
+}
+
+.status-pill.online {
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--status-online);
+  background: rgba(16, 185, 129, 0.07);
+}
+
+.status-pill.offline {
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--status-offline);
+  background: rgba(239, 68, 68, 0.07);
+}
+
+.status-pill.neutral {
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.status-dot.online { background: var(--status-online); }
+.status-dot.offline { background: var(--status-offline); }
+.status-dot.unknown { background: var(--status-unknown); }
+.status-dot.pulse {
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.welcome-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 260px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ---- Chat Input ---- */
+.chat-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-sidebar);
+  flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius);
+  padding: 8px 10px 8px 14px;
+  transition: border-color var(--ease);
+}
+
+.chat-input-wrapper:focus-within {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+
+.chat-input-field {
+  flex: 1;
+  resize: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13.5px;
+  line-height: 1.5;
+  max-height: 120px;
+  min-height: 22px;
+  overflow-y: auto;
+  padding: 2px 0;
+  user-select: text;
+}
+
+.chat-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.chat-send-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--ease);
+  align-self: flex-end;
+}
+
+.chat-send-btn:hover {
+  background: var(--accent-bright);
+  box-shadow: var(--accent-glow);
+  transform: scale(1.05);
+}
+
+.chat-send-btn:disabled {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chat-input-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding: 0 4px;
+}
+
+.chat-input-hint {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   MESSAGE BUBBLES
+   ============================================================ */
+
+.message-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.message-row.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.message-avatar.ai {
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  box-shadow: 0 0 10px rgba(124,58,237,0.25);
+}
+
+.message-avatar.user {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+}
+
+.message-content {
+  max-width: 72%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.message-bubble {
+  padding: 9px 13px;
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  line-height: 1.65;
+  user-select: text;
+}
+
+.message-bubble.ai {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px var(--radius) var(--radius) var(--radius);
+  color: var(--text-primary);
+}
+
+.message-bubble.user {
+  background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(79,70,229,0.2));
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius) 4px var(--radius) var(--radius);
+  color: var(--text-primary);
+}
+
+.message-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.message-row.user .message-time {
+  text-align: right;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 2px;
+}
+
+.typing-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
+
+.right-panel {
+  grid-area: right;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-right);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.right-panel-header {
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.right-panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.echo-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.echo-brand-icon {
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 0 12px rgba(124,58,237,0.3);
+}
+
+.echo-brand-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-logo);
+}
+
+.echo-brand-version {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: auto;
+  font-family: var(--font-mono);
+}
+
+.right-panel-section {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.right-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 5px;
+  transition: all var(--ease);
+}
+
+.status-card:last-child {
+  margin-bottom: 0;
+}
+
+.status-card-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 52px;
+}
+
+.status-card-value {
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-card-value.online {
+  color: var(--status-online);
+}
+
+.status-card-value.offline {
+  color: var(--status-offline);
+}
+
+.status-card-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--ease);
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: var(--font-ui);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-bright);
+  box-shadow: var(--accent-glow);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border-color: var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+}
+
+.btn-ghost {
+  color: var(--text-secondary);
+}
+.btn-ghost:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+/* ---- Quick actions ---- */
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+/* ============================================================
+   STATUS BAR
+   ============================================================ */
+
+.status-bar {
+  grid-area: statusbar;
+  grid-column: 1 / -1;   /* span alla kolumner */
+  display: flex;
+  align-items: center;
+  height: var(--status-bar-height);
+  background: var(--bg-sidebar);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0 14px;
+  gap: 0;
+  overflow: hidden;
+}
+
+.status-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  padding: 0 10px;
+  height: 100%;
+  border-right: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.status-bar-item:first-child {
+  padding-left: 0;
+}
+
+.status-bar-item:last-child {
+  border-right: none;
+  margin-left: auto;
+}
+
+.status-bar-item .sb-value {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.status-bar-item .sb-label {
+  color: var(--text-muted);
+}
+
+.status-bar-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SECTION VIEWS (Projekt, Prompts, etc.)
+   ============================================================ */
+
+.section-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.section-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.placeholder-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 10px;
+  color: var(--text-muted);
+  padding: 40px;
+}
+
+.placeholder-view-icon {
+  font-size: 36px;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+.placeholder-view-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.placeholder-view-text {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+.placeholder-view-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--border-accent);
+  color: var(--accent-text);
+  background: var(--accent-dim);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   MODELLGUIDE
+   ============================================================ */
+
+.model-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+.model-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 14px;
+  transition: all var(--ease);
+  cursor: default;
+}
+
+.model-card:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.model-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.model-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.model-perf-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.model-perf-badge.snabb {
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.3);
+  color: #34d399;
+}
+
+.model-perf-badge.medel {
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.3);
+  color: #fbbf24;
+}
+
+.model-perf-badge.tung {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+}
+
+.model-card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.model-card-best {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.model-card-best strong {
+  color: var(--text-secondary);
+}
+
+.model-card-tip {
+  font-size: 11px;
+  color: var(--accent-text);
+  background: var(--accent-dim);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  line-height: 1.5;
+}
+
+.model-card-tip::before {
+  content: "💡 ";
+}
+
+/* ============================================================
+   INSTÄLLNINGAR / SETTINGS
+   ============================================================ */
+
+.settings-view {
+  padding: 20px;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.settings-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-row-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.settings-row-value {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.update-info-text {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+/* ============================================================
+   UTILITY / HELPERS
+   ============================================================ */
+
+.text-accent { color: var(--accent-text); }
+.text-muted  { color: var(--text-muted); }
+.text-success { color: var(--status-online); }
+.text-error { color: var(--status-offline); }
+.text-mono { font-family: var(--font-mono); }
+
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
+}
+
+/* Toast / snabb feedback */
+.toast-container {
+  position: fixed;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 12.5px;
+  font-weight: 500;
+  border: 1px solid;
+  animation: toast-in 200ms ease, toast-out 300ms ease 2.5s forwards;
+  backdrop-filter: blur(8px);
+}
+
+.toast.info {
+  background: rgba(17,17,32,0.95);
+  border-color: var(--border-accent);
+  color: var(--accent-text);
+}
+
+.toast.success {
+  background: rgba(16,185,129,0.15);
+  border-color: rgba(16,185,129,0.4);
+  color: #34d399;
+}
+
+.toast.error {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.4);
+  color: #f87171;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ============================================================
+   MODELLVÄLJARE (Bash 2)
+   ============================================================ */
+
+.model-select-wrapper {
+  position: relative;
+}
+
+.model-select {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 7px 28px 7px 10px;
+  cursor: pointer;
+  /* Döljer systemets standardpil — vi ritar vår egen */
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.model-select:hover {
+  border-color: var(--border-accent);
+}
+
+.model-select:focus {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+  outline: none;
+}
+
+.model-select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.model-select option {
+  background: #1a1a2e;
+  color: var(--text-primary);
+}
+
+/* Anpassad pil för dropdown */
+.model-select-chevron {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Modellinformation under dropdown */
+.model-select-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  padding: 0 2px;
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+/* Hint när inga modeller finns / ej ansluten */
+.model-no-models-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 9px 11px;
+  line-height: 1.6;
+}
+
+/* Felruta i höger panel */
+.ollama-error-box {
+  margin-top: 6px;
+  background: rgba(239, 68, 68, 0.07);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--status-offline);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   HJÄLPRUTA / HELP BOX (Bash 2)
+   ============================================================ */
+
+/* Inställningar-kortets hjälpvariant */
+.help-box {
+  background: rgba(124, 58, 237, 0.06);
+  border-color: var(--border-accent) !important;
+}
+
+/* Kod-block i hjälpruta (block-display) */
+.help-block-code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  color: var(--accent-text);
+  margin: 5px 0;
+  user-select: text;
+}
+
+/* Inline-kodsnutt (t.ex. i model-no-models-hint) */
+.help-inline-code {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-medium);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--accent-text);
+  margin: 4px 0;
+}
+
+/* ============================================================
+   MODELLGUIDE — SEKTIONSRUBRIKER (Bash 2)
+   ============================================================ */
+
+.guide-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.guide-section-count {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Tom-state i modellguide */
+.guide-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* Installerad modell-kort — extra detalj-rad */
+.installed-model-card {
+  border-color: rgba(124, 58, 237, 0.15);
+}
+
+.installed-model-card:hover {
+  border-color: var(--border-accent);
+}
+
+.model-card-meta {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-bottom: 8px;
+}
+
+/* Okänd prestanda-badge */
+.model-perf-badge.okand {
+  background: rgba(100, 116, 139, 0.12);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   CHATTHISTORIK I SIDOPANEL (Bash 3)
+   ============================================================ */
+
+/* Historik-sektionen växer och scrollar */
+.sidebar-history {
+  flex: 1;
+  min-height: 0;          /* krävs för att overflow ska fungera i flexbox */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 2px;
+}
+
+/* Header-rad: "SAMTAL" + "+ Ny chat"-knapp */
+.sidebar-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 4px;
+  flex-shrink: 0;
+}
+
+/* "+ Ny chat"-knapp i sidopanelen */
+.new-chat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-dim);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all var(--ease);
+  font-family: var(--font-ui);
+  /* INSTÄLLNING - Ändra padding och font-size för knappens storlek */
+}
+
+.new-chat-btn:hover {
+  background: rgba(124, 58, 237, 0.22);
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+
+/* Scrollbar lista */
+.chat-history-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Tomt läge */
+.chat-history-empty {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Enskild chattpost */
+.chat-history-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--ease), border-color var(--ease);
+  border: 1px solid transparent;
+  /* INSTÄLLNING - Justera padding för större/mindre chat-items */
+  min-height: 44px;
+  position: relative;
+}
+
+.chat-history-item:hover {
+  background: var(--bg-card);
+  border-color: var(--border-subtle);
+}
+
+.chat-history-item.active {
+  background: var(--accent-dim);
+  border-color: var(--border-accent);
+}
+
+/* Text-innehåll i chat-item */
+.chat-history-item-body {
+  flex: 1;
+  min-width: 0;           /* krävs för text-overflow i flexbox */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-history-item-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  /* INSTÄLLNING - Ändra font-size för titeltexten */
+}
+
+.chat-history-item.active .chat-history-item-title {
+  color: var(--accent-text);
+}
+
+.chat-history-item-date {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.2;
+  /* INSTÄLLNING - Ändra font-size för datumtexten */
+}
+
+/* Åtgärdsknappar (visas vid hover) */
+.chat-history-item-actions {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.chat-history-item:hover .chat-history-item-actions {
+  display: flex;
+}
+
+.chat-history-action-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--ease);
+  font-family: var(--font-ui);
+  /* INSTÄLLNING - Justera storlek på åtgärdsknapparna */
+}
+
+.chat-history-action-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  color: var(--text-secondary);
+}
+
+.chat-history-action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--status-offline);
+}
+
+/* ============================================================
+   PROJEKTMINNE (Bash 5)
+   ============================================================ */
+
+/* Grid för projektkorten */
+.project-memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 4px 20px 16px;
+  /* INSTÄLLNING - Justera minmax för kortbredd */
+}
+
+/* Projektkort (knappliknande) */
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); /* INSTÄLLNING - project-card-radius */
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease), box-shadow var(--ease);
+  width: 100%;
+  font-family: var(--font-ui);
+}
+
+.project-card:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+}
+
+.project-card.active {
+  border-color: var(--border-active);
+  background: rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
+}
+
+/* Kort-header: ikon + namn + status */
+.project-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.project-card-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.project-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  /* INSTÄLLNING - Kortets namnstorlek */
+}
+
+.project-card.active .project-card-name {
+  color: var(--accent-text);
+}
+
+.project-card-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.project-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.project-active-tag {
+  color: var(--status-online);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  margin-left: auto;
+}
+
+/* Statusbadge på projektkorten */
+.project-status-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  /* INSTÄLLNING - Statusbadge-storlek */
+}
+
+.project-status-badge.status-active {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--status-online);
+}
+
+.project-status-badge.status-planned {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--status-warning);
+}
+
+.project-status-badge.status-other {
+  background: rgba(100, 116, 139, 0.1);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  color: var(--text-muted);
+}
+
+/* Detaljblock i projektvyn */
+.project-detail-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.project-detail-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+/* Regelslista och inbyggda noter */
+.project-rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.project-rules-list li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+}
+
+.project-rules-list li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--accent-text);
+}
+
+/* Egna anteckningar-lista */
+.project-notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+}
+
+.project-note-text {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.project-note-delete {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--ease);
+  font-family: var(--font-ui);
+  padding: 0;
+}
+
+.project-note-delete:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--status-offline);
+}
+
+/* Anteckningseditor */
+.project-note-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.project-note-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  resize: none;
+  transition: border-color var(--ease);
+  /* INSTÄLLNING - Anteckningsfältets storlek och utseende */
+}
+
+.project-note-textarea:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.project-note-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Föreslagna prompts */
+.project-suggested-prompts {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.suggested-prompt-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease), color var(--ease);
+  /* INSTÄLLNING - Föreslagna prompt-knappars utseende */
+}
+
+.suggested-prompt-btn:hover {
+  border-color: var(--border-accent);
+  background: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+.suggested-prompt-btn.copied {
+  border-color: var(--status-online);
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--status-online);
+}
+
+/* ============================================================
+   Promptbibliotek (Bash 6)
+   ============================================================ */
+
+/* Sökfält */
+.prompt-search-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  transition: border-color var(--ease);
+  /* INSTÄLLNING - Sökfältets utseende */
+}
+
+.prompt-search-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.prompt-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Kategoriflikar */
+.prompt-category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 20px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prompt-category-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-family: var(--font-ui);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--ease);
+  white-space: nowrap;
+}
+
+.prompt-category-chip:hover {
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+.prompt-category-chip.active {
+  background: var(--accent-dim);
+  border-color: var(--border-accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+/* Skapa/redigera-formulär */
+.prompt-form-card {
+  margin: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prompt-form-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-text);
+  margin-bottom: 2px;
+}
+
+.prompt-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prompt-form-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.prompt-form-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  font-size: 12.5px;
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  transition: border-color var(--ease);
+}
+
+.prompt-form-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.prompt-form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.prompt-form-select-wrapper {
+  position: relative;
+}
+
+.prompt-form-select {
+  width: 100%;
+  appearance: none;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 7px 28px 7px 10px;
+  font-size: 12.5px;
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color var(--ease);
+}
+
+.prompt-form-select:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.prompt-form-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+  transition: border-color var(--ease);
+  /* INSTÄLLNING - Mallinnehållets textarea */
+}
+
+.prompt-form-textarea:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.prompt-form-textarea::placeholder {
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+}
+
+.prompt-form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+/* Mallkort-lista */
+.prompt-template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px 20px 0;
+}
+
+.prompt-template-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  transition: border-color var(--ease);
+}
+
+.prompt-template-card:hover {
+  border-color: var(--border-medium);
+}
+
+.prompt-template-card.expanded {
+  border-color: var(--border-accent);
+}
+
+/* Header-rad i mallkortet (klickbar) */
+.prompt-template-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+.prompt-template-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.prompt-template-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.prompt-category-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-dim);
+  border: 1px solid var(--border-accent);
+  border-radius: 10px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+.prompt-custom-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--status-online);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 10px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+.prompt-template-expand {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.prompt-template-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+
+/* Tagg-chips */
+.prompt-template-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.prompt-tag {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+
+/* Expanderat mallinnehåll */
+.prompt-template-content {
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 11.5px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0 0 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  /* INSTÄLLNING - Max höjd för expanderat mallinnehåll */
+}
+
+/* Knappraden under varje mallkort */
+.prompt-template-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* Danger-knapp (ta bort) */
+.btn.btn-danger {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: var(--status-offline);
+}
+
+.btn.btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--status-offline);
+}
+
+/* ============================================================
+   Backup och export (Bash 7)
+   ============================================================ */
+
+/* Rutnät för exportknappar */
+.backup-export-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 16px;
+  /* INSTÄLLNING - Antal kolumner i exportknappsgallret */
+}
+
+.backup-export-btn {
+  justify-content: flex-start;
+  font-size: 11.5px;
+}
+
+/* Importsektion */
+.backup-import-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  /* INSTÄLLNING - Importkortets bakgrund och kant */
+}
+
+.backup-import-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+/* Fil-väljarknapp */
+.backup-file-selector {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  color: var(--text-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--ease);
+  /* INSTÄLLNING - Fil-väljarknappens utseende */
+}
+
+.backup-file-selector:hover {
+  border-color: var(--border-accent);
+  color: var(--text-secondary);
+}
+
+.backup-file-selector.has-file {
+  border-style: solid;
+  border-color: var(--border-accent);
+  color: var(--accent-text);
+  background: var(--accent-dim);
+}
+
+/* Importläge-knappar */
+.backup-mode-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.backup-mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: all var(--ease);
+}
+
+.backup-mode-option:hover {
+  background: var(--bg-card);
+}
+
+.backup-mode-option.active {
+  background: var(--accent-dim);
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+}
+
+.backup-mode-option input[type="radio"] {
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--accent-text);
+}
+
+/* Varningsruta */
+.backup-warning-box {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: rgb(202, 155, 8);
+  line-height: 1.5;
+  /* INSTÄLLNING - Varningsrutans färg och bakgrund */
+}
+
+/* Statusmeddelanden */
+.backup-status {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.backup-status-success {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--status-online);
+}
+
+.backup-status-error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--status-offline);
+}
+
+.backup-status-info {
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid var(--border-accent);
+  color: var(--accent-text);
+}
+
+/* ============================================================
+   Streaming (Bash 8)
+   ============================================================ */
+
+/* Stoppknapp — ersätter skicka-knappen under generering */
+.chat-stop-btn {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: var(--status-offline) !important;
+  font-size: 13px;
+  /* INSTÄLLNING - Stoppknappens färg och stil */
+}
+
+.chat-stop-btn:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: var(--status-offline) !important;
+}
+
+/* Platshållartext i tom streaming-bubbla */
+.streaming-placeholder-text {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.95em;
+  /* INSTÄLLNING - Stil på "EchoCompanion skriver…"-texten */
+}
+
+/* Streaming-toggle i inställningar */
+.streaming-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.streaming-toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.streaming-toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  transition: background var(--ease), border-color var(--ease);
+  /* INSTÄLLNING - Toggle-knappens bredd och höjd */
+}
+
+.streaming-toggle-input:checked + .streaming-toggle-track {
+  background: var(--accent-dim);
+  border-color: var(--border-accent);
+}
+
+.streaming-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform var(--ease), background var(--ease);
+  /* INSTÄLLNING - Toggle-tummarens storlek */
+}
+
+.streaming-toggle-input:checked + .streaming-toggle-track .streaming-toggle-thumb {
+  transform: translateX(16px);
+  background: var(--accent-text);
+}
+
+.streaming-toggle-text {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 20px;
+}
+
+/* ============================================================
+   Modellbeteende-inställningar (Bash 9)
+   ============================================================ */
+
+/* Slider-rad — label + värde + slider + ledtexter */
+.settings-control-row {
+  margin-bottom: 16px;
+}
+
+.settings-control-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.settings-control-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+  /* INSTÄLLNING - Färg och stilsättning för det numeriska värdet bredvid slidern */
+}
+
+.settings-slider {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--accent-text);
+  cursor: pointer;
+  border-radius: 2px;
+  /* INSTÄLLNING - Slider-höjd och accent-färg */
+}
+
+.settings-slider:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.settings-slider-hints {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Förklarande hjälptext under en inställningskontroll */
+.settings-control-hint {
+  margin: 5px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  /* INSTÄLLNING - Stil på hjälptexten under varje inställningskontroll */
+}
+
+/* Numeriskt input-fält */
+.settings-number-input {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  transition: border-color var(--ease);
+  /* INSTÄLLNING - Bakgrundsfärg och kantlinje för nummerinput */
+}
+
+.settings-number-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.settings-number-input::-webkit-inner-spin-button,
+.settings-number-input::-webkit-outer-spin-button {
+  opacity: 0.5;
+}
+
+/* Systemprompt-förhandsvisning */
+.system-prompt-preview {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  /* INSTÄLLNING - Kantlinje och rundning för förhandsvisningsblocket */
+}
+
+.system-prompt-preview-toggle {
+  display: block;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background var(--ease), color var(--ease);
+}
+
+.system-prompt-preview-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.system-prompt-preview-toggle::before {
+  content: "▾ ";
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+details[open] .system-prompt-preview-toggle::before {
+  content: "▴ ";
+}
+
+.system-prompt-preview-toggle:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.system-prompt-preview-content {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg-input);
+  border-top: 1px solid var(--border-subtle);
+  max-height: 320px;
+  overflow-y: auto;
+  /* INSTÄLLNING - Maxhöjd och teckensnitt för systemprompt-förhandsvisning */
+}

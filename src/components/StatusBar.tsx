@@ -3,6 +3,7 @@
 // ============================================================
 
 import type { OllamaStatus } from "../features/ollama/ollamaService";
+import { APP_VERSION, APP_BUILD } from "../data/appInfo";
 
 interface StatusBarProps {
   ollamaStatus: OllamaStatus;
@@ -22,13 +23,13 @@ export default function StatusBar({
       {/* Version */}
       <div className="status-bar-item">
         <span className="sb-label">EchoCompanion</span>
-        <span className="sb-value">v0.1.0</span>
+        <span className="sb-value">{APP_VERSION}</span>
       </div>
 
       {/* Build */}
       <div className="status-bar-item">
         <span className="sb-label">Build</span>
-        <span className="sb-value">10</span>
+        <span className="sb-value">{APP_BUILD}</span>
       </div>
 
       {/* Budget */}

@@ -17,6 +17,39 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Utvecklingskommandon
+
+| Kommando | Vad det gör | Kräver Rust |
+|---|---|---|
+| `npm run dev` | Startar Vite dev-server på port 1420 (webbläsarläge) | Nej |
+| `npm run typecheck` | Kör TypeScript-typkontroll utan att bygga | Nej |
+| `npm run build` | Bygger frontend till `dist/` | Nej |
+| `npm run preview` | Förhandsvisar produktionsbygg i webbläsare | Nej |
+| `npm run tauri:dev` | Kör appen som Tauri-skrivbordsapp med live-reload | **Ja** |
+| `npm run tauri:build` | Bygger installerbar Windows-app (.exe/.msi) | **Ja** |
+
+> **Webbläsarläge** fungerar utan Rust. **Desktop-läge** kräver [Rust](https://rustup.rs) installerat.
+
+---
+
+## Funktioner i v0.1.0 Build 11
+
+### ✅ Klart i Build 11
+- **Tauri-konfiguration uppdaterad** — identifier ändrad till `se.jimmyeliasson.echocompanion`; standardfönster 1440×900, minimum 1100×720
+- **Package scripts kompletta** — `typecheck`, `tauri:dev` och `tauri:build` tillagda i `package.json`
+- **`src/data/appInfo.ts`** — central källa för `APP_NAME`, `APP_VERSION`, `APP_BUILD`, `APP_REPOSITORY`, `APP_TAGLINE` med `INSTÄLLNING`-kommentarer
+- **StatusBar och Settings** — hämtar nu version och build-nummer från `appInfo.ts` istället för hårdkodade strängar
+- **Ny sektion i Inställningar: "Desktop-läge"** — visar appinfo, alla kommandon med förklaringar, varning om Rust-krav, packaging-checklista
+- **`docs/desktop-packaging.md`** — dokumenterar icon-krav, Tauri-byggprocess, version-synk-checklista
+- **`docs/roadmap.md`** — kompakt roadmap Build 1–15
+- **Utvecklingskommandon i README** — tydlig tabell med alla kommandon och Rust-krav
+- Build 10 → 11
+
+### ⚠ Begränsningar i Build 11
+- Desktop-läge (Tauri) har inte testats i detta build — Rust är inte installerat på Jimmy's maskin
+- Placeholder-ikoner i `src-tauri/icons/` är inte skapade ännu — `tauri:build` kan misslyckas utan dem
+- Ingen funktionell förändring i AI-chatten, streaming eller inställningar
+
 ## Funktioner i v0.1.0 Build 10
 
 ### ✅ Klart i Build 10

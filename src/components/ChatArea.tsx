@@ -41,6 +41,7 @@ import {
 } from "../features/backup/backupService";
 import { getSavedChats } from "../features/chat/chatStorage";
 import { type AppSettings, DEFAULT_APP_SETTINGS } from "../features/settings/appSettings";
+import { APP_NAME, APP_VERSION, APP_BUILD, APP_REPOSITORY } from "../data/appInfo";
 
 // ---- Ikoner ----
 const SendIcon = () => (
@@ -987,11 +988,11 @@ function InstallningarSection({
             <div className="settings-section-title">ℹ App-information</div>
             <div className="settings-row">
               <span className="settings-row-label">Version</span>
-              <span className="settings-row-value">v0.1.0</span>
+              <span className="settings-row-value">{APP_VERSION}</span>
             </div>
             <div className="settings-row">
               <span className="settings-row-label">Build</span>
-              <span className="settings-row-value">10</span>
+              <span className="settings-row-value">{APP_BUILD}</span>
             </div>
             <div className="settings-row">
               <span className="settings-row-label">Budgetläge</span>
@@ -1012,6 +1013,82 @@ function InstallningarSection({
               <span className="settings-row-value" style={{ fontSize: 11 }}>
                 temp {DEFAULT_APP_SETTINGS.temperature} · topP {DEFAULT_APP_SETTINGS.topP} · svar {DEFAULT_APP_SETTINGS.numPredict} · ctx {DEFAULT_APP_SETTINGS.numCtx}
               </span>
+            </div>
+          </div>
+
+          {/* Desktop-läge (Bash 11) */}
+          <div className="settings-section">
+            <div className="settings-section-title">🖥 Desktop-läge</div>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 14 }}>
+              EchoCompanion kör just nu bra i webbläsaren via Vite. För en riktig Windows-app används Tauri, vilket kräver Rust installerat lokalt.
+            </p>
+
+            <div className="settings-row">
+              <span className="settings-row-label">App</span>
+              <span className="settings-row-value">{APP_NAME}</span>
+            </div>
+            <div className="settings-row">
+              <span className="settings-row-label">Version</span>
+              <span className="settings-row-value">{APP_VERSION}</span>
+            </div>
+            <div className="settings-row">
+              <span className="settings-row-label">Build</span>
+              <span className="settings-row-value">{APP_BUILD}</span>
+            </div>
+            <div className="settings-row">
+              <span className="settings-row-label">Repo</span>
+              <span className="settings-row-value" style={{ fontFamily: "var(--font-mono)", fontSize: 11 }}>
+                {APP_REPOSITORY}
+              </span>
+            </div>
+
+            <div style={{ marginTop: 16, marginBottom: 6 }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)" }}>
+                Kommandon
+              </span>
+            </div>
+            <code className="help-block-code">npm run dev</code>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
+              Webbläsarläge — startar Vite dev-server på port 1420. Kräver inte Rust.
+            </p>
+            <code className="help-block-code">npm run typecheck</code>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
+              Kör TypeScript-typkontroll utan att bygga.
+            </p>
+            <code className="help-block-code">npm run build</code>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
+              Bygger frontend till dist/ (används av Tauri).
+            </p>
+            <code className="help-block-code">npm run tauri:dev</code>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
+              Desktop-läge med live-reload. Kräver Rust installerat.
+            </p>
+            <code className="help-block-code">npm run tauri:build</code>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 14px" }}>
+              Bygger installerbar Windows-app (.exe/.msi). Kräver Rust installerat.
+            </p>
+
+            <div className="backup-warning-box" style={{
+              background: "rgba(124, 58, 237, 0.06)",
+              borderColor: "var(--border-accent)",
+              color: "var(--accent-text)",
+            }}>
+              ℹ Om kommandot tauri:dev inte fungerar behöver Rust installeras från rustup.rs — det är gratis och tar ~5 minuter.
+            </div>
+
+            <div style={{ marginTop: 18 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8 }}>
+                Inför framtida installer
+              </div>
+              <ul style={{ fontSize: 11.5, color: "var(--text-muted)", lineHeight: 2.1, paddingLeft: 18, margin: 0 }}>
+                <li>Rust installerat (rustup.rs)</li>
+                <li>npm run tauri:dev fungerar</li>
+                <li>Appikon vald och placerad i src-tauri/icons/</li>
+                <li>Versionsnummer uppdaterat i appInfo.ts + tauri.conf.json</li>
+                <li>Backup exporterad innan större ändringar</li>
+                <li>GitHub-release skapas senare</li>
+                <li>Auto-update byggs senare</li>
+              </ul>
             </div>
           </div>
 
@@ -1118,7 +1195,7 @@ function InstallningarSection({
             <div className="settings-section-title">🔁 Uppdateringar</div>
             <div className="settings-row">
               <span className="settings-row-label">Nuvarande version</span>
-              <span className="settings-row-value">v0.1.0 Build 10</span>
+              <span className="settings-row-value">{APP_VERSION} Build {APP_BUILD}</span>
             </div>
             <div style={{ marginTop: 12 }}>
               <button

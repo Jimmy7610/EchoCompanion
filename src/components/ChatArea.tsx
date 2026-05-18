@@ -42,6 +42,11 @@ import {
 import { getSavedChats } from "../features/chat/chatStorage";
 import { type AppSettings, DEFAULT_APP_SETTINGS } from "../features/settings/appSettings";
 import { APP_NAME, APP_VERSION, APP_BUILD, APP_REPOSITORY } from "../data/appInfo";
+import {
+  getLocalStorageDiagnostics,
+  formatBytes,
+  type StorageDiagnostics,
+} from "../features/storage/storageDiagnostics";
 
 // ---- Ikoner ----
 const SendIcon = () => (
@@ -507,6 +512,16 @@ function InstallningarSection({
   const [importMode, setImportMode] = useState<"merge" | "replace">("merge");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const [storageDiagnostics, setStorageDiagnostics] = useState<StorageDiagnostics | null>(null);
+
+  function loadDiagnostics() {
+    setStorageDiagnostics(getLocalStorageDiagnostics());
+  }
+
+  // Ladda diagnostik en gång vid mount
+  useEffect(() => {
+    loadDiagnostics();
+  }, []);
 
   function showBackupStatus(type: "success" | "error" | "info", text: string) {
     setBackupStatus({ type, text });
@@ -1101,6 +1116,72 @@ function InstallningarSection({
             <p style={{ fontSize: 11.5, color: "var(--text-muted)", lineHeight: 1.6, marginTop: 6 }}>
               Tips: Minnesfunktionen fungerar bara inom ett och samma samtal. Starta du ett nytt samtal börjar minnet om från noll.
             </p>
+          </div>
+
+          {/* Lokal lagring (Bash 12) */}
+          <div className="settings-section">
+            <div className="settings-section-title">💽 Lokal lagring</div>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 14 }}>
+              EchoCompanion sparar just nu data i webbläsarens localStorage. Det fungerar bra för utveckling. Inför riktig desktop-version kan datan senare flyttas till Tauris app data-katalog.
+            </p>
+
+            <div className="settings-row">
+              <span className="settings-row-label">Backend</span>
+              <span className="settings-row-value" style={{ fontFamily: "var(--font-mono)", fontSize: 11 }}>
+                {storageDiagnostics?.backend ?? "localStorage"}
+              </span>
+            </div>
+            <div className="settings-row">
+              <span className="settings-row-label">Total storlek</span>
+              <span className="settings-row-value">
+                {storageDiagnostics ? formatBytes(storageDiagnostics.totalEstimatedBytes) : "—"}
+              </span>
+            </div>
+
+            <div style={{ marginTop: 14, marginBottom: 8 }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)" }}>
+                Kända lagringsposter
+              </span>
+            </div>
+
+            {storageDiagnostics ? (
+              <div className="storage-diagnostic-list">
+                {storageDiagnostics.entries.map((entry) => (
+                  <div key={entry.key} className="storage-diagnostic-entry">
+                    <div className="storage-diag-header">
+                      <span className="storage-diag-label">{entry.label}</span>
+                      <span className={`storage-diag-badge ${entry.exists ? "exists" : "missing"}`}>
+                        {entry.exists ? "Finns" : "Saknas"}
+                      </span>
+                    </div>
+                    {entry.exists && (
+                      <div className="storage-diag-meta">
+                        <span>{formatBytes(entry.sizeBytes)}</span>
+                        {entry.itemCount !== undefined && (
+                          <span>· {entry.itemCount} poster</span>
+                        )}
+                        <span className="storage-diag-key">{entry.key}</span>
+                      </div>
+                    )}
+                    {entry.warning && (
+                      <div className="storage-diag-warning">⚠ {entry.warning}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p style={{ fontSize: 11.5, color: "var(--text-muted)" }}>Laddar…</p>
+            )}
+
+            <div style={{ marginTop: 12 }}>
+              <button className="btn btn-secondary btn-sm" onClick={loadDiagnostics}>
+                🔄 Uppdatera lagringsstatus
+              </button>
+            </div>
+
+            <div className="backup-warning-box" style={{ marginTop: 12 }}>
+              ⚠ Exportera alltid backup innan större ändringar av lagringen.
+            </div>
           </div>
 
           {/* Backup och export */}

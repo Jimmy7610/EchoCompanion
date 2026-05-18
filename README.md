@@ -32,6 +32,20 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 12
+
+### ✅ Klart i Build 12
+- **`src/features/storage/storageKeys.ts`** — centralt register för alla kända `localStorage`-nycklar med versionssuffix (`.v1`)
+- **`src/features/storage/storageDiagnostics.ts`** — read-only diagnostik: storlek i bytes, antal poster, eventuella varningar per nyckel
+- **`src/features/storage/storageAdapter.ts`** — abstraktionslager förberett för framtida Tauri FS API (alla operationer delegeras till localStorage nu)
+- **Ny sektion i Inställningar: "Lokal lagring"** — visar backend, total storlek, status per nyckel med badge (finns/saknas), byte-storlek, antal poster och nyckelnamn; uppdateringsknapp
+- **`docs/storage-migration-plan.md`** — plan för framtida migrering från localStorage till Tauri FS API
+- Build 11 → 12
+
+### ⚠ Begränsningar i Build 12
+- All lagring sker fortfarande i `localStorage` — Tauri FS API är inte implementerat ännu
+- Lagringsdiagnostiken är read-only; ingen rensning eller migrering sker i detta build
+
 ## Funktioner i v0.1.0 Build 11
 
 ### ✅ Klart i Build 11

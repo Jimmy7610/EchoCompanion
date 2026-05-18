@@ -2485,3 +2485,79 @@ details[open] .system-prompt-preview-toggle::before {
   overflow-y: auto;
   /* INSTÄLLNING - Maxhöjd och teckensnitt för systemprompt-förhandsvisning */
 }
+
+/* ============================================================
+   Lagringsdiagnostik (Bash 12)
+   ============================================================ */
+
+.storage-diagnostic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.storage-diagnostic-entry {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.storage-diag-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.storage-diag-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.storage-diag-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.storage-diag-badge.exists {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.storage-diag-badge.missing {
+  background: rgba(156, 163, 175, 0.12);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.storage-diag-meta {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.storage-diag-key {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.storage-diag-warning {
+  font-size: 11px;
+  color: #f59e0b;
+  margin-top: 2px;
+}

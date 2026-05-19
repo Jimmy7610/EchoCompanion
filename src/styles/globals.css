@@ -1229,6 +1229,84 @@ input, textarea {
   line-height: 1.6;
 }
 
+/* ---- Uppdateringslägen (Build 23) ---- */
+
+/* INSTÄLLNING - Lista med de tre uppdateringslägen */
+.update-modes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.update-mode-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* INSTÄLLNING - Badgefärger för uppdateringslägen */
+.update-mode-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.update-mode-badge.ok {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--status-online);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.update-mode-badge.next {
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--accent-text);
+  border: 1px solid var(--border-accent);
+}
+
+.update-mode-badge.later {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.update-mode-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.update-mode-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.update-mode-status {
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  line-height: 1.5;
+}
+
+.update-mode-status.available {
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid var(--border-accent);
+  color: var(--accent-text);
+}
+
+.update-mode-status.info {
+  background: var(--bg-hover);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
 /* ============================================================
    UTILITY / HELPERS
    ============================================================ */

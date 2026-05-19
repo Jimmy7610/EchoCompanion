@@ -32,6 +32,36 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 23
+
+### ✅ Klart i Build 23
+- **Tauri updater-plugin tillagd** — `@tauri-apps/plugin-updater` v2.10.1 installerat, `tauri-plugin-updater` i Cargo.toml, plugin registrerat i `lib.rs`
+- **`src/features/updater/tauriUpdater.ts`** — TypeScript-helper med `checkForInstallerUpdate()` och `installInstallerUpdate()`; degraderar graciöst i webbläsarläge
+- **Inställningar → Uppdateringslägen** — ny sektion med tre tydliga lägen (Git/nu, GitHub Releases/nästa, Auto/senare) + riktig "Sök och installera uppdatering"-knapp kopplad till plugin-API:n
+- **`src-tauri/capabilities/default.json`** — capabilities-fil skapad med `core:default` + `updater:default`
+- **`tauri.conf.json`** — `plugins.updater` konfigurerat med GitHub Releases endpoint och placeholder pubkey
+- **`docs/tauri-updater-plan.md`** — fullständig svensk plan: skillnad Git/installer, latest.json-schema, signeringsflöde, nästa steg
+- Inga shell-kommandon, inga extra FS-behörigheter, ingen auto-install
+- Build 22.1 → 23
+
+### ⚠ Uppdateraren är inte aktiv ännu
+Knappen fungerar men returnerar ett informativt meddelande tills:
+1. Minisign-nyckelpar genererats: `npm run tauri -- signer generate`
+2. Pubkey lagts in i `tauri.conf.json` (ersätter `PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY`)
+3. `latest.json` skapats och laddats upp till GitHub Releases
+4. Bygget körts med `TAURI_SIGNING_PRIVATE_KEY` satt
+
+Se [`docs/tauri-updater-plan.md`](docs/tauri-updater-plan.md) för fullständig guide.
+
+### 🔧 Lokal verifiering krävs
+Rust-sidan (plugin-registrering, capabilities) behöver verifieras lokalt:
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+npm run tauri:dev
+```
+
+---
+
 ## Funktioner i v0.1.0 Build 22
 
 ### ✅ Klart i Build 22

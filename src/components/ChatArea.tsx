@@ -56,6 +56,11 @@ import {
   formatBytes,
   type StorageDiagnostics,
 } from "../features/storage/storageDiagnostics";
+import {
+  isTauriUpdaterAvailable,
+  checkForInstallerUpdate,
+  installInstallerUpdate,
+} from "../features/updater/tauriUpdater";
 
 // ---- Ikoner ----
 const SendIcon = () => (
@@ -660,6 +665,129 @@ function TtsTestControls({ ttsSettings, onResetTtsSettings }: TtsTestControlsPro
         </button>
       </div>
     </>
+  );
+}
+
+// ============================================================
+// Installer-uppdateringssektion (Build 23) — GitHub Releases
+// ============================================================
+
+function InstallerUpdateSection() {
+  const [checking, setChecking] = React.useState(false);
+  const [installing, setInstalling] = React.useState(false);
+  const [statusMsg, setStatusMsg] = React.useState<string | null>(null);
+  const [updateAvailable, setUpdateAvailable] = React.useState(false);
+  const [updateVersion, setUpdateVersion] = React.useState<string | undefined>(undefined);
+
+  async function handleCheck() {
+    setChecking(true);
+    setStatusMsg(null);
+    setUpdateAvailable(false);
+    try {
+      const result = await checkForInstallerUpdate();
+      setStatusMsg(result.message);
+      setUpdateAvailable(result.available);
+      setUpdateVersion(result.version);
+    } finally {
+      setChecking(false);
+    }
+  }
+
+  async function handleInstall() {
+    setInstalling(true);
+    setStatusMsg(null);
+    try {
+      const result = await installInstallerUpdate();
+      setStatusMsg(result.message);
+      if (result.success) setUpdateAvailable(false);
+    } finally {
+      setInstalling(false);
+    }
+  }
+
+  const inTauri = isTauriUpdaterAvailable();
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-title">🔄 Uppdateringslägen</div>
+
+      {/* Tre uppdateringslägen */}
+      <div className="update-modes-list">
+        <div className="update-mode-row">
+          <span className="update-mode-badge ok">✓ Nu</span>
+          <div>
+            <div className="update-mode-title">A) Utveckling via Git</div>
+            <div className="update-mode-desc">
+              Jimmy kör <code className="help-inline-code">git pull</code> och npm-kommandon manuellt i PowerShell.
+              Kräver Git, Node, Rust. Se sektionen "Uppdatera via Git" nedan.
+            </div>
+          </div>
+        </div>
+        <div className="update-mode-row">
+          <span className="update-mode-badge next">→ Nästa</span>
+          <div>
+            <div className="update-mode-title">B) Installerad app via GitHub Releases</div>
+            <div className="update-mode-desc">
+              Knappen nedan kontrollerar <code className="help-inline-code">latest.json</code> och installerar
+              signerad uppdatering. Kräver pubkey + signerad release. Kräver ej Git/Node/Rust.
+            </div>
+          </div>
+        </div>
+        <div className="update-mode-row">
+          <span className="update-mode-badge later">Senare</span>
+          <div>
+            <div className="update-mode-title">C) Automatisk bakgrundsuppdatering</div>
+            <div className="update-mode-desc">
+              Kan kontrollera vid start. Manuell knapp är säkrare och prioriteras först.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Knapp — kopplad till riktig updater */}
+      <div style={{ marginTop: 14 }}>
+        <button
+          className="btn btn-secondary btn-full"
+          onClick={handleCheck}
+          disabled={checking || installing}
+        >
+          {checking ? "⏳ Kontrollerar…" : "🔍 Sök och installera uppdatering"}
+        </button>
+
+        {updateAvailable && updateVersion && (
+          <button
+            className="btn btn-primary btn-full"
+            style={{ marginTop: 6 }}
+            onClick={handleInstall}
+            disabled={installing}
+          >
+            {installing ? "⏳ Installerar…" : `⬇ Installera ${updateVersion}`}
+          </button>
+        )}
+      </div>
+
+      {statusMsg && (
+        <div
+          className={`update-mode-status ${updateAvailable ? "available" : "info"}`}
+          style={{ marginTop: 8 }}
+        >
+          {statusMsg}
+        </div>
+      )}
+
+      {!inTauri && (
+        <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, lineHeight: 1.5 }}>
+          Körs nu i webbläsarläge. Starta med{" "}
+          <code className="help-inline-code">npm run tauri:dev</code> för desktop-uppdatering.
+        </p>
+      )}
+
+      <div className="git-update-safety-note" style={{ marginTop: 10 }}>
+        🔒 Appen kör inga kommandon automatiskt. Uppdatering kräver explicit knapp-klick och
+        signerad release. Mer info:{" "}
+        <code style={{ fontSize: 10.5 }}>docs/tauri-updater-plan.md</code>
+      </div>
+    </div>
   );
 }
 
@@ -1906,25 +2034,10 @@ function InstallningarSection({
               <span className="settings-row-label">Nuvarande version</span>
               <span className="settings-row-value">{APP_VERSION} Build {APP_BUILD}</span>
             </div>
-            <p className="update-info-text" style={{ marginTop: 8 }}>
-              Under utveckling uppdateras EchoCompanion enklast via Git. Du kan kopiera
-              kommandona nedan och köra dem själv i PowerShell. GitHub Releases kan användas
-              senare för färdiga versioner. Appen kör inga Git-, npm- eller shell-kommandon
-              automatiskt.
-            </p>
-            <div style={{ marginTop: 10 }}>
-              <button
-                className="btn btn-secondary btn-full"
-                onClick={() =>
-                  alert(
-                    "GitHub Releases-kontroll är inte implementerad ännu.\n\nUppdatera via Git — se sektionen nedan."
-                  )
-                }
-              >
-                🔍 Sök på GitHub Releases (planeras i framtida version)
-              </button>
-            </div>
           </div>
+
+          {/* Tre uppdateringslägen + GitHub Releases-knapp (Build 23) */}
+          <InstallerUpdateSection />
 
           {/* Uppdatera via Git (Build 21) */}
           <GitUpdateSection />

@@ -137,7 +137,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 
 ---
 
-## Nuvarande status (Build 23)
+## Nuvarande status (Build 25)
 
 | Steg | Status |
 |------|--------|
@@ -155,16 +155,24 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 Knappen "Sök och installera uppdatering" i appen är kopplad till den riktiga plugin-API:n.
 Den visar ett informativt felmeddelande tills pubkey och latest.json finns på plats.
 
+**Build 25 tillagt:**
+- `.gitignore` — signeringssekret (`*.key`, `*.key.pub`, `*.sig`, `.tauri-signing/`, `release-work/`, `latest.local.json`) exkluderade
+- `docs/latest.example.json` — säker exempelmall med platshållarvärden
+- `docs/release-update-workflow.md` — komplett steg-för-steg-guide på svenska
+- Inställningar → Uppdateringslägen — statuschecklista visar vad som är klart/saknas
+
 ---
 
-## Nästa steg (Build 24)
+## Nästa steg (Build 26 — v0.1.1 signerat test)
 
-1. Generera minisign-nyckelpar: `npm run tauri -- signer generate`
-2. Byt ut `PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY` i `tauri.conf.json`
-3. Bygg med signering: `$env:TAURI_SIGNING_PRIVATE_KEY=... npm run tauri:build`
-4. Skapa `latest.json` med korrekt version, URL och signatur
-5. Ladda upp release-filer till GitHub Releases
-6. Testa uppdateringsflödet: installera v0.1.0, publicera v0.1.1, klicka "Sök uppdatering"
+1. Generera minisign-nyckelpar: `npm run tauri -- signer generate -w ~/.tauri/echocompanion.key`
+2. Byt ut `PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY` i `tauri.conf.json` med riktig pubkey
+3. Bygg med signering: `$env:TAURI_SIGNING_PRIVATE_KEY = (Get-Content ~/.tauri/echocompanion.key -Raw); npm run tauri:build`
+4. Kopiera signaturen från `.sig`-filen, skapa `latest.json` med rätt version, URL och signatur
+5. Skapa GitHub Release `v0.1.1` och ladda upp installer + zip + sig + latest.json
+6. Testa: installera v0.1.0, klicka "Sök uppdatering" — ska hitta och installera v0.1.1
+
+Se fullständig guide: `docs/release-update-workflow.md`
 
 ---
 

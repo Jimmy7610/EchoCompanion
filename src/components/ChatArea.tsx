@@ -762,6 +762,41 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
+      {/* Statuschecklista — visar vad som är på plats och vad som saknas */}
+      <div className="updater-checklist">
+        <div className="updater-checklist-title">Vad som krävs för aktiv uppdaterare</div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-ok">✅</span>
+          <span>Updater-plugin installerat (<code className="help-inline-code">@tauri-apps/plugin-updater</code>)</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-ok">✅</span>
+          <span>Knappkoppling till plugin-API</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-missing">❌</span>
+          <span>Signing key — generera med <code className="help-inline-code">npm run tauri -- signer generate</code></span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-missing">❌</span>
+          <span><code className="help-inline-code">latest.json</code> — skapa och ladda upp till GitHub Releases</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-missing">❌</span>
+          <span>Release-kanal — publicera signerad release på GitHub</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-missing">❌</span>
+          <span>Sluttest — installera gammal version och testa uppdatering</span>
+        </div>
+        <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
+          Knappen är tekniskt kopplad till Tauri updater, men kan inte installera en
+          uppdatering förrän signerad release och{" "}
+          <code className="help-inline-code">latest.json</code> finns på GitHub Releases.
+          Se <code className="help-inline-code">docs/release-update-workflow.md</code>.
+        </p>
+      </div>
+
       {/* Knapp — kopplad till riktig updater */}
       <div style={{ marginTop: 14 }}>
         <button

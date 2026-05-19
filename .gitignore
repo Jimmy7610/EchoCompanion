@@ -26,3 +26,11 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Tauri updater signing secrets — NEVER commit these
+*.key
+*.key.pub
+*.sig
+.tauri-signing/
+release-work/
+latest.local.json

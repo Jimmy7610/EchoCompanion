@@ -1,0 +1,12 @@
+{
+  "_comment": "EXEMPELFIL — ersätt alla REPLACE_WITH-värden med riktiga värden vid release. Lägg ALDRIG upp den här filen som latest.json på GitHub Releases.",
+  "version": "0.1.1",
+  "notes": "Vad som är nytt i version 0.1.1",
+  "pub_date": "2026-01-01T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "REPLACE_WITH_REAL_SIGNATURE_FROM_TAURI_SIGNER",
+      "url": "https://github.com/Jimmy7610/EchoCompanion/releases/download/v0.1.1/EchoCompanion_0.1.1_x64-setup.nsis.zip"
+    }
+  }
+}

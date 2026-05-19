@@ -214,6 +214,27 @@ Vänta ~5–15 min (Rust-kompilering av release-version tar längre tid än dev-
 
 ---
 
+## Build 25 — Signeringsflöde och release-dokumentation
+
+### Vad som gjordes
+
+- `.gitignore` utökad med signeringssekret (`*.key`, `*.key.pub`, `*.sig`, `.tauri-signing/`, `release-work/`, `latest.local.json`)
+- `docs/latest.example.json` skapad — säker exempelmall, inga riktiga värden
+- `docs/release-update-workflow.md` skapad — steg-för-steg på svenska: nyckelgenerering, signering, latest.json, GitHub Release, testflöde, rollback
+- Statuschecklista i Inställningar → Uppdateringslägen — visar tydligt vad som är på plats och vad som saknas
+
+### Vad som återstår (Build 26)
+
+Privat nyckel måste genereras lokalt av Jimmy och **aldrig** läggas i repot:
+
+```powershell
+npm run tauri -- signer generate -w $env:USERPROFILE\.tauri\echocompanion.key
+```
+
+Se [`docs/release-update-workflow.md`](release-update-workflow.md) för komplett guide.
+
+---
+
 ## Build 18 Desktop Test Status
 
 | Check | Status |

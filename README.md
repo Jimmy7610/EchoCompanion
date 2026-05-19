@@ -32,6 +32,20 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 25
+
+### ✅ Klart i Build 25
+- **Signeringssekret skyddade** — .gitignore utökad med *.key, *.key.pub, *.sig, .tauri-signing/, elease-work/, latest.local.json
+- **docs/latest.example.json** — säker exempelmall för latest.json-formatet; inga riktiga värden, tydlig kommentar om att inte lägga upp som riktig fil
+- **docs/release-update-workflow.md** — komplett steg-för-steg-guide på svenska: nyckelgenerering, signering, latest.json, GitHub Release, testflöde, vanliga fel, rollback
+- **Statuschecklista i Inställningar** — Uppdateringslägen visar nu sex kontrollpunkter (✅ plugin, ✅ knappkoppling, ❌ signing key, ❌ latest.json, ❌ release-kanal, ❌ sluttest) med förklarande text om vad som saknas
+- Inga nya behörigheter, ingen shell-exekvering, inga API-beroenden
+- Build 24 → 25
+
+### ⚠ Uppdateraren är fortfarande inte aktiv
+Nästa steg är att Jimmy kör signeringsflödet lokalt (se docs/release-update-workflow.md) och publicerar en GitHub Release v0.1.1.
+
+---
 ## Funktioner i v0.1.0 Build 24
 
 ### ✅ Klart i Build 24

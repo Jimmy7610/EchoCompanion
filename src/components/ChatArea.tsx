@@ -1906,23 +1906,24 @@ function InstallningarSection({
               <span className="settings-row-label">Nuvarande version</span>
               <span className="settings-row-value">{APP_VERSION} Build {APP_BUILD}</span>
             </div>
-            <div style={{ marginTop: 12 }}>
+            <p className="update-info-text" style={{ marginTop: 8 }}>
+              Under utveckling uppdateras EchoCompanion enklast via Git. Du kan kopiera
+              kommandona nedan och köra dem själv i PowerShell. GitHub Releases kan användas
+              senare för färdiga versioner. Appen kör inga Git-, npm- eller shell-kommandon
+              automatiskt.
+            </p>
+            <div style={{ marginTop: 10 }}>
               <button
                 className="btn btn-secondary btn-full"
                 onClick={() =>
                   alert(
-                    "Uppdateringskontroll via GitHub Releases planeras i en framtida version."
+                    "GitHub Releases-kontroll är inte implementerad ännu.\n\nUppdatera via Git — se sektionen nedan."
                   )
                 }
               >
-                🔍 Sök efter uppdatering (GitHub Releases — planeras)
+                🔍 Sök på GitHub Releases (planeras i framtida version)
               </button>
             </div>
-            <p className="update-info-text">
-              Automatisk uppdatering via GitHub Releases planeras i en framtida
-              version. Inga uppdateringar laddas ned eller installeras
-              automatiskt.
-            </p>
           </div>
 
           {/* Uppdatera via Git (Build 21) */}

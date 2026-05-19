@@ -32,6 +32,25 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 15
+
+### ✅ Klart i Build 15
+- **Companion-avatar** — visuell status-orb i höger panel med CSS-animationer, inga externa beroenden, 0 kr
+- **Stämningslägen** — idle, redo (grön puls), tänker (lila puls + ringar), pratar (cyan puls + ringar + ljudvåg), offline (nedtonad)
+- **Realtidsreaktion** — avataren reagerar direkt på Ollama-status, pågående generering och TTS-uppläsning
+- **Profil/projekt-chips** — visar aktiv profil och projekt under orben
+- **Mini-status i chat-header** — "EchoCompanion tänker…" / "EchoCompanion pratar…" ersätter modell-info under aktiva tillstånd
+- **isSpeaking-spårning** — korrekt `onend`/`onerror`-callback i TTS-tjänsten styr speaking-tillståndet
+- **Settings-infoblocket** — förklarar att avataren är CSS-baserad, inte en 3D-avatar
+- **`src/features/companion/companionTypes.ts`** — `CompanionMood`, `CompanionState`, `getCompanionState()`
+- **`src/components/CompanionAvatar.tsx`** — avatar-komponent med orb, ringar och ljudvåg
+- Build 14 → 15
+
+### ⚠ Begränsningar i Build 15
+- Ingen 3D-avatar — visuell CSS-animation endast
+- MuseTalk, VSeeFace och Piper är inte integrerade
+- Avatar kopplas inte till röststyrkan ännu
+
 ## Funktioner i v0.1.0 Build 14
 
 ### ✅ Klart i Build 14

@@ -138,7 +138,7 @@ function findBestVoice(selectedVoiceName: string | null): SpeechSynthesisVoice |
   return getBestDefaultVoice(voices);
 }
 
-export function speakText(text: string, settings: TtsSettings): void {
+export function speakText(text: string, settings: TtsSettings, onEnd?: () => void): void {
   if (!isSpeechSynthesisSupported()) return;
   if (!text.trim()) return;
 
@@ -156,6 +156,12 @@ export function speakText(text: string, settings: TtsSettings): void {
   utterance.rate = settings.rate ?? DEFAULT_TTS_RATE;
   utterance.pitch = settings.pitch ?? DEFAULT_TTS_PITCH;
   utterance.volume = settings.volume ?? DEFAULT_TTS_VOLUME;
+
+  // Meddela när uppläsningen är klar (Bash 15 — companion-avatar)
+  if (onEnd) {
+    utterance.onend = onEnd;
+    utterance.onerror = onEnd;
+  }
 
   window.speechSynthesis.speak(utterance);
 }

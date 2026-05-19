@@ -17,12 +17,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 12 | Local app data storage plan — storage key registry, diagnostics UI, adapter placeholder, migration plan |
 | 13 | Windows TTS first version — Web Speech API, voice select, rate/pitch/volume, auto-read, manual "Läs upp" button |
 | 14 | TTS polish — improved text cleanup, Swedish voice detection, test phrases, Piper prep section, tts-plan.md |
+| 15 | Simple companion avatar panel — CSS/React orb with mood states, thinking/speaking/offline animations |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 15 | Simple companion/avatar panel — static or CSS-animated companion presence |
+| 16 | Smart model helper and model recommendations |
 | 15 | Simple companion/avatar panel — static or CSS-animated companion presence in the right panel |
 
 

@@ -1189,6 +1189,20 @@ function InstallningarSection({
             </details>
           </div>
 
+          {/* Companion-avatar info (Bash 15) */}
+          <div className="settings-section">
+            <div className="settings-section-title">🤖 Companion-avatar</div>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 10 }}>
+              Build 15 lägger till en enkel lokal companion-avatar med CSS-animationer. Den använder inga externa tjänster och kostar 0 kr.
+            </p>
+            <ul style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 2, paddingLeft: 18, margin: 0 }}>
+              <li>Avataren är visuell status, inte en 3D-avatar.</li>
+              <li>Reagerar på Ollama-status, generering och TTS-uppläsning.</li>
+              <li>Kan kopplas till röst/ljudvåg mer avancerat i ett senare build.</li>
+              <li>MuseTalk, VSeeFace och Piper är inte integrerade här.</li>
+            </ul>
+          </div>
+
           {/* Standardval (Bash 9) */}
           <div className="settings-section">
             <div className="settings-section-title">🎯 Standardval</div>
@@ -2206,6 +2220,7 @@ interface ChatAreaProps {
   onResetTtsSettings: () => void;                                   // Bash 13
   onSpeak: (text: string) => void;                                  // Bash 13
   onStopSpeaking: () => void;                                       // Bash 13
+  isSpeaking?: boolean;                                             // Bash 15
 }
 
 export default function ChatArea({
@@ -2238,6 +2253,7 @@ export default function ChatArea({
   onResetTtsSettings,
   onSpeak,
   onStopSpeaking,
+  isSpeaking,
 }: ChatAreaProps) {
   const activeProjectObj = DEFAULT_PROJECTS.find((p) => p.id === activeProjectId) ?? null;
 
@@ -2326,13 +2342,23 @@ export default function ChatArea({
               </span>
             )}
             <span className="main-header-sub">
-              {activeProfileName ? `${activeProfileName} · ` : ""}
-              {activeProjectObj ? `${activeProjectObj.icon} ${activeProjectObj.name} · ` : ""}
-              {activeModel
-                ? `Modell: ${activeModel}`
-                : ollamaStatus.connected
-                ? "Välj en modell i höger panel"
-                : "Ingen modell vald"}
+              {/* Companion status-text vid aktiv generering eller uppläsning (Bash 15) */}
+              {isLoading
+                ? "EchoCompanion tänker…"
+                : isSpeaking
+                ? "EchoCompanion pratar…"
+                : (
+                  <>
+                    {activeProfileName ? `${activeProfileName} · ` : ""}
+                    {activeProjectObj ? `${activeProjectObj.icon} ${activeProjectObj.name} · ` : ""}
+                    {activeModel
+                      ? `Modell: ${activeModel}`
+                      : ollamaStatus.connected
+                      ? "Välj en modell i höger panel"
+                      : "Ingen modell vald"}
+                  </>
+                )
+              }
             </span>
           </div>
           <div className="header-actions">

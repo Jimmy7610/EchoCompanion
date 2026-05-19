@@ -8,6 +8,8 @@ import { COMPANION_PROFILES } from "../features/settings/settingsTypes";
 import { DEFAULT_PROJECTS } from "../features/projects/projectTypes";
 import { findModelFamily } from "../data/modelGuideData";
 import type { TtsSettings } from "../features/tts/ttsTypes";
+import type { CompanionState } from "../features/companion/companionTypes";
+import CompanionAvatar from "./CompanionAvatar";
 
 // INSTÄLLNING - Hur många profiler som visas i snabbpanelen (max 4)
 const QUICK_PROFILES = COMPANION_PROFILES.slice(0, 4);
@@ -137,6 +139,9 @@ interface RightPanelProps {
   onSelectProject: (projectId: string) => void;
   isCheckingOllama: boolean;
   ttsSettings?: TtsSettings;
+  companionState?: CompanionState;
+  activeProfileName?: string | null;
+  activeProjectName?: string | null;
 }
 
 export default function RightPanel({
@@ -151,20 +156,34 @@ export default function RightPanel({
   onSelectProject,
   isCheckingOllama,
   ttsSettings,
+  companionState,
+  activeProfileName,
+  activeProjectName,
 }: RightPanelProps) {
   const currentProfile = COMPANION_PROFILES.find((p) => p.id === activeProfile);
   const currentProject = DEFAULT_PROJECTS.find((p) => p.id === activeProject);
 
   return (
     <aside className="right-panel">
-      {/* Header */}
+      {/* Header + Companion Avatar (Bash 15) */}
       <div className="right-panel-header">
         <div className="right-panel-title">Kompanjon</div>
-        <div className="echo-brand">
-          <div className="echo-brand-icon">⬡</div>
-          <span className="echo-brand-name">EchoCompanion</span>
-          <span className="echo-brand-version">v0.1.0</span>
-        </div>
+        {companionState ? (
+          <CompanionAvatar
+            mood={companionState.mood}
+            label={companionState.label}
+            description={companionState.description}
+            activeProfileName={activeProfileName}
+            activeProjectName={activeProjectName}
+            isSpeaking={companionState.mood === "speaking"}
+          />
+        ) : (
+          <div className="echo-brand">
+            <div className="echo-brand-icon">⬡</div>
+            <span className="echo-brand-name">EchoCompanion</span>
+            <span className="echo-brand-version">v0.1.0</span>
+          </div>
+        )}
       </div>
 
       {/* Systemstatus */}

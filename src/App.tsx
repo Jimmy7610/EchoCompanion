@@ -49,6 +49,7 @@ import {
   stopSpeaking,
 } from "./features/tts/ttsService";
 import type { TtsVoiceInfo } from "./features/tts/ttsTypes";
+import { getCompanionState } from "./features/companion/companionTypes";
 
 // INSTÄLLNING - Maximalt antal tidigare meddelanden som skickas till Ollama (utöver systemprompt och nytt meddelande)
 const MAX_HISTORY_MESSAGES = 20;
@@ -78,6 +79,9 @@ export default function App() {
   // ---- TTS-inställningar (Bash 13) ----
   const [ttsSettings, setTtsSettings] = useState<TtsSettings>(() => getTtsSettings());
   const [availableTtsVoices, setAvailableTtsVoices] = useState<TtsVoiceInfo[]>([]);
+
+  // ---- Companion TTS speaking-tillstånd (Bash 15) ----
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   // ---- Utkast från promptbiblioteket ----
   const [draftMessage, setDraftMessage] = useState("");
@@ -155,11 +159,13 @@ export default function App() {
   }, []);
 
   const handleSpeak = useCallback((text: string) => {
-    speakText(text, ttsSettings);
+    setIsSpeaking(true);
+    speakText(text, ttsSettings, () => setIsSpeaking(false));
   }, [ttsSettings]);
 
   const handleStopSpeaking = useCallback(() => {
     stopSpeaking();
+    setIsSpeaking(false);
   }, []);
 
   // ---- Skapa ny chat ----
@@ -384,7 +390,8 @@ export default function App() {
 
           // Auto-uppläsning efter fullständigt svar (Bash 13)
           if (ttsSettings.enabled && ttsSettings.autoReadAssistant && accumulatedContent) {
-            speakText(accumulatedContent, ttsSettings);
+            setIsSpeaking(true);
+            speakText(accumulatedContent, ttsSettings, () => setIsSpeaking(false));
           }
         } catch (err) {
           const wasAborted = err instanceof Error && err.name === "AbortError";
@@ -433,7 +440,8 @@ export default function App() {
 
           // Auto-uppläsning efter fullständigt svar (Bash 13)
           if (ttsSettings.enabled && ttsSettings.autoReadAssistant && responseText) {
-            speakText(responseText, ttsSettings);
+            setIsSpeaking(true);
+            speakText(responseText, ttsSettings, () => setIsSpeaking(false));
           }
         } catch (err) {
           const errorText =
@@ -467,6 +475,15 @@ export default function App() {
   const activeProjectName = activeProjectObj
     ? `${activeProjectObj.icon} ${activeProjectObj.name}`
     : null;
+
+  // Companion-stämning (Bash 15)
+  const companionState = getCompanionState({
+    ollamaConnected: ollamaStatus.connected,
+    isGenerating: isLoading,
+    isSpeaking,
+    activeProfileName,
+    activeProjectName,
+  });
 
   return (
     <div className="app-container">
@@ -511,6 +528,7 @@ export default function App() {
         onResetTtsSettings={handleResetTtsSettings}
         onSpeak={handleSpeak}
         onStopSpeaking={handleStopSpeaking}
+        isSpeaking={isSpeaking}
       />
 
       <RightPanel
@@ -525,6 +543,9 @@ export default function App() {
         onSelectProject={setActiveProject}
         isCheckingOllama={isCheckingOllama}
         ttsSettings={ttsSettings}
+        companionState={companionState}
+        activeProfileName={activeProfileName}
+        activeProjectName={activeProjectName}
       />
 
       <StatusBar

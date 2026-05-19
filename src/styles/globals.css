@@ -2720,3 +2720,192 @@ details[open] .tts-piper-summary::before {
   border: 1px solid var(--border-subtle);
   /* INSTÄLLNING - Stil på enskild checklistepunkt */
 }
+
+/* ============================================================
+   Companion Avatar (Bash 15)
+   ============================================================ */
+
+/* Kortet som omsluter avataren i höger panel */
+.companion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 400ms ease;
+  /* INSTÄLLNING - Kortstorlek och avstånd för companion-avataren */
+}
+
+.companion-card.companion-mood-ready   { border-color: rgba(16, 185, 129, 0.2); }
+.companion-card.companion-mood-thinking { border-color: rgba(124, 58, 237, 0.35); }
+.companion-card.companion-mood-speaking { border-color: rgba(14, 165, 233, 0.35); }
+.companion-card.companion-mood-offline  { border-color: var(--border-subtle); opacity: 0.65; }
+.companion-card.companion-mood-error    { border-color: rgba(239, 68, 68, 0.3); }
+
+/* Orb-wrapper hanterar positionering av ringar */
+.companion-orb-wrapper {
+  position: relative;
+  width: 52px; /* INSTÄLLNING - Matcha --companion-orb-size */
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Själva orben */
+.companion-orb {
+  width: 52px;  /* INSTÄLLNING - Orbens bredd */
+  height: 52px; /* INSTÄLLNING - Orbens höjd */
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 36%, rgba(139, 92, 246, 0.25), rgba(8, 8, 15, 0.9) 70%);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 400ms ease, border-color 400ms ease;
+  /* INSTÄLLNING - Orbens bakgrundsgradient och kantlinje */
+}
+
+.companion-mood-idle     .companion-orb { box-shadow: var(--companion-glow-idle,    0 0 16px rgba(74,85,104,0.3)); }
+.companion-mood-ready    .companion-orb { box-shadow: var(--companion-glow-ready,   0 0 22px rgba(16,185,129,0.35)); border-color: rgba(16,185,129,0.3); animation: companion-pulse-ready 3s ease-in-out infinite; }
+.companion-mood-thinking .companion-orb { box-shadow: var(--companion-glow-think,   0 0 28px rgba(124,58,237,0.55)); border-color: rgba(124,58,237,0.6); animation: companion-pulse-think 1.2s ease-in-out infinite; }
+.companion-mood-speaking .companion-orb { box-shadow: var(--companion-glow-speak,   0 0 28px rgba(14,165,233,0.55)); border-color: rgba(14,165,233,0.5); animation: companion-pulse-speak 0.8s ease-in-out infinite; }
+.companion-mood-offline  .companion-orb { box-shadow: var(--companion-glow-offline, 0 0 10px rgba(74,85,104,0.2)); filter: grayscale(0.7); }
+.companion-mood-error    .companion-orb { box-shadow: 0 0 20px rgba(239,68,68,0.4); border-color: rgba(239,68,68,0.5); }
+
+.companion-orb-icon {
+  font-size: 22px; /* INSTÄLLNING - Storlek på ⬡-ikonen i orben */
+  line-height: 1;
+  color: var(--accent-text);
+  transition: color 400ms ease;
+}
+
+.companion-mood-thinking .companion-orb-icon { color: #a78bfa; }
+.companion-mood-speaking .companion-orb-icon { color: #38bdf8; }
+.companion-mood-offline  .companion-orb-icon { color: var(--text-muted); }
+
+/* ---- Ringar (thinking + speaking) ---- */
+.companion-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.companion-mood-thinking .companion-ring { border-color: rgba(124, 58, 237, 0.25); animation: companion-ring-expand 1.8s ease-out infinite; }
+.companion-mood-speaking .companion-ring { border-color: rgba(14, 165, 233, 0.25);  animation: companion-ring-expand 1.1s ease-out infinite; }
+
+.companion-ring-1 { width: 68px; height: 68px; }  /* INSTÄLLNING - Inre ring-diameter */
+.companion-ring-2 { width: 84px; height: 84px; animation-delay: 0.4s !important; } /* INSTÄLLNING - Yttre ring-diameter */
+
+/* ---- Ljudvåg-prickar (speaking) ---- */
+.companion-wave {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 12px;
+}
+
+.companion-wave-dot {
+  width: 3px; /* INSTÄLLNING - Bredden på varje våg-prick */
+  background: rgba(14, 165, 233, 0.6);
+  border-radius: 2px;
+  animation: companion-wave-bounce 0.6s ease-in-out infinite;
+}
+
+.companion-wave-dot:nth-child(1) { height: 4px;  animation-delay: 0s; }
+.companion-wave-dot:nth-child(2) { height: 8px;  animation-delay: 0.1s; }
+.companion-wave-dot:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+.companion-wave-dot:nth-child(4) { height: 8px;  animation-delay: 0.3s; }
+.companion-wave-dot:nth-child(5) { height: 4px;  animation-delay: 0.4s; }
+
+/* ---- Status-text och chips ---- */
+.companion-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding-top: 2px;
+}
+
+.companion-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.2px;
+  transition: color 300ms ease;
+  /* INSTÄLLNING - Typografi för companion-statusetiketten */
+}
+
+.companion-mood-ready    .companion-label { color: #6ee7b7; }
+.companion-mood-thinking .companion-label { color: #c4b5fd; }
+.companion-mood-speaking .companion-label { color: #7dd3fc; }
+.companion-mood-offline  .companion-label { color: var(--text-muted); }
+
+/* Metadata-chips (profil + projekt) */
+.companion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.companion-chip {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1px 7px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* INSTÄLLNING - Stil på profil/projekt-chips under avataren */
+}
+
+/* ---- Keyframe-animationer ---- */
+
+@keyframes companion-pulse-ready {
+  0%, 100% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.25); }
+  50%       { box-shadow: 0 0 28px rgba(16, 185, 129, 0.5); }
+  /* INSTÄLLNING - Pulsintensitet i redo-läge */
+}
+
+@keyframes companion-pulse-think {
+  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); }
+  50%       { box-shadow: 0 0 38px rgba(124, 58, 237, 0.75); }
+  /* INSTÄLLNING - Pulsintensitet i tänker-läge */
+}
+
+@keyframes companion-pulse-speak {
+  0%, 100% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
+  50%       { box-shadow: 0 0 36px rgba(14, 165, 233, 0.7); }
+  /* INSTÄLLNING - Pulsintensitet i pratar-läge */
+}
+
+@keyframes companion-ring-expand {
+  0%   { transform: scale(0.85); opacity: 0.6; }
+  80%  { transform: scale(1.4);  opacity: 0; }
+  100% { transform: scale(1.4);  opacity: 0; }
+  /* INSTÄLLNING - Ring-expansions-animation */
+}
+
+@keyframes companion-wave-bounce {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(1.3); }
+  /* INSTÄLLNING - Ljudvåg-studs-animation */
+}

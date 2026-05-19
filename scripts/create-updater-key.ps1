@@ -1,77 +1,85 @@
-# ============================================================
-# create-updater-key.ps1
-# Genererar minisign-nyckelpar för Tauri updater.
+﻿# ============================================================
+# create-updater-key.ps1 -- Generate Tauri updater signing key
 #
-# KÖR BARA EN GÅNG — nyckelparet binds till alla framtida releases.
-# Den privata nyckeln stannar ALDRIG i repot.
+# Run ONCE only. The key pair is tied to all future releases.
+# The PRIVATE key must NEVER be committed to the repo.
 # ============================================================
 
-Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$keyDir = Join-Path $PSScriptRoot ".." ".tauri-signing"
-$keyDir = [System.IO.Path]::GetFullPath($keyDir)
-$keyFile = Join-Path $keyDir "echocompanion.key"
-$pubFile = "$keyFile.pub"
+$repoRoot   = Split-Path $PSScriptRoot -Parent
+$signingDir = Join-Path $repoRoot ".tauri-signing"
+$keyFile    = Join-Path $signingDir "echocompanion.key"
+$pubFile    = "$keyFile.pub"
 
 Write-Host ""
-Write-Host "=== EchoCompanion — Generera Tauri-signeringsnyckel ===" -ForegroundColor Cyan
+Write-Host "=== EchoCompanion: Generate Tauri signing key ===" -ForegroundColor Cyan
 Write-Host ""
 
-# Kontrollera att .tauri-signing/ är gitignorerad
-$gitignorePath = Join-Path $PSScriptRoot ".." ".gitignore"
+# Verify .tauri-signing/ is in .gitignore
+$gitignorePath = Join-Path $repoRoot ".gitignore"
 $gitignoreContent = Get-Content $gitignorePath -Raw -ErrorAction SilentlyContinue
 if ($gitignoreContent -notmatch "\.tauri-signing") {
-    Write-Warning ".tauri-signing/ saknas i .gitignore — lägg till det innan du fortsätter!"
+    Write-Host "ERROR: .tauri-signing/ is not in .gitignore. Add it before continuing." -ForegroundColor Red
     exit 1
 }
 
-# Skapa katalog om den inte finns
-if (-not (Test-Path $keyDir)) {
-    New-Item -ItemType Directory -Path $keyDir | Out-Null
-    Write-Host "Skapade: $keyDir" -ForegroundColor Green
+# Create signing dir if missing
+if (-not (Test-Path $signingDir)) {
+    New-Item -ItemType Directory -Path $signingDir | Out-Null
+    Write-Host "Created: $signingDir" -ForegroundColor Green
 }
 
-# Avbryt om nyckeln redan finns
+# Abort if key already exists
 if (Test-Path $keyFile) {
-    Write-Host "Nyckel finns redan: $keyFile" -ForegroundColor Yellow
-    Write-Host "Ta bort filen manuellt om du vill generera en ny nyckel." -ForegroundColor Yellow
+    Write-Host "Key already exists: $keyFile" -ForegroundColor Yellow
+    Write-Host "Delete it manually if you want to generate a new key." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Din publika nyckel (lägg in i tauri.conf.json):" -ForegroundColor Cyan
-    Write-Host ""
-    Get-Content $pubFile
+    if (Test-Path $pubFile) {
+        Write-Host "Your PUBLIC key (paste into tauri.conf.json):" -ForegroundColor Cyan
+        Write-Host ""
+        Get-Content $pubFile
+    }
     Write-Host ""
     exit 0
 }
 
-Write-Host "Genererar nyckelpar i: $keyDir" -ForegroundColor Green
+Write-Host "Generating key pair in: $signingDir" -ForegroundColor Green
 Write-Host ""
 
-# Försök primärt kommando
-try {
-    npm run tauri signer generate -- -w $keyFile
-} catch {
-    Write-Host "Primärt kommando misslyckades, försöker alternativ syntax..." -ForegroundColor Yellow
-    # Alternativ syntax
-    npm run tauri -- signer generate -w $keyFile
+# Generate key pair
+# Note: the private key file is written to $keyFile
+Set-Location $repoRoot
+npm run tauri -- signer generate -w "$keyFile"
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "ERROR: Key generation failed (exit code $LASTEXITCODE)." -ForegroundColor Red
+    Write-Host "Make sure Rust and Tauri CLI are installed." -ForegroundColor Yellow
+    exit 1
 }
 
 Write-Host ""
-Write-Host "=== Nyckelpar genererat ===" -ForegroundColor Green
+Write-Host "=== Key pair generated ===" -ForegroundColor Green
 Write-Host ""
-Write-Host "Privat nyckel : $keyFile" -ForegroundColor Red
-Write-Host "Publik nyckel : $pubFile" -ForegroundColor Green
+Write-Host "Private key : $keyFile" -ForegroundColor Red
+Write-Host "Public key  : $pubFile" -ForegroundColor Green
 Write-Host ""
-Write-Host "VIKTIGT — GÖR DESSA STEG NU:" -ForegroundColor Yellow
-Write-Host "  1. Kopiera innehållet i $pubFile" -ForegroundColor White
-Write-Host "  2. Öppna src-tauri/tauri.conf.json" -ForegroundColor White
-Write-Host '  3. Ersätt "PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY" med pubkey-strängen' -ForegroundColor White
-Write-Host "  4. Committa tauri.conf.json (pubkey är inte hemlig)" -ForegroundColor White
-Write-Host "  5. Spara privat nyckel på ett säkert ställe (t.ex. KeePass)" -ForegroundColor White
+Write-Host "NEXT STEPS:" -ForegroundColor Yellow
+Write-Host "  1. Copy the public key string shown below" -ForegroundColor White
+Write-Host "  2. Open src-tauri/tauri.conf.json" -ForegroundColor White
+Write-Host "  3. Replace PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY with the public key" -ForegroundColor White
+Write-Host "  4. Commit tauri.conf.json (public key is not secret)" -ForegroundColor White
+Write-Host "  5. Store the private key safely (e.g. KeePass)" -ForegroundColor White
+Write-Host "  6. Never commit the private key file" -ForegroundColor White
 Write-Host ""
-Write-Host "DIN PUBLIKA NYCKEL:" -ForegroundColor Cyan
+Write-Host "YOUR PUBLIC KEY:" -ForegroundColor Cyan
 Write-Host ""
-Get-Content $pubFile
+if (Test-Path $pubFile) {
+    Get-Content $pubFile
+} else {
+    Write-Host "(pub file not found at $pubFile -- check $signingDir)" -ForegroundColor Red
+}
 Write-Host ""
-Write-Host "Privat nyckel visas INTE här. Hitta den i: $keyFile" -ForegroundColor Red
+Write-Host "The private key is NOT shown here. Find it at: $keyFile" -ForegroundColor Red
 Write-Host ""

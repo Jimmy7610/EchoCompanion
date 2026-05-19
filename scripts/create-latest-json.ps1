@@ -1,116 +1,87 @@
 ﻿# ============================================================
-# create-latest-json.ps1 -- Create release-work/latest.json
+# create-latest-json.ps1 -- Create latest.json for EchoCompanion updater
 #
 # Requirements:
-#   - scripts/build-signed-release.ps1 has been run
-#   - Tauri build created the .sig file
+#   - Signed v0.1.1 build has been created
+#   - NSIS setup.exe exists
+#   - NSIS setup.exe.sig exists
 #
-# Contains NO private keys.
-# Upload latest.json to GitHub Releases tag v0.1.1.
+# This script does NOT upload anything.
+# It only creates release-work/latest.json.
 # ============================================================
 
 $ErrorActionPreference = "Stop"
 
-$repoRoot   = Split-Path $PSScriptRoot -Parent
-$version    = "0.1.1"
-$releaseTag = "v$version"
-$notes      = "Test release for EchoCompanion updater v0.1.1"
-$pubDate    = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
+$repoRoot = Split-Path $PSScriptRoot -Parent
 
-# Expected paths (Tauri v2 NSIS artifacts)
-$nsisDir     = Join-Path $repoRoot "src-tauri" "target" "release" "bundle" "nsis"
-$sigFileNsis = Join-Path $nsisDir "EchoCompanion_${version}_x64-setup.nsis.zip.sig"
-$sigFileExe  = Join-Path $nsisDir "EchoCompanion_${version}_x64-setup.exe.sig"
+$bundleDir = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "src-tauri") "target") "release") "bundle"
+$nsisDir = Join-Path $bundleDir "nsis"
+$releaseWorkDir = Join-Path $repoRoot "release-work"
 
-# GitHub Releases URLs
-$baseUrl     = "https://github.com/Jimmy7610/EchoCompanion/releases/download/$releaseTag"
-$urlNsisZip  = "$baseUrl/EchoCompanion_${version}_x64-setup.nsis.zip"
-$urlExe      = "$baseUrl/EchoCompanion_${version}_x64-setup.exe"
+$version = "0.1.1"
+$setupFileName = "EchoCompanion_0.1.1_x64-setup.exe"
+$sigFileName = "EchoCompanion_0.1.1_x64-setup.exe.sig"
+
+$setupFile = Join-Path $nsisDir $setupFileName
+$sigFile = Join-Path $nsisDir $sigFileName
+$latestJsonFile = Join-Path $releaseWorkDir "latest.json"
 
 Write-Host ""
 Write-Host "=== EchoCompanion: Create latest.json ===" -ForegroundColor Cyan
 Write-Host ""
 
-# Pick sig file -- try .nsis.zip.sig first (Tauri v2 standard), then .exe.sig
-$sigFile    = $null
-$releaseUrl = $null
-
-if (Test-Path $sigFileNsis) {
-    $sigFile    = $sigFileNsis
-    $releaseUrl = $urlNsisZip
-    Write-Host "Found signature (NSIS zip): $sigFileNsis" -ForegroundColor Green
-} elseif (Test-Path $sigFileExe) {
-    $sigFile    = $sigFileExe
-    $releaseUrl = $urlExe
-    Write-Host "Found signature (exe): $sigFileExe" -ForegroundColor Green
-} else {
-    Write-Host "ERROR: No .sig file found." -ForegroundColor Red
-    Write-Host "Expected one of:" -ForegroundColor Yellow
-    Write-Host "  $sigFileNsis" -ForegroundColor Yellow
-    Write-Host "  $sigFileExe" -ForegroundColor Yellow
+if (-not (Test-Path $setupFile)) {
+    Write-Host "ERROR: Setup file not found:" -ForegroundColor Red
+    Write-Host $setupFile -ForegroundColor Red
     Write-Host ""
-    Write-Host "Run scripts/build-signed-release.ps1 with TAURI_SIGNING_PRIVATE_KEY set." -ForegroundColor Yellow
+    Write-Host "Run scripts/build-signed-release.ps1 first." -ForegroundColor Yellow
     exit 1
 }
 
-# Read signature
+if (-not (Test-Path $sigFile)) {
+    Write-Host "ERROR: Signature file not found:" -ForegroundColor Red
+    Write-Host $sigFile -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Run scripts/build-signed-release.ps1 first and confirm signing succeeded." -ForegroundColor Yellow
+    exit 1
+}
+
+if (-not (Test-Path $releaseWorkDir)) {
+    New-Item -ItemType Directory -Path $releaseWorkDir | Out-Null
+    Write-Host "Created: $releaseWorkDir" -ForegroundColor Green
+}
+
 $signature = (Get-Content $sigFile -Raw).Trim()
 
-if ([string]::IsNullOrWhiteSpace($signature)) {
-    Write-Host "ERROR: Sig file is empty: $sigFile" -ForegroundColor Red
-    exit 1
-}
+$releaseUrl = "https://github.com/Jimmy7610/EchoCompanion/releases/download/v0.1.1/$setupFileName"
 
-# Create release-work/ dir
-$outDir  = Join-Path $repoRoot "release-work"
-$outFile = Join-Path $outDir "latest.json"
-
-if (-not (Test-Path $outDir)) {
-    New-Item -ItemType Directory -Path $outDir | Out-Null
-}
-
-# Build JSON object
-$latestJson = [ordered]@{
-    version  = $version
-    notes    = $notes
-    pub_date = $pubDate
+$latest = [ordered]@{
+    version = $version
+    notes = "Testrelease for EchoCompanion updater."
+    pub_date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
     platforms = [ordered]@{
         "windows-x86_64" = [ordered]@{
             signature = $signature
-            url       = $releaseUrl
+            url = $releaseUrl
         }
     }
 }
 
-$json = $latestJson | ConvertTo-Json -Depth 5
-$enc  = New-Object System.Text.UTF8Encoding($false)
-[System.IO.File]::WriteAllText($outFile, $json, $enc)
+$json = $latest | ConvertTo-Json -Depth 10
+
+# Write UTF-8 without BOM for JSON file
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText($latestJsonFile, $json, $utf8NoBom)
 
 Write-Host ""
-Write-Host "=== latest.json created ===" -ForegroundColor Green
-Write-Host "Path    : $outFile" -ForegroundColor White
-Write-Host "Version : $version" -ForegroundColor White
-Write-Host "URL     : $releaseUrl" -ForegroundColor White
+Write-Host "latest.json created:" -ForegroundColor Green
+Write-Host $latestJsonFile
 Write-Host ""
-Write-Host "Contents:" -ForegroundColor Cyan
-Get-Content $outFile
+Write-Host "Release URL:" -ForegroundColor Cyan
+Write-Host $releaseUrl
 Write-Host ""
-Write-Host "Upload these files to GitHub Release $releaseTag :" -ForegroundColor Cyan
-
-$exeFile = Join-Path $nsisDir "EchoCompanion_${version}_x64-setup.exe"
-if (Test-Path $exeFile) {
-    Write-Host "  $exeFile" -ForegroundColor White
-}
-if ($sigFile -eq $sigFileNsis) {
-    $zipFile = Join-Path $nsisDir "EchoCompanion_${version}_x64-setup.nsis.zip"
-    if (Test-Path $zipFile) {
-        Write-Host "  $zipFile" -ForegroundColor White
-    }
-    Write-Host "  $sigFileNsis" -ForegroundColor White
-} else {
-    Write-Host "  $sigFileExe" -ForegroundColor White
-}
-Write-Host "  $outFile" -ForegroundColor White
-Write-Host ""
-Write-Host "See docs/github-release-v0.1.1-checklist.md for the full checklist." -ForegroundColor Cyan
+Write-Host "Next files to upload to GitHub Release v0.1.1:" -ForegroundColor Cyan
+Write-Host "1. $setupFile"
+Write-Host "2. $sigFile"
+Write-Host "3. $latestJsonFile"
 Write-Host ""

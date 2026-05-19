@@ -13,7 +13,8 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path $PSScriptRoot -Parent
-$keyFile  = Join-Path $repoRoot ".tauri-signing" "echocompanion.key"
+$signingDir = Join-Path $repoRoot ".tauri-signing"
+$keyFile = Join-Path $signingDir "echocompanion.key"
 
 Write-Host ""
 Write-Host "=== EchoCompanion: Signed release build ===" -ForegroundColor Cyan
@@ -27,7 +28,9 @@ if (-not (Test-Path $keyFile)) {
 }
 
 # Check pubkey is not still placeholder
-$tauriConf = Get-Content (Join-Path $repoRoot "src-tauri" "tauri.conf.json") -Raw
+$tauriConfPath = Join-Path (Join-Path $repoRoot "src-tauri") "tauri.conf.json"
+$tauriConf = Get-Content $tauriConfPath -Raw
+
 if ($tauriConf -match "PLACEHOLDER") {
     Write-Host "ERROR: tauri.conf.json still has PLACEHOLDER pubkey." -ForegroundColor Red
     Write-Host "Run create-updater-key.ps1, copy the public key into tauri.conf.json." -ForegroundColor Yellow
@@ -38,10 +41,12 @@ Write-Host "Private key found." -ForegroundColor Green
 Write-Host "Public key verified (no PLACEHOLDER)." -ForegroundColor Green
 Write-Host ""
 
-# Load private key into env var (in memory only, not echoed)
+# Load private key into env var in memory only.
+# IMPORTANT: Do not print this value.
 $env:TAURI_SIGNING_PRIVATE_KEY = (Get-Content $keyFile -Raw).Trim()
-# If your key has a password, uncomment and set:
-# $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = ""
+
+# If your key has a password, set this before running the script:
+# $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "YOUR_PASSWORD"
 
 Set-Location $repoRoot
 
@@ -57,7 +62,7 @@ Write-Host ""
 Write-Host "Step 2/3 -- Frontend build..." -ForegroundColor Cyan
 npm run build
 if ($LASTEXITCODE -ne 0) {
-    Remove-Item Env:\TAURI_SIGNING_PRIVATE_KEY -ErrorAction SilentlyContinue
+    Remove-Item Env:\TAURI_SIGNING_PRIVATE_KEY_PATH -ErrorAction SilentlyContinue
     Write-Host "Frontend build failed." -ForegroundColor Red
     exit 1
 }
@@ -67,8 +72,8 @@ Write-Host "Step 3/3 -- Tauri release build (may take 5-15 min)..." -ForegroundC
 npm run tauri:build
 $buildExitCode = $LASTEXITCODE
 
-# Clear signing key from memory immediately after build
-Remove-Item Env:\TAURI_SIGNING_PRIVATE_KEY -ErrorAction SilentlyContinue
+# Clear signing key path from environment after build
+Remove-Item Env:\TAURI_SIGNING_PRIVATE_KEY_PATH -ErrorAction SilentlyContinue
 
 if ($buildExitCode -ne 0) {
     Write-Host "Tauri build failed (exit code $buildExitCode)." -ForegroundColor Red
@@ -80,8 +85,9 @@ Write-Host "=== Build complete! ===" -ForegroundColor Green
 Write-Host ""
 Write-Host "Output files:" -ForegroundColor Cyan
 
-$nsisDir = Join-Path $repoRoot "src-tauri" "target" "release" "bundle" "nsis"
-$msiDir  = Join-Path $repoRoot "src-tauri" "target" "release" "bundle" "msi"
+$targetDir = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "src-tauri") "target") "release") "bundle"
+$nsisDir = Join-Path $targetDir "nsis"
+$msiDir = Join-Path $targetDir "msi"
 
 if (Test-Path $nsisDir) {
     Write-Host "NSIS:" -ForegroundColor Yellow

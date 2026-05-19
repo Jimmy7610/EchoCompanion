@@ -102,3 +102,34 @@ When bumping the version:
 2. `src-tauri/tauri.conf.json` — update `version`
 3. `package.json` — update `version`
 4. `README.md` — add new build section
+
+---
+
+## Build 18 Desktop Test Status
+
+| Check | Status |
+|-------|--------|
+| Rust installed | ❌ Inte installerat på Jimmys dator vid Build 18 |
+| `npm run typecheck` | ✅ Passerar |
+| `npm run build` | ✅ Passerar |
+| `npm run tauri:dev` | ⏳ Fylls i efter lokal test när Rust är installerat |
+| `npm run tauri:build` | ⏳ Fylls i efter lokal test när Rust är installerat |
+| Tauri-fönster öppnas | ⏳ Fylls i efter lokal test |
+| Installer skapad | ⏳ Fylls i efter lokal test |
+
+### Kända blockers (Build 18)
+
+- **Rust saknas** — Desktop-kommandon (`tauri:dev`, `tauri:build`) kan inte köras förrän Rust är installerat.
+  Installera från https://rustup.rs (gratis, tar ~5 min på Windows).
+- **Appikon saknas** — Platshållarfiler finns i `src-tauri/icons/` men ingen riktig EchoCompanion-ikon är skapad.
+  Generera med: `npm run tauri icon sökväg/till/ikon.png` (kräver Tauri CLI + Rust).
+- **localStorage/WebView storage** — All data (chattar, inställningar, projektminne) lagras i WebView-storage,
+  inte i vanliga filer. Migration till Tauri FS API är planerat till ett senare build.
+
+### Nästa steg för desktop
+
+1. Installera Rust från https://rustup.rs
+2. Verifiera med `rustc --version` och `cargo --version`
+3. Kör `npm run tauri:dev` och följ checklistan i `docs/desktop-test-checklist.md`
+4. Om dev-läget fungerar: kör `npm run tauri:build` och testa installationsfilen
+5. Uppdatera denna tabell med verkliga testresultat

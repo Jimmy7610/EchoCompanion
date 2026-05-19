@@ -1441,11 +1441,12 @@ function InstallningarSection({
             </div>
           </div>
 
-          {/* Desktop-läge (Bash 11) */}
+          {/* Desktop-läge (Bash 11, förbättrat Bash 18) */}
           <div className="settings-section">
             <div className="settings-section-title">🖥 Desktop-läge</div>
-            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 14 }}>
-              EchoCompanion kör just nu bra i webbläsaren via Vite. För en riktig Windows-app används Tauri, vilket kräver Rust installerat lokalt.
+            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 10 }}>
+              Browserläge räcker för all utveckling. Desktop-läge behövs när EchoCompanion ska köras som
+              riktig Windows-app utanför webbläsaren.
             </p>
 
             <div className="settings-row">
@@ -1467,38 +1468,91 @@ function InstallningarSection({
               </span>
             </div>
 
-            <div style={{ marginTop: 16, marginBottom: 6 }}>
+            {/* Kommandoöversikt (Bash 18) */}
+            <div style={{ marginTop: 16, marginBottom: 8 }}>
               <span style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)" }}>
                 Kommandon
               </span>
             </div>
-            <code className="help-block-code">npm run dev</code>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
-              Webbläsarläge — startar Vite dev-server på port 1420. Kräver inte Rust.
-            </p>
-            <code className="help-block-code">npm run typecheck</code>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
-              Kör TypeScript-typkontroll utan att bygga.
-            </p>
-            <code className="help-block-code">npm run build</code>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
-              Bygger frontend till dist/ (används av Tauri).
-            </p>
-            <code className="help-block-code">npm run tauri:dev</code>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 10px" }}>
-              Desktop-läge med live-reload. Kräver Rust installerat.
-            </p>
-            <code className="help-block-code">npm run tauri:build</code>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 14px" }}>
-              Bygger installerbar Windows-app (.exe/.msi). Kräver Rust installerat.
-            </p>
+            <div className="desktop-cmd-list">
+              <div className="desktop-cmd-row">
+                <code className="desktop-cmd-code">npm run dev</code>
+                <span className="desktop-cmd-desc">Startar Vite dev-server på port 1420</span>
+                <span className="desktop-cmd-badge no-rust">Inget Rust</span>
+              </div>
+              <div className="desktop-cmd-row">
+                <code className="desktop-cmd-code">npm run typecheck</code>
+                <span className="desktop-cmd-desc">TypeScript-typkontroll utan bygge</span>
+                <span className="desktop-cmd-badge no-rust">Inget Rust</span>
+              </div>
+              <div className="desktop-cmd-row">
+                <code className="desktop-cmd-code">npm run build</code>
+                <span className="desktop-cmd-desc">Bygger frontend till dist/</span>
+                <span className="desktop-cmd-badge no-rust">Inget Rust</span>
+              </div>
+              <div className="desktop-cmd-row">
+                <code className="desktop-cmd-code">npm run tauri:dev</code>
+                <span className="desktop-cmd-desc">Desktop-app med live-reload</span>
+                <span className="desktop-cmd-badge needs-rust">Kräver Rust</span>
+              </div>
+              <div className="desktop-cmd-row">
+                <code className="desktop-cmd-code">npm run tauri:build</code>
+                <span className="desktop-cmd-desc">Bygger .exe/.msi-installer</span>
+                <span className="desktop-cmd-badge needs-rust">Kräver Rust</span>
+              </div>
+            </div>
+
+            {/* Tauri-teststatus (Bash 18) — INSTÄLLNING: uppdatera manuellt efter test */}
+            <div style={{ marginTop: 16, marginBottom: 8 }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)" }}>
+                Teststatus
+              </span>
+            </div>
+            <div className="desktop-status-list">
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">Browserläge (npm run dev)</span>
+                <span className="desktop-status-value ok">Fungerar</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">TypeScript-kontroll</span>
+                <span className="desktop-status-value ok">Fungerar</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">Frontend-build (npm run build)</span>
+                <span className="desktop-status-value ok">Fungerar</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot pending" />
+                {/* INSTÄLLNING - Ändra "Kräver Rust" till "Fungerar" efter lokal test */}
+                <span className="desktop-status-label">Desktop dev (npm run tauri:dev)</span>
+                <span className="desktop-status-value pending">Kräver Rust</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot pending" />
+                {/* INSTÄLLNING - Ändra "Kräver Rust" till "Fungerar" efter lokal test */}
+                <span className="desktop-status-label">Desktop build (npm run tauri:build)</span>
+                <span className="desktop-status-value pending">Kräver Rust</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot pending" />
+                {/* INSTÄLLNING - Ändra "Inte testad lokalt" till "Testad lokalt" efter test */}
+                <span className="desktop-status-label">Tauri-fönster testat</span>
+                <span className="desktop-status-value pending">Inte testad lokalt</span>
+              </div>
+            </div>
 
             <div className="backup-warning-box" style={{
               background: "rgba(124, 58, 237, 0.06)",
               borderColor: "var(--border-accent)",
               color: "var(--accent-text)",
+              marginTop: 14,
             }}>
-              ℹ Om kommandot tauri:dev inte fungerar behöver Rust installeras från rustup.rs — det är gratis och tar ~5 minuter.
+              ℹ Installera Rust från rustup.rs (gratis, tar ~5 min). Kör sedan{" "}
+              <code style={{ fontSize: 11 }}>npm run tauri:dev</code> för att testa skrivbordsläget.
+              Mer info i <code style={{ fontSize: 11 }}>docs/desktop-test-checklist.md</code>.
             </div>
 
             <div style={{ marginTop: 18 }}>
@@ -1511,8 +1565,8 @@ function InstallningarSection({
                 <li>Appikon vald och placerad i src-tauri/icons/</li>
                 <li>Versionsnummer uppdaterat i appInfo.ts + tauri.conf.json</li>
                 <li>Backup exporterad innan större ändringar</li>
-                <li>GitHub-release skapas senare</li>
-                <li>Auto-update byggs senare</li>
+                <li>GitHub-release skapas efter tauri:build verifierad</li>
+                <li>Auto-update — planeras i ett senare build</li>
               </ul>
             </div>
           </div>

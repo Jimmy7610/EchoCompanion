@@ -32,6 +32,42 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 18
+
+### ✅ Klart i Build 18
+- **Desktop-läge UI förbättrat** — Inställningar → Desktop-läge visar nu en tydlig kommandolista med Rust-krav per kommando, en teststatus-rad per steg och en klarare förklaring av browser- vs desktop-läge
+- **`docs/desktop-test-checklist.md`** — fullständig checklista för webbläsar-, desktop-dev- och desktop-produktionstester; inkluderar förberedelser, Ollama-krav och kända begränsningar
+- **`docs/desktop-packaging.md` utökad** — Build 18-status: Rust ej installerat, typecheck/build passerar, tauri:dev/tauri:build väntar på Rust
+- **Rust-kontroll dokumenterad** — Rust saknas på Jimmys dator vid Build 18; desktop-kommandon kan inte köras förrän `rustup.rs` är installerat
+- **TypeScript-kontroll: passerar**
+- **Frontend-build: passerar**
+- Build 16 → 18 (Build 17 = Update checker)
+
+### ⚠ Begränsningar i Build 18
+- Desktop-läge (`npm run tauri:dev`, `npm run tauri:build`) är **inte testat** — Rust saknas
+- Ingen ny funktionalitet tillagd — enbart dokumentation och UI-förbättring i Settings
+- Tauri-status i Desktop-läge-sektionen är **manuell text** — uppdatera `INSTÄLLNING`-kommentarerna i ChatArea.tsx efter lokal test
+
+### 🧪 Att testa manuellt (efter Rust-installation)
+1. Installera Rust från https://rustup.rs
+2. Verifiera: `rustc --version` och `cargo --version`
+3. Kör `npm run tauri:dev` — Tauri-fönstret ska öppnas
+4. Följ checklistan i [`docs/desktop-test-checklist.md`](docs/desktop-test-checklist.md)
+5. Om det fungerar: uppdatera teststatus i Inställningar → Desktop-läge (`INSTÄLLNING`-kommentarerna)
+
+---
+
+## Funktioner i v0.1.0 Build 17
+
+### ✅ Klart i Build 17
+- **GitHub Releases-kontroll** — hämtar senaste release-tag via GitHub API, jämför med `APP_VERSION`
+- **Notifieringsbadge i StatusBar** — visas när en nyare version finns tillgänglig
+- **Inget auto-install** — öppnar bara GitHub Releases-länken, inget nedladdas automatiskt
+- **Hastighetsbegränsning** — kontrolleras max en gång per app-session
+- Build 16 → 17
+
+---
+
 ## Funktioner i v0.1.0 Build 15
 
 ### ✅ Klart i Build 15

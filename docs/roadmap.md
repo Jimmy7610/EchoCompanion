@@ -19,21 +19,22 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 14 | TTS polish — improved text cleanup, Swedish voice detection, test phrases, Piper prep section, tts-plan.md |
 | 15 | Simple companion avatar panel — CSS/React orb with mood states, thinking/speaking/offline animations |
 | 16 | Smart model helper — rule-based model recommendations by task, LLaVA family, model warnings in RightPanel |
+| 17 | Update checker — GitHub Releases API, version comparison, notification badge in StatusBar, no auto-install |
+| 18 | Tauri desktop testing — Rust check, frontend verified, Desktop-läge UI improved, desktop-test-checklist.md |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 17 | Update checker via GitHub Releases (no auto-install, just notification) |
-
-
+| 19 | Local file help planning — design doc for safe file context, no shell execution, no broad FS permissions |
 
 ## Later
 
-- Update checker via GitHub Releases (no auto-install, just notification)
-- Proper app icon
+- Tauri desktop mode fully tested (blocked on Rust install on Jimmy's machine)
+- Proper app icon (generate with `npm run tauri icon`)
 - Windows system tray integration
 - Tauri-native file dialogs for backup import/export
+- Storage migration: localStorage → Tauri FS API (plan in docs/storage-migration-plan.md)
 
 ## Constraints
 

@@ -2911,6 +2911,100 @@ details[open] .tts-piper-summary::before {
 }
 
 /* ============================================================
+   Desktop-läge kommando- och statuslista (Bash 18)
+   ============================================================ */
+
+.desktop-cmd-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.desktop-cmd-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+}
+
+.desktop-cmd-code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+
+.desktop-cmd-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+.desktop-cmd-badge {
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.desktop-cmd-badge.no-rust {
+  background: rgba(74, 222, 128, 0.10);
+  color: var(--status-online);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+}
+
+.desktop-cmd-badge.needs-rust {
+  background: rgba(245, 158, 11, 0.10);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.22);
+}
+
+.desktop-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.desktop-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.desktop-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.desktop-status-dot.ok      { background: var(--status-online); }
+.desktop-status-dot.pending { background: var(--status-unknown); }
+.desktop-status-dot.error   { background: var(--status-offline); }
+
+.desktop-status-label {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.desktop-status-value {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.desktop-status-value.ok      { color: var(--status-online); }
+.desktop-status-value.pending { color: var(--text-muted); }
+.desktop-status-value.error   { color: var(--status-offline); }
+
+/* ============================================================
    Smart modellhjälp (Bash 16)
    ============================================================ */
 

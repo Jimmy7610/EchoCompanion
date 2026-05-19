@@ -5,6 +5,30 @@
 
 export type PerformanceLevel = "Snabb" | "Medel" | "Tung";
 
+// INSTÄLLNING - Tillgängliga uppgiftskategorier för modellrekommendationer
+export type ModelTask =
+  | "general-chat"
+  | "code"
+  | "writing"
+  | "analysis"
+  | "fast"
+  | "project-planning"
+  | "vision"
+  | "creative"
+  | "swedish";
+
+export const MODEL_TASK_LABELS: Record<ModelTask, string> = {
+  "general-chat": "Vanlig chat",
+  code: "Kod",
+  writing: "Skriva text",
+  analysis: "Analysera",
+  fast: "Snabba svar",
+  "project-planning": "Projektplanering",
+  vision: "Bildanalys",
+  creative: "Kreativt arbete",
+  swedish: "Svenska texter",
+};
+
 export interface ModelFamily {
   id: string;
   displayName: string;
@@ -19,6 +43,10 @@ export interface ModelFamily {
   performance: PerformanceLevel;
   /** Nycklar för namnmatchning (lowercase) */
   matchKeys: string[];
+  /** Uppgiftskategorier som modellen rekommenderas för, i prioritetsordning */
+  recommendedTasks?: ModelTask[];
+  /** Varning som visas när modellen är aktiv */
+  warning?: string;
 }
 
 // INSTÄLLNING - Lägg till nya modellfamiljer här
@@ -34,6 +62,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Llama 3.1 8B är ett utmärkt val för daglig användning med bra balans mellan hastighet och kvalitet.",
     performance: "Medel",
     matchKeys: ["llama"],
+    recommendedTasks: ["general-chat", "writing", "swedish", "creative", "project-planning", "analysis"],
   },
   {
     id: "qwen",
@@ -45,6 +74,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Välj Qwen när du vill skapa prompts till Claude Code eller analysera kod. Qwen2.5-Coder är specialbyggd för programmering.",
     performance: "Medel",
     matchKeys: ["qwen"],
+    recommendedTasks: ["code", "project-planning", "analysis", "general-chat", "swedish"],
   },
   {
     id: "mistral",
@@ -57,6 +87,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Mistral 7B är bland de snabbaste alternativen för lokal körning — perfekt om du har begränsat RAM.",
     performance: "Snabb",
     matchKeys: ["mistral"],
+    recommendedTasks: ["fast", "general-chat", "swedish", "writing", "analysis"],
   },
   {
     id: "gemma",
@@ -68,6 +99,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Gemma 2 2B kan köras på nästan vilken dator som helst. Bra om du har ont om VRAM.",
     performance: "Snabb",
     matchKeys: ["gemma"],
+    recommendedTasks: ["fast", "general-chat"],
   },
   {
     id: "deepseek",
@@ -79,6 +111,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "DeepSeek-Coder-V2 är ett av de bästa lokala alternativen för serius programmering. Kräver dock mer minne.",
     performance: "Tung",
     matchKeys: ["deepseek"],
+    recommendedTasks: ["code", "analysis"],
   },
   {
     id: "phi",
@@ -91,6 +124,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Phi-4-mini är perfekt om du vill ha kvalitetssvar utan att bränna GPU-minnet. Bra för Claude Code-integration.",
     performance: "Snabb",
     matchKeys: ["phi"],
+    recommendedTasks: ["fast", "code", "general-chat"],
   },
   {
     id: "codellama",
@@ -102,6 +136,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Kör CodeLlama 13B om du primärt arbetar med kod och vill ha Llama-kvalitet med kodspecialisering.",
     performance: "Medel",
     matchKeys: ["codellama", "code-llama"],
+    recommendedTasks: ["code"],
   },
   {
     id: "starcoder",
@@ -113,6 +148,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "StarCoder2 15B ger bra resultat för kodfullbordning men är tung. Prova 3B-varianten för snabbare svar.",
     performance: "Tung",
     matchKeys: ["starcoder", "star-coder"],
+    recommendedTasks: ["code"],
   },
   {
     id: "dolphin",
@@ -125,6 +161,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Dolphin-Mistral kombinerar Mistrals hastighet med Dolphins flexibilitet. Bra för berättandeprojekt som Taren.",
     performance: "Medel",
     matchKeys: ["dolphin"],
+    recommendedTasks: ["creative", "writing", "general-chat"],
   },
   {
     id: "nous",
@@ -136,6 +173,7 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Hermes 3 på Llama 3.1 är ett av de bästa open-source alternativen för komplex resonering. Rekommenderat för JarvisBrain.",
     performance: "Medel",
     matchKeys: ["nous", "hermes"],
+    recommendedTasks: ["analysis", "project-planning", "writing", "general-chat"],
   },
   {
     id: "mixtral",
@@ -147,6 +185,20 @@ export const MODEL_FAMILIES: ModelFamily[] = [
     tip: "Mixtral 8x7B kräver 32+ GB RAM/VRAM men ger nästan GPT-4-klass svar lokalt. För kraftfulla maskiner.",
     performance: "Tung",
     matchKeys: ["mixtral", "moe"],
+    recommendedTasks: ["analysis", "writing", "general-chat"],
+  },
+  {
+    id: "llava",
+    displayName: "LLaVA",
+    emoji: "👁️",
+    description:
+      "Large Language and Vision Assistant — en multimodal modell som kan analysera bilder och text tillsammans. Baseras på Llama eller Mistral.",
+    bestFor: "Bildanalys, bildtolkning och uppgifter som kombinerar bild och text.",
+    tip: "LLaVA passar bäst när du vill beskriva eller fråga om bilder. För ren textchatt ger vanliga modeller bättre resultat.",
+    performance: "Medel",
+    matchKeys: ["llava"],
+    recommendedTasks: ["vision"],
+    warning: "LLaVA är en bildmodell och passar bäst för bildanalys. Vid vanlig textchatt kan den ge sämre resultat än en textmodell.",
   },
 ];
 

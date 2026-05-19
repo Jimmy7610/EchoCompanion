@@ -7,6 +7,7 @@ import { formatModelSize } from "../features/ollama/ollamaService";
 import { COMPANION_PROFILES } from "../features/settings/settingsTypes";
 import { DEFAULT_PROJECTS } from "../features/projects/projectTypes";
 import { findModelFamily } from "../data/modelGuideData";
+import { getModelWarnings } from "../features/models/modelRecommendation";
 import type { TtsSettings } from "../features/tts/ttsTypes";
 import type { CompanionState } from "../features/companion/companionTypes";
 import CompanionAvatar from "./CompanionAvatar";
@@ -298,6 +299,12 @@ export default function RightPanel({
           activeModel={activeModel}
           onSelectModel={onSelectModel}
         />
+        {/* Modellvarningar (Bash 16) */}
+        {activeModel && getModelWarnings(activeModel).map((warning, i) => (
+          <div key={i} className="model-warning-box">
+            ⚠ {warning}
+          </div>
+        ))}
       </div>
 
       {/* Kompanjonprofiler */}

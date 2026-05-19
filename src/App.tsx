@@ -529,6 +529,7 @@ export default function App() {
         onSpeak={handleSpeak}
         onStopSpeaking={handleStopSpeaking}
         isSpeaking={isSpeaking}
+        onSelectModel={handleSelectModel}
       />
 
       <RightPanel

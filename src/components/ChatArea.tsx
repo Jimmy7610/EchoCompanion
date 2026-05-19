@@ -10,7 +10,12 @@ import type { TtsSettings } from "../features/tts/ttsTypes";
 import type { TtsVoiceInfo } from "../features/tts/ttsTypes";
 import { isSpeechSynthesisSupported, speakText, stopSpeaking } from "../features/tts/ttsService";
 import { TTS_TEST_PHRASES } from "../features/tts/ttsTestPhrases";
-import { MODEL_FAMILIES, findModelFamily } from "../data/modelGuideData";
+import { MODEL_FAMILIES, findModelFamily, MODEL_TASK_LABELS } from "../data/modelGuideData";
+import type { ModelTask } from "../data/modelGuideData";
+import {
+  getModelRecommendationForTask,
+  getModelWarnings,
+} from "../features/models/modelRecommendation";
 import type { OllamaStatus, OllamaModel } from "../features/ollama/ollamaService";
 import { formatModelSize } from "../features/ollama/ollamaService";
 import { COMPANION_PROFILES } from "../features/settings/settingsTypes";
@@ -339,13 +344,88 @@ function PlaceholderSection({
 interface ModellguideSectionProps {
   ollamaStatus: OllamaStatus;
   availableModels: OllamaModel[];
+  activeModel: string | null;
   onCheckOllama: () => void;
+  onSelectModel?: (model: string | null) => void;
+}
+
+// ============================================================
+// Smart modellhjälp — uppgiftsbaserade rekommendationer (Bash 16)
+// ============================================================
+
+interface SmartModelHelperProps {
+  availableModels: OllamaModel[];
+  activeModel: string | null;
+  onSelectModel?: (model: string | null) => void;
+}
+
+function SmartModelHelper({ availableModels, activeModel, onSelectModel }: SmartModelHelperProps) {
+  const [selectedTask, setSelectedTask] = useState<ModelTask>("general-chat");
+  const tasks = Object.entries(MODEL_TASK_LABELS) as [ModelTask, string][];
+  const recommended = getModelRecommendationForTask(selectedTask, availableModels);
+  const isAlreadyActive = recommended !== null && recommended === activeModel;
+
+  return (
+    <div className="smart-model-helper">
+      <div className="smart-model-helper-title">🧠 Smart modellhjälp</div>
+      <p className="smart-model-helper-desc">
+        Välj en uppgift så rekommenderar EchoCompanion den bäst lämpade installerade modellen.
+      </p>
+
+      <div className="settings-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+        <span className="settings-row-label">Jag vill arbeta med…</span>
+        <div className="prompt-form-select-wrapper" style={{ width: "100%" }}>
+          <select
+            className="prompt-form-select"
+            value={selectedTask}
+            onChange={(e) => setSelectedTask(e.target.value as ModelTask)}
+          >
+            {tasks.map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+          <span className="model-select-chevron">▾</span>
+        </div>
+      </div>
+
+      {availableModels.length === 0 ? (
+        <p className="smart-model-no-models">
+          Anslut till Ollama och kontrollera modeller för att få rekommendationer.
+        </p>
+      ) : recommended ? (
+        <div className="smart-model-recommendation">
+          <div className="smart-model-recommendation-label">Rekommenderad modell</div>
+          <div className="smart-model-recommendation-name">
+            {findModelFamily(recommended)?.emoji ?? "❓"} {recommended}
+          </div>
+          {isAlreadyActive ? (
+            <span className="smart-model-active-badge">✓ Redan aktiv</span>
+          ) : onSelectModel ? (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => onSelectModel(recommended)}
+              style={{ marginTop: 8 }}
+            >
+              ✓ Använd rekommenderad modell
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <p className="smart-model-no-models">
+          Ingen installerad modell matchar uppgiften <em>{MODEL_TASK_LABELS[selectedTask]}</em>.
+          Prova <code className="help-inline-code" style={{ fontSize: 11 }}>ollama pull llava</code> för bildanalys eller en annan modell.
+        </p>
+      )}
+    </div>
+  );
 }
 
 function ModellguideSection({
   ollamaStatus,
   availableModels,
+  activeModel,
   onCheckOllama,
+  onSelectModel,
 }: ModellguideSectionProps) {
   return (
     <div className="section-view">
@@ -358,7 +438,16 @@ function ModellguideSection({
 
       <div className="section-body" style={{ padding: 0, overflow: "auto" }}>
 
+        {/* Smart modellhjälp (Bash 16) */}
         <div style={{ padding: "16px 20px 8px" }}>
+          <SmartModelHelper
+            availableModels={availableModels}
+            activeModel={activeModel}
+            onSelectModel={onSelectModel}
+          />
+        </div>
+
+        <div style={{ padding: "8px 20px 8px" }}>
           <div className="guide-section-heading">
             <span>⬇ Installerade modeller</span>
             <span className="guide-section-count">
@@ -2221,6 +2310,7 @@ interface ChatAreaProps {
   onSpeak: (text: string) => void;                                  // Bash 13
   onStopSpeaking: () => void;                                       // Bash 13
   isSpeaking?: boolean;                                             // Bash 15
+  onSelectModel?: (model: string | null) => void;                  // Bash 16
 }
 
 export default function ChatArea({
@@ -2254,6 +2344,7 @@ export default function ChatArea({
   onSpeak,
   onStopSpeaking,
   isSpeaking,
+  onSelectModel,
 }: ChatAreaProps) {
   const activeProjectObj = DEFAULT_PROJECTS.find((p) => p.id === activeProjectId) ?? null;
 
@@ -2281,7 +2372,9 @@ export default function ChatArea({
           <ModellguideSection
             ollamaStatus={ollamaStatus}
             availableModels={availableModels}
+            activeModel={activeModel}
             onCheckOllama={onCheckOllama}
+            onSelectModel={onSelectModel}
           />
         );
 

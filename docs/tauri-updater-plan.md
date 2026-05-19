@@ -137,7 +137,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 
 ---
 
-## Nuvarande status (Build 25)
+## Nuvarande status (Build 26)
 
 | Steg | Status |
 |------|--------|
@@ -161,18 +161,26 @@ Den visar ett informativt felmeddelande tills pubkey och latest.json finns på p
 - `docs/release-update-workflow.md` — komplett steg-för-steg-guide på svenska
 - Inställningar → Uppdateringslägen — statuschecklista visar vad som är klart/saknas
 
+**Build 26 tillagt:**
+- Version bumpad till v0.1.1 (`package.json`, `tauri.conf.json`, `appInfo.ts`)
+- `"createUpdaterArtifacts": true` tillagd i `tauri.conf.json` bundle-sektion
+- `scripts/create-updater-key.ps1` — genererar nyckelpar lokalt, visar pubkey, visar aldrig privat nyckel
+- `scripts/build-signed-release.ps1` — kontrollerar förutsättningar, sätter `TAURI_SIGNING_PRIVATE_KEY` från lokal fil, kör hela byggkedjan
+- `scripts/create-latest-json.ps1` — läser .sig-filen och genererar `release-work/latest.json`
+- `docs/github-release-v0.1.1-checklist.md` — fullständig checklista för release och end-to-end-test
+- Förbättrade felmeddelanden i `tauriUpdater.ts` (kanal saknas, signaturfel)
+
 ---
 
-## Nästa steg (Build 26 — v0.1.1 signerat test)
+## Nästa steg (Build 27 — publicera och testa)
 
-1. Generera minisign-nyckelpar: `npm run tauri -- signer generate -w ~/.tauri/echocompanion.key`
-2. Byt ut `PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY` i `tauri.conf.json` med riktig pubkey
-3. Bygg med signering: `$env:TAURI_SIGNING_PRIVATE_KEY = (Get-Content ~/.tauri/echocompanion.key -Raw); npm run tauri:build`
-4. Kopiera signaturen från `.sig`-filen, skapa `latest.json` med rätt version, URL och signatur
-5. Skapa GitHub Release `v0.1.1` och ladda upp installer + zip + sig + latest.json
-6. Testa: installera v0.1.0, klicka "Sök uppdatering" — ska hitta och installera v0.1.1
+1. Kör `.\scripts\create-updater-key.ps1` lokalt — kopiera pubkey till `tauri.conf.json`
+2. Kör `.\scripts\build-signed-release.ps1` — skapar signerade artefakter
+3. Kör `.\scripts\create-latest-json.ps1` — skapar `release-work/latest.json`
+4. Publicera GitHub Release `v0.1.1` med alla filer (se `docs/github-release-v0.1.1-checklist.md`)
+5. Testa: installera v0.1.0, klicka "Sök uppdatering" — ska hitta och installera v0.1.1
 
-Se fullständig guide: `docs/release-update-workflow.md`
+Se fullständig guide: `docs/github-release-v0.1.1-checklist.md`
 
 ---
 

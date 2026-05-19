@@ -214,6 +214,39 @@ Vänta ~5–15 min (Rust-kompilering av release-version tar längre tid än dev-
 
 ---
 
+## Build 26 — v0.1.1 signed release scripts
+
+### Vad som gjordes
+
+- Version bumpad till `v0.1.1` i `package.json`, `src-tauri/tauri.conf.json`, `src/data/appInfo.ts`
+- `"createUpdaterArtifacts": true` tillagd i `tauri.conf.json` — aktiverar generering av `.nsis.zip` och `.sig`-filer vid bygge med signering
+- `scripts/create-updater-key.ps1` — genererar `.tauri-signing/echocompanion.key` lokalt, visar pubkey i terminal, visar aldrig privat nyckel
+- `scripts/build-signed-release.ps1` — kontrollerar att nyckel och pubkey finns, sätter `TAURI_SIGNING_PRIVATE_KEY` från lokal fil, kör `typecheck` + `build` + `tauri:build`
+- `scripts/create-latest-json.ps1` — läser `.sig`-fil från bygget, skriver `release-work/latest.json`
+- `docs/github-release-v0.1.1-checklist.md` — steg-för-steg-checklista för release och end-to-end-test
+
+### Vad som återstår (Build 27)
+
+Dessa steg kräver Jimmys lokala miljö:
+
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+
+# 1. Generera nyckelpar (engång)
+.\scripts\create-updater-key.ps1
+# Kopiera pubkey till src-tauri/tauri.conf.json och committa
+
+# 2. Bygg signerad release
+.\scripts\build-signed-release.ps1
+
+# 3. Skapa latest.json
+.\scripts\create-latest-json.ps1
+
+# 4. Ladda upp till GitHub Releases v0.1.1 (se docs/github-release-v0.1.1-checklist.md)
+```
+
+---
+
 ## Build 25 — Signeringsflöde och release-dokumentation
 
 ### Vad som gjordes

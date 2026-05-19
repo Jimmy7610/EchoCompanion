@@ -762,9 +762,9 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
-      {/* Statuschecklista — visar vad som är på plats och vad som saknas */}
+      {/* Statuschecklista — Build 26 state */}
       <div className="updater-checklist">
-        <div className="updater-checklist-title">Vad som krävs för aktiv uppdaterare</div>
+        <div className="updater-checklist-title">Status — v0.1.1 signerad test-release</div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
           <span>Updater-plugin installerat (<code className="help-inline-code">@tauri-apps/plugin-updater</code>)</span>
@@ -774,26 +774,29 @@ function InstallerUpdateSection() {
           <span>Knappkoppling till plugin-API</span>
         </div>
         <div className="updater-checklist-row">
-          <span className="updater-checklist-missing">❌</span>
-          <span>Signing key — generera med <code className="help-inline-code">npm run tauri -- signer generate</code></span>
+          <span className="updater-checklist-ok">✅</span>
+          <span>Hjälpscript klara — <code className="help-inline-code">scripts/create-updater-key.ps1</code>, <code className="help-inline-code">build-signed-release.ps1</code>, <code className="help-inline-code">create-latest-json.ps1</code></span>
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-missing">❌</span>
-          <span><code className="help-inline-code">latest.json</code> — skapa och ladda upp till GitHub Releases</span>
+          <span>Signing key — kräver lokal nyckelgenerering (kör <code className="help-inline-code">scripts/create-updater-key.ps1</code>)</span>
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-missing">❌</span>
-          <span>Release-kanal — publicera signerad release på GitHub</span>
+          <span><code className="help-inline-code">latest.json</code> — mall och script finns, kräver signerat bygge</span>
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-missing">❌</span>
-          <span>Sluttest — installera gammal version och testa uppdatering</span>
+          <span>Release-kanal — kräver GitHub Release v0.1.1</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-missing">❌</span>
+          <span>Sluttest — ej genomfört</span>
         </div>
         <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          Knappen är tekniskt kopplad till Tauri updater, men kan inte installera en
-          uppdatering förrän signerad release och{" "}
-          <code className="help-inline-code">latest.json</code> finns på GitHub Releases.
-          Se <code className="help-inline-code">docs/release-update-workflow.md</code>.
+          Build 26 förbereder v0.1.1 som första signerade updater-test. Privat nyckel ska
+          ligga lokalt och aldrig i repot. Se{" "}
+          <code className="help-inline-code">docs/github-release-v0.1.1-checklist.md</code>.
         </p>
       </div>
 

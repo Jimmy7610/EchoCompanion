@@ -32,6 +32,32 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.1 Build 26
+
+### ✅ Klart i Build 26
+- **Version bumpad till v0.1.1** — package.json, src-tauri/tauri.conf.json, src/data/appInfo.ts
+- **"createUpdaterArtifacts": true** tillagd i 	auri.conf.json — aktiverar generering av signerade artefakter vid 	auri:build
+- **scripts/create-updater-key.ps1** — genererar lokal minisign-nyckel, visar pubkey, visar aldrig privat nyckel
+- **scripts/build-signed-release.ps1** — verifierar förutsättningar, laddar nyckel från lokal fil, kör fullständig signerad build-kedja
+- **scripts/create-latest-json.ps1** — läser .sig-filen från bygget, genererar elease-work/latest.json
+- **docs/github-release-v0.1.1-checklist.md** — komplett checklista: nyckel → bygg → latest.json → GitHub Release → end-to-end-test
+- **Förbättrade felmeddelanden** i uppdateraren (skillnad på kanal-saknas vs signaturfel)
+- **Statuschecklista uppdaterad** — visar nu tre ✅ (plugin, knappling, scripts) och tre ❌ (nyckel, latest.json, release)
+- Inga privata nycklar i repot, inga shell-kommandon från appen
+- Build 25 → 26
+
+### ⚠ Lokala steg krävs för aktiv uppdaterare
+Kör dessa på Jimmys dator för att aktivera one-click-uppdateraren:
+`powershell
+.\scripts\create-updater-key.ps1       # generera nyckelpar
+# → kopiera pubkey till tauri.conf.json och committa
+.\scripts\build-signed-release.ps1    # bygg signerad v0.1.1
+.\scripts\create-latest-json.ps1      # skapa latest.json
+# → ladda upp till GitHub Releases v0.1.1
+`
+Se [docs/github-release-v0.1.1-checklist.md](docs/github-release-v0.1.1-checklist.md) för fullständig guide.
+
+---
 ## Funktioner i v0.1.0 Build 25
 
 ### ✅ Klart i Build 25

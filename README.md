@@ -32,6 +32,34 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 22
+
+### ✅ Klart i Build 22
+- **Tauri production build-konfiguration verifierad** — alla ikoner finns (`src-tauri/icons/`), `tauri.conf.json` korrekt, bundle-mål: NSIS + MSI
+- **Desktop-läge uppdaterat** — ny statusrad "Bundle-konfiguration: Verifierad (Build 22)", samt rader för installer/bundle-skapande
+- **`docs/desktop-packaging.md` utökad** — Build 22-sektion med konfigurationstabell, förväntad output-struktur och steg-för-steg lokal körning
+- **`docs/desktop-test-checklist.md` uppdaterad** — detaljerat röktestprotokoll för installerad app (Ollama, backup, version, auto-install-kontroll)
+- Inget auto-uppdaterat, inga nya behörigheter, ingen shell-exekvering
+- Build 21 → 22
+
+### ⚠ Blocker: tauri:build körs lokalt av Jimmy
+Sandbox-miljön saknar Rust i PATH. `npm run tauri:build` måste köras på Jimmys dator.
+
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+npm run tauri:build
+```
+
+Förväntad output:
+```
+src-tauri/target/release/bundle/nsis/EchoCompanion_0.1.0_x64-setup.exe
+src-tauri/target/release/bundle/msi/EchoCompanion_0.1.0_x64_en-US.msi
+```
+
+Följ röktestprotokollet i [`docs/desktop-test-checklist.md`](docs/desktop-test-checklist.md) efter bygget.
+
+---
+
 ## Funktioner i v0.1.0 Build 21
 
 ### ✅ Klart i Build 21

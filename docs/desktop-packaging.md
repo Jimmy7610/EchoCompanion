@@ -133,6 +133,87 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 22 — Production build prep (konfigurationsverifiering)
+
+### Kommando
+```powershell
+npm run tauri:build
+```
+
+### Resultat (Build 22)
+
+Kommandot kördes från sandbox-miljön men blockerades eftersom `cargo` inte finns i sandbox-miljöns PATH.
+Rust är installerat på Jimmys lokala dator och fungerar för `tauri:dev`, men sandbox-miljön ärver inte hans PATH.
+
+**Jimmy måste köra `npm run tauri:build` lokalt.**
+
+### Konfigurationsverifiering ✅
+
+Alla konfigurationsfiler kontrollerades och är korrekta:
+
+| Inställning | Värde | Status |
+|-------------|-------|--------|
+| `productName` | EchoCompanion | ✅ |
+| `version` | 0.1.0 | ✅ |
+| `identifier` | se.jimmyeliasson.echocompanion | ✅ |
+| `bundle.targets` | all (NSIS + MSI) | ✅ |
+| `frontendDist` | ../dist | ✅ |
+| `beforeBuildCommand` | npm run build | ✅ |
+
+### Ikonstatus ✅
+
+Alla ikonfiler som listas i `bundle.icon` finns i `src-tauri/icons/`:
+
+| Fil | Status |
+|-----|--------|
+| `icons/32x32.png` | ✅ Finns |
+| `icons/128x128.png` | ✅ Finns |
+| `icons/128x128@2x.png` | ✅ Finns |
+| `icons/icon.icns` | ✅ Finns |
+| `icons/icon.ico` | ✅ Finns |
+
+### Förväntad output när Jimmy kör lokalt
+
+```
+src-tauri/target/release/bundle/
+├── nsis/
+│   └── EchoCompanion_0.1.0_x64-setup.exe    ← NSIS-installer
+└── msi/
+    └── EchoCompanion_0.1.0_x64_en-US.msi    ← MSI-installer
+```
+
+Filnamnen kan variera något beroende på Tauri-version och Windows-konfiguration.
+
+### Steg för Jimmy — kör lokalt
+
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+npm run typecheck
+npm run build
+npm run tauri:build
+```
+
+Vänta ~5–15 min (Rust-kompilering av release-version tar längre tid än dev-version).
+
+### Efter att bygget är klart
+
+1. Öppna `src-tauri/target/release/bundle/` i Utforskaren
+2. Kör NSIS-installationsfilen (`*-setup.exe`)
+3. Verifiera att EchoCompanion startar från Start-menyn
+4. Kontrollera version i Inställningar → App-information (ska visa v0.1.0 Build 22)
+5. Testa Ollama-anslutning i den installerade appen
+6. Testa backup-export
+7. Uppdatera Build 22-tabellen ovan med verkliga testresultat
+
+### Kända begränsningar (Build 22)
+
+- Ikoner är platshållare (ingen riktig EchoCompanion-designad ikon)
+- localStorage-data delas inte automatiskt mellan dev-läge och installerad app
+- Auto-uppdatering är inte implementerad; uppdatering sker via Git pull
+- NSIS-installer kräver att Windows tillåter körning av okänt program (SmartScreen)
+
+---
+
 ## Build 18 Desktop Test Status
 
 | Check | Status |

@@ -65,22 +65,46 @@ Kör: `npm run tauri:dev`
 ## Desktop-produktionstest (npm run tauri:build)
 
 **Kräver Rust installerat och att tauri:dev fungerar.**
+**Konfiguration verifierad i Build 22 — alla ikoner finns och tauri.conf.json är korrekt.**
 
-Kör: `npm run tauri:build`
+Kör lokalt i PowerShell:
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+npm run tauri:build
+```
 
-- [ ] Bygget slutförs utan fel
-- [ ] Installationspaket skapas i:
-  - `src-tauri/target/release/bundle/nsis/` (NSIS .exe)
-  - `src-tauri/target/release/bundle/msi/` (MSI .msi)
-- [ ] Kör installationsfilen → appen installeras
-- [ ] Appen startar från Start-menyn eller skrivbordet
-- [ ] Version och build visas korrekt i Inställningar → App-information
+Vänta 5–15 min. Release-kompilering tar längre tid än dev.
+
+### Build-verifiering
+- [ ] Bygget slutförs utan fel i terminalen
+- [ ] Output-mapp skapas: `src-tauri/target/release/bundle/`
+- [ ] NSIS-installer finns: `bundle/nsis/EchoCompanion_0.1.0_x64-setup.exe`
+- [ ] MSI-installer finns: `bundle/msi/EchoCompanion_0.1.0_x64_en-US.msi`
+
+### Installationstest
+- [ ] Kör NSIS-installationsfilen (`*-setup.exe`)
+  - OBS: Windows SmartScreen kan varna för okänt program — välj "Kör ändå"
+- [ ] Appen installeras utan fel
+- [ ] Appen startar från Start-menyn eller genväg på skrivbordet
+
+### Röktest av installerad app
+- [ ] Välkomstsidan visas (dark theme, EchoCompanion-rubrik)
+- [ ] Inställningar → App-information visar rätt version och build
+- [ ] "Kontrollera Ollama" fungerar (kräver att Ollama körs)
+- [ ] Skicka ett testmeddelande → svar kommer tillbaka
+- [ ] Backup-export fungerar (Inställningar → Backup och export)
+- [ ] Uppdateringsknappen (Inställningar → Uppdateringar) öppnar ingen auto-install
+- [ ] Inställningar → Uppdatera via Git visar kopieringsbara kommandon
 - [ ] Inga betaltjänster, molnanrop eller API-nycklar krävs
-- [ ] Ollama-chatten fungerar i den installerade appen
+
+### Dataisolering
+- [ ] localStorage-data från dev-läget delas INTE med den installerade appen (förväntat beteende)
+  - WebView-storage är isolerad per app-identifierare
+  - Importera backup från dev-läget om du vill flytta data
 
 ---
 
-## Kända begränsningar (Build 18)
+## Kända begränsningar (uppdaterat Build 22)
 
 - **Web Speech TTS** beror på Windows WebView2-röster — kan skilja sig från webbläsarröster
 - **Data i localStorage/WebView** — chattar och inställningar lagras i WebView-storage, inte i vanlig filsystem
@@ -102,4 +126,4 @@ Om du ändrar versionsnummer, uppdatera dessa tre filer:
 
 ---
 
-*Uppdaterat i Build 18 — 2026-05-19*
+*Uppdaterat i Build 22 — 2026-05-19*

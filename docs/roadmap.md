@@ -24,12 +24,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 19.1 | Tauri icon fix — placeholder icons generated (PNG + ICO + ICNS) via PowerShell/GDI+, no external deps |
 | 20 | UX polish — welcome suggestions, shorter input placeholders, sidebar chat count, settings index, desktop status updated |
 | 21 | Manual Git update workflow — copyable commands in Settings, docs/git-update-workflow.md, no auto-execution |
+| 22 | Tauri production build prep — config verified (icons, tauri.conf.json, bundle targets), tauri:build must run locally (sandbox has no Rust in PATH) |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 22 | Tauri production build and installer test — run tauri:build, verify .exe/.msi output, document result |
+| 23 | Installer smoke test and release notes — run tauri:build locally, verify .exe/.msi, test installed app, prepare release notes |
 
 ## Later
 

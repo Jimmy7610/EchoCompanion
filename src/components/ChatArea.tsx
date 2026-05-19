@@ -1671,10 +1671,20 @@ function InstallningarSection({
                 <span className="desktop-status-value ok">Testat lokalt</span>
               </div>
               <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">Bundle-konfiguration</span>
+                <span className="desktop-status-value ok">Verifierad (Build 22)</span>
+              </div>
+              <div className="desktop-status-row">
                 <span className="desktop-status-dot pending" />
-                {/* INSTÄLLNING - Ändra till "ok" när tauri:build verifierad */}
+                {/* INSTÄLLNING - Ändra till "ok" och värde "Fungerar" när tauri:build körts lokalt och installer verifierad */}
                 <span className="desktop-status-label">Desktop build (npm run tauri:build)</span>
-                <span className="desktop-status-value pending">Inte testad ännu</span>
+                <span className="desktop-status-value pending">Körs lokalt av Jimmy</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot pending" />
+                <span className="desktop-status-label">Installer/bundle skapad</span>
+                <span className="desktop-status-value pending">Väntar på lokal build</span>
               </div>
             </div>
 
@@ -1684,9 +1694,10 @@ function InstallningarSection({
               color: "var(--status-online)",
               marginTop: 14,
             }}>
-              ✓ EchoCompanion kan nu köras som Tauri-fönster i utvecklingsläge. Riktig installer/build
-              testas senare. Mer info i{" "}
-              <code style={{ fontSize: 11 }}>docs/desktop-test-checklist.md</code>.
+              ✓ Konfiguration verifierad i Build 22: alla ikoner finns, tauri.conf.json är korrekt,
+              bundle-mål är NSIS + MSI. Kör{" "}
+              <code style={{ fontSize: 11 }}>npm run tauri:build</code>{" "}
+              lokalt för att skapa installationsfilen.
             </div>
 
             <div style={{ marginTop: 18 }}>

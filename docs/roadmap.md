@@ -16,12 +16,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 11 | Desktop packaging readiness — Tauri config, package scripts, appInfo constants, docs |
 | 12 | Local app data storage plan — storage key registry, diagnostics UI, adapter placeholder, migration plan |
 | 13 | Windows TTS first version — Web Speech API, voice select, rate/pitch/volume, auto-read, manual "Läs upp" button |
+| 14 | TTS polish — improved text cleanup, Swedish voice detection, test phrases, Piper prep section, tts-plan.md |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 14 | Piper TTS preparation or simple companion/avatar panel — whichever is safest next |
+| 15 | Simple companion/avatar panel — static or CSS-animated companion presence |
 | 15 | Simple companion/avatar panel — static or CSS-animated companion presence in the right panel |
 
 

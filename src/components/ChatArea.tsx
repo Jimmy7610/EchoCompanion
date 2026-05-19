@@ -9,6 +9,7 @@ import MessageBubble from "./MessageBubble";
 import type { TtsSettings } from "../features/tts/ttsTypes";
 import type { TtsVoiceInfo } from "../features/tts/ttsTypes";
 import { isSpeechSynthesisSupported, speakText, stopSpeaking } from "../features/tts/ttsService";
+import { TTS_TEST_PHRASES } from "../features/tts/ttsTestPhrases";
 import { MODEL_FAMILIES, findModelFamily } from "../data/modelGuideData";
 import type { OllamaStatus, OllamaModel } from "../features/ollama/ollamaService";
 import { formatModelSize } from "../features/ollama/ollamaService";
@@ -489,6 +490,71 @@ function ModellguideSection({
 }
 
 // ============================================================
+// TTS-testkontroller (Bash 14) — inline i inställningssektionen
+// ============================================================
+
+interface TtsTestControlsProps {
+  ttsSettings: TtsSettings;
+  onResetTtsSettings: () => void;
+}
+
+function TtsTestControls({ ttsSettings, onResetTtsSettings }: TtsTestControlsProps) {
+  const [selectedPhraseIndex, setSelectedPhraseIndex] = useState(0);
+
+  return (
+    <>
+      {/* Testfras-väljare */}
+      <div className="settings-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, marginTop: 14 }}>
+        <span className="settings-row-label">Testfras</span>
+        <div className="prompt-form-select-wrapper" style={{ width: "100%" }}>
+          <select
+            className="prompt-form-select"
+            value={selectedPhraseIndex}
+            onChange={(e) => setSelectedPhraseIndex(parseInt(e.target.value, 10))}
+          >
+            {TTS_TEST_PHRASES.map((phrase, i) => (
+              <option key={i} value={i}>
+                {phrase.label}
+              </option>
+            ))}
+          </select>
+          <span className="model-select-chevron">▾</span>
+        </div>
+      </div>
+
+      {/* Knappar */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => speakText(TTS_TEST_PHRASES[selectedPhraseIndex].text, ttsSettings)}
+          title="Spela upp vald testfras"
+        >
+          🔊 Testa röst
+        </button>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => stopSpeaking()}
+          title="Stoppa pågående uppläsning"
+        >
+          ⏹ Stoppa uppläsning
+        </button>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => {
+            if (window.confirm("Återställ röstinställningar till standard?")) {
+              onResetTtsSettings();
+            }
+          }}
+          title="Återställ alla röstinställningar till standardvärden"
+        >
+          ↺ Återställ röstinställningar
+        </button>
+      </div>
+    </>
+  );
+}
+
+// ============================================================
 // Inställningar-sektionen (Bash 9)
 // ============================================================
 
@@ -905,7 +971,7 @@ function InstallningarSection({
             )}
           </div>
 
-          {/* Röst / uppläsning (Bash 13) */}
+          {/* Röst / uppläsning (Bash 13–14) */}
           <div className="settings-section">
             <div className="settings-section-title">🔊 Röst / uppläsning</div>
             <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 14 }}>
@@ -978,27 +1044,50 @@ function InstallningarSection({
 
                 {/* Röstval */}
                 <div className="settings-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, marginTop: 10 }}>
-                  <span className="settings-row-label">Röst</span>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                    <span className="settings-row-label">Röst</span>
+                    {availableTtsVoices.length > 0 && (
+                      <span style={{ fontSize: 10.5, color: "var(--text-muted)" }}>
+                        {availableTtsVoices.length} röster tillgängliga
+                        {availableTtsVoices.some((v) => v.lang.startsWith("sv")) && (
+                          <span style={{ color: "var(--status-online)", marginLeft: 5 }}>
+                            · ✓ Svensk röst hittad
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </div>
+
                   {availableTtsVoices.length === 0 ? (
                     <div className="tts-info-box">
-                      Inga röster hittades ännu. Testa att ladda om appen eller kontrollera Windows röstinställningar.
+                      Inga röster hittades ännu. Testa att ladda om appen eller kontrollera Windows röstinställningar (Inställningar → Tid och språk → Tal).
                     </div>
                   ) : (
-                    <div className="prompt-form-select-wrapper" style={{ width: "100%" }}>
-                      <select
-                        className="prompt-form-select"
-                        value={ttsSettings.selectedVoiceName ?? ""}
-                        onChange={(e) => onUpdateTtsSettings({ selectedVoiceName: e.target.value || null })}
-                      >
-                        <option value="">— Automatisk (föredrar svenska) —</option>
-                        {availableTtsVoices.map((v) => (
-                          <option key={v.name} value={v.name}>
-                            {v.name} ({v.lang})
-                          </option>
-                        ))}
-                      </select>
-                      <span className="model-select-chevron">▾</span>
-                    </div>
+                    <>
+                      <div className="prompt-form-select-wrapper" style={{ width: "100%" }}>
+                        <select
+                          className="prompt-form-select"
+                          value={ttsSettings.selectedVoiceName ?? ""}
+                          onChange={(e) => onUpdateTtsSettings({ selectedVoiceName: e.target.value || null })}
+                        >
+                          <option value="">— Automatisk (föredrar svenska) —</option>
+                          {availableTtsVoices.map((v) => (
+                            <option key={v.name} value={v.name}>
+                              {v.name} ({v.lang}){v.lang.startsWith("sv") ? " ★" : ""}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="model-select-chevron">▾</span>
+                      </div>
+                      {ttsSettings.selectedVoiceName && (
+                        <span style={{ fontSize: 11, color: "var(--accent-text)" }}>
+                          Vald: {ttsSettings.selectedVoiceName}
+                        </span>
+                      )}
+                      <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, margin: 0 }}>
+                        Rösterna kommer från Windows/webbläsaren. Om du saknar svensk röst, kontrollera Windows röstinställningar (Inställningar → Tid och språk → Tal).
+                      </p>
+                    </>
                   )}
                 </div>
 
@@ -1065,38 +1154,39 @@ function InstallningarSection({
                   </div>
                 </div>
 
-                {/* Knappar */}
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={() =>
-                      speakText(
-                        "Hej Jimmy, EchoCompanion kan nu läsa upp svar med en lokal röst.",
-                        ttsSettings
-                      )
-                    }
-                  >
-                    🔊 Testa röst
-                  </button>
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => stopSpeaking()}
-                  >
-                    ⏹ Stoppa uppläsning
-                  </button>
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => {
-                      if (window.confirm("Återställ röstinställningar till standard?")) {
-                        onResetTtsSettings();
-                      }
-                    }}
-                  >
-                    ↺ Återställ röstinställningar
-                  </button>
-                </div>
+                {/* Testfras-väljare + knappar (Bash 14) */}
+                <TtsTestControls ttsSettings={ttsSettings} onResetTtsSettings={onResetTtsSettings} />
               </>
             )}
+          </div>
+
+          {/* Piper TTS – planerad lokal röst (Bash 14) */}
+          <div className="settings-section">
+            <details className="tts-piper-details">
+              <summary className="tts-piper-summary">
+                🔬 Piper TTS – planerad lokal röst
+                <span className="tts-piper-badge">Ej installerad</span>
+              </summary>
+              <div className="tts-piper-body">
+                <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 12 }}>
+                  Piper är en framtida lokal TTS-motor som kan ge bättre offline-röster. Den är <strong>inte installerad eller kopplad</strong> i denna build.
+                </p>
+                <div style={{ fontSize: 11.5, color: "var(--text-secondary)", fontWeight: 600, marginBottom: 6 }}>
+                  Checklista inför framtida Piper-integration:
+                </div>
+                <ul className="piper-checklist">
+                  <li>⬜ Ladda ner Piper (gratis, open source)</li>
+                  <li>⬜ Ladda ner svensk Piper-röst (t.ex. sv_SE-nst-medium)</li>
+                  <li>⬜ Spara röstfiler lokalt i appens datakatalog</li>
+                  <li>⬜ Koppla EchoCompanion till Piper via Tauri shell-API</li>
+                  <li>⬜ Testa WAV-uppspelning i appen</li>
+                  <li>⬜ Välja Web Speech eller Piper i inställningar</li>
+                </ul>
+                <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, marginTop: 10 }}>
+                  Piper kräver Rust/Tauri för att anropa lokala binärer. Implementeras i ett senare build.
+                </p>
+              </div>
+            </details>
           </div>
 
           {/* Standardval (Bash 9) */}
@@ -2246,6 +2336,16 @@ export default function ChatArea({
             </span>
           </div>
           <div className="header-actions">
+            {/* Kompakt TTS-knapp i chatheadern när uppläsning är aktiv (Bash 14) */}
+            {ttsSettings.enabled && (
+              <button
+                className="btn btn-secondary btn-sm tts-header-stop-btn"
+                onClick={onStopSpeaking}
+                title="Stoppa pågående uppläsning"
+              >
+                ⏹ Stoppa röst
+              </button>
+            )}
             <button
               className="btn btn-secondary btn-sm"
               onClick={onNewChat}

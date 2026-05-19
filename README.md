@@ -32,6 +32,28 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 14
+
+### ✅ Klart i Build 14
+- **Förbättrad textstädning** — kodblock, inline-kod, URL:ar (ersätts med "länk"), rubriker, listsymboler och markdown-symboler rensas ordentligt inför uppläsning
+- **Max textlängd** — texter längre än 4 000 tecken trunkeras vid sista meningsgränsen, med ett meddelande om avkortning
+- **Förbättrat röstval** — tydligare prioritet: sv-lang → Swedish/Svenska i namn → systemstandard → första röst
+- **`getBestDefaultVoice()`** — exporterad hjälpfunktion för röstprioritet
+- **`src/features/tts/ttsTestPhrases.ts`** — fyra svenska testfraser: Kort, Normalt, Längre och Projekt-test
+- **Testfras-väljare i inställningar** — välj testfras och spela upp direkt
+- **Röstinfo** — visar antal röster, "✓ Svensk röst hittad" om en sv-röst finns
+- **"★" i röstsväljaren** — markerar svenska röster
+- **Vald röst visas** — namn visas under röstsväljaren när en röst är vald
+- **Info om Windows röstinställningar** — länk till Inställningar → Tid och språk → Tal
+- **"Stoppa röst"-knapp i chatheadern** — syns när uppläsning är aktiverat
+- **Piper TTS-sektion** — informationssektion i Inställningar, ej integrerad kod
+- **`docs/tts-plan.md`** — fullständig plan för TTS-väg framåt
+- Build 13 → 14
+
+### ⚠ Begränsningar i Build 14
+- Piper är fortfarande inte integrerat — dokumenterat och förberett men ingen körbar kod
+- Röster beror fortfarande på Windows-miljö
+
 ## Funktioner i v0.1.0 Build 13
 
 ### ✅ Klart i Build 13

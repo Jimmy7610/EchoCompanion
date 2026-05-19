@@ -32,6 +32,31 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 19.1
+
+### ✅ Klart i Build 19.1
+- **Tauri-ikoner skapade** — `src-tauri/icons/` var tom och orsakade build-fel; alla krävda filer genererades med PowerShell + System.Drawing (GDI+), utan externa verktyg eller betalda resurser
+- **`icon.ico`** — 12 KB, innehåller 16 / 32 / 48 / 256 px inbäddad PNG — krävs av Windows-resourcefilen i Tauri-build
+- **`icon.icns`** — 4 KB, macOS-platshållare (ic07, 128×128 PNG i ICNS-container)
+- **`32x32.png`, `128x128.png`, `128x128@2x.png`, `icon.png`** — alla genererade med samma design
+- **Ikondesign:** mörk bakgrund (#08080F) · lila glow-ring (#8b5cf6) · cyan orb (#06b6d4) · vit highlight
+- **`npm run tauri:dev` bör inte längre krascha** på saknad `icons/icon.ico`
+- TypeScript-kontroll: passerar · Frontend-build: passerar
+- Build 18 → 19.1
+
+### ⚠ Begränsningar i Build 19.1
+- Ikonerna är platshållare — ingen riktig EchoCompanion-designad ikon ännu
+- Ersätt med `npm run tauri icon sökväg/till/ikon.png` när en final 1024×1024-ikon finns
+- Tauri-fönstret är inte bekräftat öppnat — Jimmy måste köra `npm run tauri:dev` lokalt för att verifiera
+
+### 🧪 Att testa manuellt
+1. Kör `npm run tauri:dev` i terminalen
+2. Vänta ~2–5 min på Rust-kompilering (första gången)
+3. Tauri-fönstret ska öppnas utan `icons/icon.ico`-fel
+4. Följ [`docs/desktop-test-checklist.md`](docs/desktop-test-checklist.md) för fullständigt test
+
+---
+
 ## Funktioner i v0.1.0 Build 18
 
 ### ✅ Klart i Build 18

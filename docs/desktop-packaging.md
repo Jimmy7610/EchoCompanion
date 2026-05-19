@@ -105,6 +105,34 @@ When bumping the version:
 
 ---
 
+## Build 19.1 — Placeholder icons added
+
+Placeholder icons were generated programmatically using PowerShell + System.Drawing (GDI+).
+No external tools or paid assets required.
+
+Design: dark circle (#08080F bg) · purple glow ring (#8b5cf6) · cyan orb (#06b6d4) · white highlight.
+
+Files created in `src-tauri/icons/`:
+
+| File | Size | Purpose |
+|------|------|---------|
+| `icon.ico` | ~12 KB | **Windows — required** (16, 32, 48, 256 px embedded PNG) |
+| `icon.icns` | ~4 KB | macOS placeholder (128×128 PNG, ic07) |
+| `32x32.png` | ~1 KB | Tauri icon list |
+| `128x128.png` | ~4 KB | Tauri icon list |
+| `128x128@2x.png` | ~9 KB | Tauri icon list (256×256 source) |
+| `icon.png` | ~9 KB | General-purpose 256×256 |
+
+To replace with a real icon later:
+1. Create a 1024×1024 PNG with your final icon design
+2. Run: `npm run tauri icon path/to/your-icon.png`
+   (requires Rust + Tauri CLI installed)
+3. This regenerates all sizes automatically
+
+The required Windows resource file path is: `src-tauri/icons/icon.ico`
+
+---
+
 ## Build 18 Desktop Test Status
 
 | Check | Status |

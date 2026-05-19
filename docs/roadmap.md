@@ -21,6 +21,7 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 16 | Smart model helper — rule-based model recommendations by task, LLaVA family, model warnings in RightPanel |
 | 17 | Update checker — GitHub Releases API, version comparison, notification badge in StatusBar, no auto-install |
 | 18 | Tauri desktop testing — Rust check, frontend verified, Desktop-läge UI improved, desktop-test-checklist.md |
+| 19.1 | Tauri icon fix — placeholder icons generated (PNG + ICO + ICNS) via PowerShell/GDI+, no external deps |
 
 ## Upcoming
 

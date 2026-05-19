@@ -664,6 +664,92 @@ function TtsTestControls({ ttsSettings, onResetTtsSettings }: TtsTestControlsPro
 }
 
 // ============================================================
+// Git-uppdateringssektion (Build 21)
+// ============================================================
+
+const GIT_UPDATE_COMMANDS = `cd C:\\Users\\Jimmy\\Documents\\GitHub\\EchoCompanion
+git status
+git pull origin main
+npm install
+npm run typecheck
+npm run build
+npm run tauri:dev`;
+
+const GIT_PULL_COMMAND = `cd C:\\Users\\Jimmy\\Documents\\GitHub\\EchoCompanion
+git pull origin main`;
+
+const DESKTOP_START_COMMAND = `cd C:\\Users\\Jimmy\\Documents\\GitHub\\EchoCompanion
+npm run tauri:dev`;
+
+function GitUpdateSection() {
+  const [copiedKey, setCopiedKey] = React.useState<string | null>(null);
+
+  function copy(key: string, text: string) {
+    navigator.clipboard.writeText(text).catch(() => {});
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  }
+
+  return (
+    <div className="settings-section">
+      <div className="settings-section-title">⬆ Uppdatera via Git</div>
+      <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 12 }}>
+        Under utveckling är det säkrast att uppdatera EchoCompanion via Git.
+        Appen kör inga kommandon själv — den visar kommandon du kan kopiera och köra i PowerShell.
+      </p>
+
+      {/* Kommandoblocket */}
+      <div className="git-update-cmd-block">
+        {GIT_UPDATE_COMMANDS.split("\n").map((line) => (
+          <div key={line} className="git-update-cmd-line">
+            <span className="git-update-cmd-prompt">$</span>
+            <code>{line}</code>
+          </div>
+        ))}
+      </div>
+
+      {/* Kopieringsknappar */}
+      <div className="git-update-copy-row">
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => copy("all", GIT_UPDATE_COMMANDS)}
+          title="Kopiera alla kommandon"
+        >
+          {copiedKey === "all" ? "✓ Kopierat" : "📋 Kopiera Git-kommandon"}
+        </button>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => copy("pull", GIT_PULL_COMMAND)}
+          title="Kopiera bara git pull"
+        >
+          {copiedKey === "pull" ? "✓ Kopierat" : "📋 Kopiera bara git pull"}
+        </button>
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => copy("start", DESKTOP_START_COMMAND)}
+          title="Kopiera desktop-start"
+        >
+          {copiedKey === "start" ? "✓ Kopierat" : "📋 Kopiera desktop-start"}
+        </button>
+      </div>
+
+      {/* Säkerhetsnotering */}
+      <div className="git-update-safety-note">
+        🔒 EchoCompanion kör inte Git, npm eller shell-kommandon automatiskt.
+        Du kör själv kommandona i PowerShell så att du alltid har kontroll.
+      </div>
+
+      <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 10, lineHeight: 1.6 }}>
+        Fullständig guide:{" "}
+        <code style={{ fontSize: 10.5, background: "var(--bg-hover)", padding: "1px 4px", borderRadius: 3 }}>
+          docs/git-update-workflow.md
+        </code>
+      </p>
+    </div>
+  );
+}
+
+// ============================================================
 // Inställningar-sektionen (Bash 9)
 // ============================================================
 
@@ -1617,6 +1703,25 @@ function InstallningarSection({
                 <li>Auto-update — planeras i ett senare build</li>
               </ul>
             </div>
+
+            {/* Uppdateringsmetod (Build 21) */}
+            <div style={{ marginTop: 16, padding: "10px 12px", background: "var(--bg-hover)", borderRadius: "var(--radius)", border: "1px solid var(--border-subtle)" }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: "var(--text-secondary)" }}>
+                Rekommenderad uppdatering under utveckling
+              </span>
+              <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.6, margin: "4px 0 0" }}>
+                Kör{" "}
+                <code style={{ fontSize: 10.5, background: "var(--bg-card)", padding: "1px 4px", borderRadius: 3 }}>
+                  git pull origin main
+                </code>
+                {" "}i PowerShell. Se Inställningar → Uppdateringar → Uppdatera via Git för kopieringsbara kommandon,
+                eller{" "}
+                <code style={{ fontSize: 10.5, background: "var(--bg-card)", padding: "1px 4px", borderRadius: 3 }}>
+                  docs/git-update-workflow.md
+                </code>
+                {" "}för fullständig guide.
+              </p>
+            </div>
           </div>
 
           <div className="settings-section help-box">
@@ -1799,15 +1904,18 @@ function InstallningarSection({
                   )
                 }
               >
-                🔍 Sök efter uppdatering
+                🔍 Sök efter uppdatering (GitHub Releases — planeras)
               </button>
             </div>
             <p className="update-info-text">
-              Automatisk uppdatering via GitHub Releases planeras i senare
+              Automatisk uppdatering via GitHub Releases planeras i en framtida
               version. Inga uppdateringar laddas ned eller installeras
-              automatiskt i v0.1.
+              automatiskt.
             </p>
           </div>
+
+          {/* Uppdatera via Git (Build 21) */}
+          <GitUpdateSection />
 
         </div>
       </div>

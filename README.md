@@ -32,6 +32,30 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 21
+
+### ✅ Klart i Build 21
+- **Manuellt Git-uppdateringsarbetsflöde** — Inställningar → Uppdateringar → ny sektion "Uppdatera via Git"
+- **Kopieringsbara PowerShell-kommandon** — tre knappar: Kopiera Git-kommandon (alla), Kopiera bara git pull, Kopiera desktop-start
+- **Kommandoblocket** visar alla steg: `cd`, `git status`, `git pull origin main`, `npm install`, `npm run typecheck`, `npm run build`, `npm run tauri:dev`
+- **Säkerhetsnotering** — tydlig grön ruta: EchoCompanion kör inga kommandon automatiskt
+- **Desktop-läge** — ny notering om rekommenderad uppdateringsmetod via Git
+- **`docs/git-update-workflow.md`** — fullständig svensk guide med felsökning, skillnad mellan Git/GitHub Releases/auto-updater
+- GitHub Release-kontroll finns kvar (platshållarknapp, planeras i framtida build)
+- Ingen auto-install, ingen shell-exekvering, ingen fil-åtkomst
+- Build 20 → 21
+
+### 🧪 Att testa manuellt
+1. Öppna Inställningar → Uppdateringar — sektionen "Uppdatera via Git" ska visas
+2. Klicka "Kopiera Git-kommandon" — statustext "✓ Kopierat" ska visas 2 sek
+3. Klistra in i Anteckningar/Notepad och verifiera att alla kommandon är med
+4. Klicka "Kopiera bara git pull" — verifiera att bara `cd` + `git pull origin main` kopierades
+5. Klicka "Kopiera desktop-start" — verifiera att `cd` + `npm run tauri:dev` kopierades
+6. Kontrollera säkerhetsnoteringen (grön ruta längst ned i sektionen)
+7. Öppna Desktop-läge i Inställningar — uppdateringsnoteringen ska synas
+
+---
+
 ## Funktioner i v0.1.0 Build 20
 
 ### ✅ Klart i Build 20

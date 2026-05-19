@@ -115,6 +115,23 @@ function ChatSection({
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const prevIsLoadingRef = useRef(false);
+
+  // Fokusera inputfältet via requestAnimationFrame (väntar på nästa render)
+  function focusInputSoon() {
+    requestAnimationFrame(() => { textareaRef.current?.focus(); });
+  }
+
+  // Fokusera när chattvy öppnas
+  useEffect(() => { focusInputSoon(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fokusera när svar är klart (isLoading: true → false)
+  useEffect(() => {
+    if (prevIsLoadingRef.current && !isLoading) {
+      focusInputSoon();
+    }
+    prevIsLoadingRef.current = isLoading;
+  }, [isLoading]);
 
   // Scrolla till botten vid nya meddelanden
   useEffect(() => {
@@ -157,6 +174,7 @@ function ChatSection({
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
+    focusInputSoon();
   }
 
   const hasMessages = messages.length > 0;

@@ -32,6 +32,18 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 24
+
+### ✅ Klart i Build 24
+- **Markdown-rendering av AI-svar** — paragrafavstånd, punktlistor, numrerade listor, fetstil (`**text**`), kodblock (` ``` `), inline-kod (`` `kod` ``); ingen `dangerouslySetInnerHTML`, inga externa bibliotek
+- **Chattinput auto-fokus** — fokuseras automatiskt: vid öppning av chatten, efter skickad rad, efter mottaget/stoppad svar; bevarar Shift+Enter-rader och Stop-knapp
+- Streaming visar fortfarande live-text med `pre-wrap` under generering
+- Användarmeddelanden behåller `pre-wrap` för egna radbrytningar
+- Inga nya behörigheter, ingen shell-exekvering, inga API-beroenden
+- Build 23 → 24
+
+---
+
 ## Funktioner i v0.1.0 Build 23
 
 ### ✅ Klart i Build 23

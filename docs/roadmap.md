@@ -26,12 +26,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 21 | Manual Git update workflow — copyable commands in Settings, docs/git-update-workflow.md, no auto-execution |
 | 22 | Tauri production build prep — config verified (icons, tauri.conf.json, bundle targets), tauri:build must run locally (sandbox has no Rust in PATH) |
 | 23 | Tauri updater foundation — @tauri-apps/plugin-updater installed, tauriUpdater.ts helper, InstallerUpdateSection UI with three modes, Rust plugin registered, capabilities file, docs/tauri-updater-plan.md |
+| 24 | Chat UX polish — markdown rendering (paragraphs, lists, bold, code blocks), input auto-focus after send/response/stop |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 24 | GitHub Release + latest.json + updater signing setup — generate minisign key, sign build, create latest.json, publish GitHub Release, test one-click update |
+| 25 | GitHub Release latest.json and updater signing setup — generate minisign key, sign build, create latest.json, publish GitHub Release, test one-click update |
 
 ## Later
 

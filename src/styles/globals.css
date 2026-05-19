@@ -654,6 +654,64 @@ input, textarea {
   text-align: right;
 }
 
+/* ---- Rendered message content (Build 24) ---- */
+
+/* INSTÄLLNING - White-space for user messages and streaming text */
+.msg-user-text,
+.msg-streaming-text {
+  white-space: pre-wrap;
+}
+
+/* INSTÄLLNING - Container for rendered AI answer blocks */
+.msg-rendered {
+  width: 100%;
+}
+
+/* INSTÄLLNING - Paragraph spacing inside AI answers */
+.msg-para {
+  margin: 0 0 0.65em;
+  line-height: 1.65;
+}
+.msg-para:last-child { margin-bottom: 0; }
+
+/* INSTÄLLNING - List indentation and spacing */
+.msg-list {
+  margin: 0 0 0.65em;
+  padding-left: 20px;
+  line-height: 1.65;
+}
+.msg-list:last-child { margin-bottom: 0; }
+.msg-ul { list-style-type: disc; }
+.msg-ol { list-style-type: decimal; }
+.msg-list li { margin-bottom: 0.2em; }
+
+/* INSTÄLLNING - Fenced code block */
+.msg-code-block {
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 10px 13px;
+  margin: 0 0 0.65em;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre;
+}
+.msg-code-block:last-child { margin-bottom: 0; }
+
+/* INSTÄLLNING - Inline code inside AI answer text */
+.msg-inline-code {
+  background: var(--bg-hover);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--accent-text);
+}
+
 /* Typing indicator */
 .typing-indicator {
   display: flex;

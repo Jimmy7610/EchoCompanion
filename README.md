@@ -32,6 +32,24 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 20
+
+### ✅ Klart i Build 20
+- **Snabbstarter-förslag på välkomstskärmen** — fyra klickbara förslag som fyller chatten med ett utkast (använder befintlig draft-mekanism från promptbiblioteket)
+- **Förbättrade input-placeholders** — kortare och kontextbaserade: "Anslut till Ollama…" / "Välj en modell…" / "Skriv ditt meddelande…"
+- **Sidopanel: chattantal** — rubrikraden visar "Samtal · 4" när sparade samtal finns
+- **Inställningar: sektionsöversikt** — ny indexblock i toppen av Inställningar med beskrivning och chips för alla sektioner
+- **Desktop-läge uppdaterat** — teststatus visar nu att Rust är installerat, `tauri:dev` fungerar lokalt och Tauri-fönstret är testat; `tauri:build` är kvar som "Inte testad ännu"
+- Build 19.1 → 20
+
+### 🧪 Att testa manuellt
+1. Öppna appen och kontrollera välkomstskärmen — fyra förslag ska visas som rundade knappar
+2. Klicka ett förslag — texten ska placeras i chattinputen utan att skickas
+3. Kontrollera sidopanelen — "Samtal · N" ska visas om det finns sparade samtal
+4. Öppna Inställningar — sektionsöversikten ska synas högst upp
+
+---
+
 ## Funktioner i v0.1.0 Build 19.1
 
 ### ✅ Klart i Build 19.1

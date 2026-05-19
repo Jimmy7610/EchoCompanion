@@ -87,6 +87,7 @@ interface ChatSectionProps {
   onDraftConsumed: () => void;
   onSendMessage: (text: string) => void;
   onStopGeneration: () => void;
+  onUseDraft?: (text: string) => void;
   ttsSettings?: TtsSettings;
   onSpeak?: (text: string) => void;
   onStopSpeaking?: () => void;
@@ -101,6 +102,7 @@ function ChatSection({
   onDraftConsumed,
   onSendMessage,
   onStopGeneration,
+  onUseDraft,
   ttsSettings,
   onSpeak,
   onStopSpeaking,
@@ -156,11 +158,11 @@ function ChatSection({
   // INSTÄLLNING - Ta bort "activeModel"-kravet här om du vill tillåta sändning utan vald modell
   const canSend = inputValue.trim().length > 0 && !isLoading && !!activeModel;
 
-  let placeholder = "Anslut till Ollama i höger panel för att börja chatta…";
+  let placeholder = "Anslut till Ollama för att börja chatta…";
   if (ollamaStatus.connected && !activeModel) {
-    placeholder = "Välj en modell i höger panel för att börja chatta…";
+    placeholder = "Välj en modell för att börja chatta…";
   } else if (ollamaStatus.connected && activeModel) {
-    placeholder = "Skriv ett meddelande… (Enter för att skicka)";
+    placeholder = "Skriv ditt meddelande…";
   }
 
   return (
@@ -211,6 +213,24 @@ function ChatSection({
                 ? "Välj en modell i höger panel och börja chatta."
                 : `Redo! Chatta med ${activeModel}.`}
             </p>
+
+            {/* Snabbstarter-förslag (Build 20) */}
+            <div className="welcome-suggestions">
+              {[
+                "Vad kan du hjälpa mig med?",
+                "Förklara vilken modell jag bör välja",
+                "Skapa en Claude Code-prompt",
+                "Planera nästa steg i Tauri",
+              ].map((suggestion) => (
+                <button
+                  key={suggestion}
+                  className="welcome-suggestion-btn"
+                  onClick={() => onUseDraft?.(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
           <>
@@ -804,6 +824,26 @@ function InstallningarSection({
       </div>
       <div className="section-body">
         <div className="settings-view">
+
+          {/* Sektionsöversikt (Build 20) */}
+          <div className="settings-index">
+            <p className="settings-index-desc">
+              Styr EchoCompanion: anslutning, modell, röst, backup och desktop-läge.
+            </p>
+            <div className="settings-index-list">
+              {[
+                "🔌 Ollama-anslutning",
+                "⚙ Modellbeteende",
+                "🔊 Röst / uppläsning",
+                "🎯 Standardval",
+                "💾 Backup och export",
+                "🗄 Lokal lagring",
+                "🖥 Desktop-läge",
+              ].map((label) => (
+                <span key={label} className="settings-index-item">{label}</span>
+              ))}
+            </div>
+          </div>
 
           {/* Ollama-anslutning */}
           <div className="settings-section">
@@ -1525,34 +1565,42 @@ function InstallningarSection({
                 <span className="desktop-status-value ok">Fungerar</span>
               </div>
               <div className="desktop-status-row">
-                <span className="desktop-status-dot pending" />
-                {/* INSTÄLLNING - Ändra "Kräver Rust" till "Fungerar" efter lokal test */}
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">Rust installerat</span>
+                <span className="desktop-status-value ok">Installerat</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
+                <span className="desktop-status-label">Appikon</span>
+                <span className="desktop-status-value ok">Placeholder-ikon finns</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot ok" />
                 <span className="desktop-status-label">Desktop dev (npm run tauri:dev)</span>
-                <span className="desktop-status-value pending">Kräver Rust</span>
+                <span className="desktop-status-value ok">Fungerar lokalt</span>
               </div>
               <div className="desktop-status-row">
-                <span className="desktop-status-dot pending" />
-                {/* INSTÄLLNING - Ändra "Kräver Rust" till "Fungerar" efter lokal test */}
-                <span className="desktop-status-label">Desktop build (npm run tauri:build)</span>
-                <span className="desktop-status-value pending">Kräver Rust</span>
-              </div>
-              <div className="desktop-status-row">
-                <span className="desktop-status-dot pending" />
-                {/* INSTÄLLNING - Ändra "Inte testad lokalt" till "Testad lokalt" efter test */}
+                <span className="desktop-status-dot ok" />
                 <span className="desktop-status-label">Tauri-fönster testat</span>
-                <span className="desktop-status-value pending">Inte testad lokalt</span>
+                <span className="desktop-status-value ok">Testat lokalt</span>
+              </div>
+              <div className="desktop-status-row">
+                <span className="desktop-status-dot pending" />
+                {/* INSTÄLLNING - Ändra till "ok" när tauri:build verifierad */}
+                <span className="desktop-status-label">Desktop build (npm run tauri:build)</span>
+                <span className="desktop-status-value pending">Inte testad ännu</span>
               </div>
             </div>
 
             <div className="backup-warning-box" style={{
-              background: "rgba(124, 58, 237, 0.06)",
-              borderColor: "var(--border-accent)",
-              color: "var(--accent-text)",
+              background: "rgba(16, 185, 129, 0.06)",
+              borderColor: "rgba(16, 185, 129, 0.3)",
+              color: "var(--status-online)",
               marginTop: 14,
             }}>
-              ℹ Installera Rust från rustup.rs (gratis, tar ~5 min). Kör sedan{" "}
-              <code style={{ fontSize: 11 }}>npm run tauri:dev</code> för att testa skrivbordsläget.
-              Mer info i <code style={{ fontSize: 11 }}>docs/desktop-test-checklist.md</code>.
+              ✓ EchoCompanion kan nu köras som Tauri-fönster i utvecklingsläge. Riktig installer/build
+              testas senare. Mer info i{" "}
+              <code style={{ fontSize: 11 }}>docs/desktop-test-checklist.md</code>.
             </div>
 
             <div style={{ marginTop: 18 }}>
@@ -2415,6 +2463,7 @@ export default function ChatArea({
             onDraftConsumed={onDraftConsumed}
             onSendMessage={onSendMessage}
             onStopGeneration={onStopGeneration}
+            onUseDraft={onUseDraft}
             ttsSettings={ttsSettings}
             onSpeak={onSpeak}
             onStopSpeaking={onStopSpeaking}

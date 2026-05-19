@@ -465,6 +465,35 @@ input, textarea {
   max-width: 260px;
   text-align: center;
   line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ---- Welcome Suggestions (Build 20) ---- */
+.welcome-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 380px;
+  margin-top: 4px;
+}
+
+.welcome-suggestion-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  line-height: 1.4;
+}
+
+.welcome-suggestion-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-text);
+  background: var(--accent-dim);
 }
 
 /* ---- Chat Input ---- */
@@ -1062,6 +1091,36 @@ input, textarea {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* ---- Settings Index (Build 20) ---- */
+.settings-index {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.settings-index-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+
+.settings-index-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.settings-index-item {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 3px 10px;
 }
 
 .settings-section {

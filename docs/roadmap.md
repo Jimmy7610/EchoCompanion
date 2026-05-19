@@ -22,12 +22,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 17 | Update checker — GitHub Releases API, version comparison, notification badge in StatusBar, no auto-install |
 | 18 | Tauri desktop testing — Rust check, frontend verified, Desktop-läge UI improved, desktop-test-checklist.md |
 | 19.1 | Tauri icon fix — placeholder icons generated (PNG + ICO + ICNS) via PowerShell/GDI+, no external deps |
+| 20 | UX polish — welcome suggestions, shorter input placeholders, sidebar chat count, settings index, desktop status updated |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 19 | Local file help planning — design doc for safe file context, no shell execution, no broad FS permissions |
+| 21 | Local file help planning — design doc for safe file context, no shell execution, no broad FS permissions |
 
 ## Later
 

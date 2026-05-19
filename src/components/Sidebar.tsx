@@ -205,7 +205,7 @@ export default function Sidebar({
         {/* Rubrik + Ny chat-knapp */}
         <div className="sidebar-history-header">
           <span className="sidebar-section-label" style={{ marginBottom: 0 }}>
-            Samtal
+            Samtal{savedChats.length > 0 ? ` · ${savedChats.length}` : ""}
           </span>
           <button
             className="new-chat-btn"

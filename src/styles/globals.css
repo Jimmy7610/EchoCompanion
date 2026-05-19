@@ -2561,3 +2561,72 @@ details[open] .system-prompt-preview-toggle::before {
   color: #f59e0b;
   margin-top: 2px;
 }
+
+/* ============================================================
+   Röst / TTS (Bash 13)
+   ============================================================ */
+
+/* Meddelandets meta-rad (tid + TTS-åtgärder) */
+.message-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+/* Knappraden med Läs upp / Stoppa röst */
+.message-actions {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity var(--ease);
+  /* INSTÄLLNING - Synlighet för meddelandeknappar — ändra till opacity: 1 för att alltid visa */
+}
+
+.message-row:hover .message-actions {
+  opacity: 1;
+}
+
+.message-action-btn {
+  font-size: 10.5px;
+  font-family: var(--font-ui);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px; /* INSTÄLLNING - Rundning på Läs upp-knappen */
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: color var(--ease), border-color var(--ease), background var(--ease);
+  white-space: nowrap;
+}
+
+.message-action-btn:hover {
+  color: var(--accent-text);
+  border-color: var(--border-accent);
+  background: var(--accent-dim);
+}
+
+/* Varningsruta — uppläsning stöds ej */
+.tts-warning-box {
+  background: rgba(239, 68, 68, 0.07);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--status-offline);
+  line-height: 1.55;
+  /* INSTÄLLNING - Färg och stil på TTS-varningsrutan */
+}
+
+/* Informationsruta — inga röster hittades */
+.tts-info-box {
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--accent-text);
+  line-height: 1.55;
+  /* INSTÄLLNING - Färg och stil på TTS-informationsrutan */
+}

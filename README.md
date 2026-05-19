@@ -32,6 +32,27 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.0 Build 13
+
+### ✅ Klart i Build 13
+- **Web Speech API TTS** — uppläsning med Windows/webbläsarens inbyggda röster, 0 kr, ingen molntjänst
+- **Manuell "Läs upp"-knapp** — visas på AI-svar vid hover när uppläsning är aktiverat
+- **"Stoppa röst"-knapp** — direkt i varje AI-svar för att avbryta uppläsning
+- **Auto-uppläsning** — kan aktiveras för att läsa upp varje AI-svar automatiskt när det är klart
+- **Röstval** — välj bland installerade Windows/webbläsarröster; svenska röster prioriteras automatiskt
+- **Hastighet, tonhöjd, volym** — justerbara sliders (0.5–1.5 för hastighet/tonhöjd, 0–1 för volym)
+- **TTS-inställningar** — ny sektion i Inställningar under "Röst / uppläsning"
+- **Testa röst**-knapp — testar med svenska frasen direkt i inställningspanelen
+- **TTS-status i höger panel och statusrad** — visar om rösten är På/Av/Auto-På
+- **Rena texter** — markdown-kod, symboler och rubriker rensas bort innan uppläsning
+- Build 12 → 13
+
+### ⚠ Begränsningar i Build 13
+- Tillgängliga röster beror på Windows- och webbläsarmiljö — inga röster garanteras
+- Web Speech API fungerar bäst i Chromium-baserade webbläsare och i Tauri-appen
+- Piper TTS (offline neural röst) planeras i ett senare build
+- Ingen Avatar ännu
+
 ## Funktioner i v0.1.0 Build 12
 
 ### ✅ Klart i Build 12

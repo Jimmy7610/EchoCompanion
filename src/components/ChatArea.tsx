@@ -6,6 +6,9 @@ import React, { useRef, useEffect, useState } from "react";
 import type { NavSection } from "./Sidebar";
 import type { ChatMessage } from "../features/chat/chatTypes";
 import MessageBubble from "./MessageBubble";
+import type { TtsSettings } from "../features/tts/ttsTypes";
+import type { TtsVoiceInfo } from "../features/tts/ttsTypes";
+import { isSpeechSynthesisSupported, speakText, stopSpeaking } from "../features/tts/ttsService";
 import { MODEL_FAMILIES, findModelFamily } from "../data/modelGuideData";
 import type { OllamaStatus, OllamaModel } from "../features/ollama/ollamaService";
 import { formatModelSize } from "../features/ollama/ollamaService";
@@ -78,6 +81,9 @@ interface ChatSectionProps {
   onDraftConsumed: () => void;
   onSendMessage: (text: string) => void;
   onStopGeneration: () => void;
+  ttsSettings?: TtsSettings;
+  onSpeak?: (text: string) => void;
+  onStopSpeaking?: () => void;
 }
 
 function ChatSection({
@@ -89,6 +95,9 @@ function ChatSection({
   onDraftConsumed,
   onSendMessage,
   onStopGeneration,
+  ttsSettings,
+  onSpeak,
+  onStopSpeaking,
 }: ChatSectionProps) {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -200,7 +209,13 @@ function ChatSection({
         ) : (
           <>
             {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
+              <MessageBubble
+                key={msg.id}
+                message={msg}
+                ttsEnabled={ttsSettings?.enabled}
+                onSpeak={onSpeak}
+                onStopSpeaking={onStopSpeaking}
+              />
             ))}
             {/* Visa bara "tänker"-indikatorn i icke-streamat läge (streaming har egen bubbla) */}
             {isLoading && !messages.some((m) => m.isStreaming) && (
@@ -487,6 +502,10 @@ interface InstallningarSectionProps {
   activeProfileId: string | null;
   activeProjectId: string | null;
   onApplyDefaults: (profileId: string | null, projectId: string | null) => void;
+  ttsSettings: TtsSettings;
+  availableTtsVoices: TtsVoiceInfo[];
+  onUpdateTtsSettings: (partial: Partial<TtsSettings>) => void;
+  onResetTtsSettings: () => void;
 }
 
 function InstallningarSection({
@@ -499,6 +518,10 @@ function InstallningarSection({
   activeProfileId,
   activeProjectId,
   onApplyDefaults,
+  ttsSettings,
+  availableTtsVoices,
+  onUpdateTtsSettings,
+  onResetTtsSettings,
 }: InstallningarSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backupStatus, setBackupStatus] = useState<{
@@ -879,6 +902,200 @@ function InstallningarSection({
               <div className={`backup-status backup-status-${settingsStatus.type}`}>
                 {settingsStatus.text}
               </div>
+            )}
+          </div>
+
+          {/* Röst / uppläsning (Bash 13) */}
+          <div className="settings-section">
+            <div className="settings-section-title">🔊 Röst / uppläsning</div>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 14 }}>
+              EchoCompanion kan använda datorns inbyggda röster via Web Speech API. Detta kostar 0 kr och fungerar lokalt i webbläsaren/Windows-miljön där röster finns installerade.
+            </p>
+
+            {!isSpeechSynthesisSupported() ? (
+              <div className="tts-warning-box">
+                ⚠ Uppläsning stöds inte i denna miljö.
+              </div>
+            ) : (
+              <>
+                {/* Aktivera uppläsning */}
+                <div className="settings-row" style={{ alignItems: "center" }}>
+                  <div style={{ flex: 1 }}>
+                    <span className="settings-row-label" style={{ display: "block", marginBottom: 2 }}>
+                      Aktivera uppläsning
+                    </span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
+                      Visar "Läs upp"-knappar på AI-svar
+                    </span>
+                  </div>
+                  <label className="streaming-toggle-label">
+                    <input
+                      type="checkbox"
+                      className="streaming-toggle-input"
+                      checked={ttsSettings.enabled}
+                      onChange={(e) => onUpdateTtsSettings({ enabled: e.target.checked })}
+                    />
+                    <span className="streaming-toggle-track">
+                      <span className="streaming-toggle-thumb" />
+                    </span>
+                    <span
+                      className="streaming-toggle-text"
+                      style={{ color: ttsSettings.enabled ? "var(--accent-text)" : "var(--text-muted)" }}
+                    >
+                      {ttsSettings.enabled ? "På" : "Av"}
+                    </span>
+                  </label>
+                </div>
+
+                {/* Läs upp AI-svar automatiskt */}
+                <div className="settings-row" style={{ alignItems: "center" }}>
+                  <div style={{ flex: 1 }}>
+                    <span className="settings-row-label" style={{ display: "block", marginBottom: 2 }}>
+                      Läs upp AI-svar automatiskt
+                    </span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
+                      Läser upp varje fullständigt svar direkt
+                    </span>
+                  </div>
+                  <label className="streaming-toggle-label">
+                    <input
+                      type="checkbox"
+                      className="streaming-toggle-input"
+                      checked={ttsSettings.autoReadAssistant}
+                      onChange={(e) => onUpdateTtsSettings({ autoReadAssistant: e.target.checked })}
+                    />
+                    <span className="streaming-toggle-track">
+                      <span className="streaming-toggle-thumb" />
+                    </span>
+                    <span
+                      className="streaming-toggle-text"
+                      style={{ color: ttsSettings.autoReadAssistant ? "var(--accent-text)" : "var(--text-muted)" }}
+                    >
+                      {ttsSettings.autoReadAssistant ? "På" : "Av"}
+                    </span>
+                  </label>
+                </div>
+
+                {/* Röstval */}
+                <div className="settings-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, marginTop: 10 }}>
+                  <span className="settings-row-label">Röst</span>
+                  {availableTtsVoices.length === 0 ? (
+                    <div className="tts-info-box">
+                      Inga röster hittades ännu. Testa att ladda om appen eller kontrollera Windows röstinställningar.
+                    </div>
+                  ) : (
+                    <div className="prompt-form-select-wrapper" style={{ width: "100%" }}>
+                      <select
+                        className="prompt-form-select"
+                        value={ttsSettings.selectedVoiceName ?? ""}
+                        onChange={(e) => onUpdateTtsSettings({ selectedVoiceName: e.target.value || null })}
+                      >
+                        <option value="">— Automatisk (föredrar svenska) —</option>
+                        {availableTtsVoices.map((v) => (
+                          <option key={v.name} value={v.name}>
+                            {v.name} ({v.lang})
+                          </option>
+                        ))}
+                      </select>
+                      <span className="model-select-chevron">▾</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Hastighet */}
+                <div className="settings-control-row" style={{ marginTop: 12 }}>
+                  <div className="settings-control-label">
+                    <span>Hastighet</span>
+                    <span className="settings-control-value">{ttsSettings.rate.toFixed(1)}</span>
+                  </div>
+                  <input
+                    type="range"
+                    className="settings-slider"
+                    min="0.5"
+                    max="1.5"
+                    step="0.1"
+                    value={ttsSettings.rate}
+                    onChange={(e) => onUpdateTtsSettings({ rate: parseFloat(e.target.value) })}
+                  />
+                  <div className="settings-slider-hints">
+                    <span>0.5 Långsam</span>
+                    <span>1.5 Snabb</span>
+                  </div>
+                </div>
+
+                {/* Tonhöjd */}
+                <div className="settings-control-row">
+                  <div className="settings-control-label">
+                    <span>Tonhöjd</span>
+                    <span className="settings-control-value">{ttsSettings.pitch.toFixed(1)}</span>
+                  </div>
+                  <input
+                    type="range"
+                    className="settings-slider"
+                    min="0.5"
+                    max="1.5"
+                    step="0.1"
+                    value={ttsSettings.pitch}
+                    onChange={(e) => onUpdateTtsSettings({ pitch: parseFloat(e.target.value) })}
+                  />
+                  <div className="settings-slider-hints">
+                    <span>0.5 Låg</span>
+                    <span>1.5 Hög</span>
+                  </div>
+                </div>
+
+                {/* Volym */}
+                <div className="settings-control-row">
+                  <div className="settings-control-label">
+                    <span>Volym</span>
+                    <span className="settings-control-value">{ttsSettings.volume.toFixed(1)}</span>
+                  </div>
+                  <input
+                    type="range"
+                    className="settings-slider"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={ttsSettings.volume}
+                    onChange={(e) => onUpdateTtsSettings({ volume: parseFloat(e.target.value) })}
+                  />
+                  <div className="settings-slider-hints">
+                    <span>0 Tyst</span>
+                    <span>1.0 Full volym</span>
+                  </div>
+                </div>
+
+                {/* Knappar */}
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() =>
+                      speakText(
+                        "Hej Jimmy, EchoCompanion kan nu läsa upp svar med en lokal röst.",
+                        ttsSettings
+                      )
+                    }
+                  >
+                    🔊 Testa röst
+                  </button>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => stopSpeaking()}
+                  >
+                    ⏹ Stoppa uppläsning
+                  </button>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      if (window.confirm("Återställ röstinställningar till standard?")) {
+                        onResetTtsSettings();
+                      }
+                    }}
+                  >
+                    ↺ Återställ röstinställningar
+                  </button>
+                </div>
+              </>
             )}
           </div>
 
@@ -1893,6 +2110,12 @@ interface ChatAreaProps {
   onUpdateAppSettings: (partial: Partial<AppSettings>) => void;    // Bash 9
   onResetSettings: () => void;                                      // Bash 9
   onApplyDefaults: (profileId: string | null, projectId: string | null) => void; // Bash 9
+  ttsSettings: TtsSettings;                                         // Bash 13
+  availableTtsVoices: TtsVoiceInfo[];                               // Bash 13
+  onUpdateTtsSettings: (partial: Partial<TtsSettings>) => void;    // Bash 13
+  onResetTtsSettings: () => void;                                   // Bash 13
+  onSpeak: (text: string) => void;                                  // Bash 13
+  onStopSpeaking: () => void;                                       // Bash 13
 }
 
 export default function ChatArea({
@@ -1919,6 +2142,12 @@ export default function ChatArea({
   onUpdateAppSettings,
   onResetSettings,
   onApplyDefaults,
+  ttsSettings,
+  availableTtsVoices,
+  onUpdateTtsSettings,
+  onResetTtsSettings,
+  onSpeak,
+  onStopSpeaking,
 }: ChatAreaProps) {
   const activeProjectObj = DEFAULT_PROJECTS.find((p) => p.id === activeProjectId) ?? null;
 
@@ -1935,6 +2164,9 @@ export default function ChatArea({
             onDraftConsumed={onDraftConsumed}
             onSendMessage={onSendMessage}
             onStopGeneration={onStopGeneration}
+            ttsSettings={ttsSettings}
+            onSpeak={onSpeak}
+            onStopSpeaking={onStopSpeaking}
           />
         );
 
@@ -1959,6 +2191,10 @@ export default function ChatArea({
             activeProfileId={activeProfileId}
             activeProjectId={activeProjectId}
             onApplyDefaults={onApplyDefaults}
+            ttsSettings={ttsSettings}
+            availableTtsVoices={availableTtsVoices}
+            onUpdateTtsSettings={onUpdateTtsSettings}
+            onResetTtsSettings={onResetTtsSettings}
           />
         );
 

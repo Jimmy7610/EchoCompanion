@@ -4,12 +4,14 @@
 
 import type { OllamaStatus } from "../features/ollama/ollamaService";
 import { APP_VERSION, APP_BUILD } from "../data/appInfo";
+import type { TtsSettings } from "../features/tts/ttsTypes";
 
 interface StatusBarProps {
   ollamaStatus: OllamaStatus;
   activeModel: string | null;
   activeProfileName: string | null;
   activeProjectName: string | null;
+  ttsSettings?: TtsSettings;
 }
 
 export default function StatusBar({
@@ -17,6 +19,7 @@ export default function StatusBar({
   activeModel,
   activeProfileName,
   activeProjectName,
+  ttsSettings,
 }: StatusBarProps) {
   return (
     <footer className="status-bar">
@@ -89,6 +92,19 @@ export default function StatusBar({
           <span className="sb-label">Projekt:</span>
           <span className="sb-value" style={{ color: "var(--accent-text)" }}>
             {activeProjectName}
+          </span>
+        </div>
+      )}
+
+      {/* TTS-status (om aktiverat) */}
+      {ttsSettings && (
+        <div className="status-bar-item">
+          <span className="sb-label">Röst:</span>
+          <span
+            className="sb-value"
+            style={{ color: ttsSettings.enabled ? "var(--status-online)" : "var(--text-muted)" }}
+          >
+            {ttsSettings.enabled ? "På" : "Av"}
           </span>
         </div>
       )}

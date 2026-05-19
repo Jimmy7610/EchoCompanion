@@ -36,6 +36,19 @@ import {
   resetAppSettings,
   type AppSettings,
 } from "./features/settings/appSettings";
+import {
+  getTtsSettings,
+  updateTtsSettings,
+  resetTtsSettings,
+} from "./features/tts/ttsStorage";
+import type { TtsSettings } from "./features/tts/ttsTypes";
+import {
+  isSpeechSynthesisSupported,
+  getAvailableVoices,
+  speakText,
+  stopSpeaking,
+} from "./features/tts/ttsService";
+import type { TtsVoiceInfo } from "./features/tts/ttsTypes";
 
 // INSTÄLLNING - Maximalt antal tidigare meddelanden som skickas till Ollama (utöver systemprompt och nytt meddelande)
 const MAX_HISTORY_MESSAGES = 20;
@@ -61,6 +74,10 @@ export default function App() {
 
   // ---- App-inställningar (Bash 9 — ersätter standalone useStreaming) ----
   const [appSettings, setAppSettings] = useState<AppSettings>(() => getAppSettings());
+
+  // ---- TTS-inställningar (Bash 13) ----
+  const [ttsSettings, setTtsSettings] = useState<TtsSettings>(() => getTtsSettings());
+  const [availableTtsVoices, setAvailableTtsVoices] = useState<TtsVoiceInfo[]>([]);
 
   // ---- Utkast från promptbiblioteket ----
   const [draftMessage, setDraftMessage] = useState("");
@@ -88,6 +105,21 @@ export default function App() {
     if (settings.defaultProjectId) setActiveProject(settings.defaultProjectId);
   }, []);
 
+  // Ladda TTS-röster vid start och lyssna på voiceschanged
+  useEffect(() => {
+    if (!isSpeechSynthesisSupported()) return;
+
+    function loadVoices() {
+      setAvailableTtsVoices(getAvailableVoices());
+    }
+
+    loadVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+    return () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", loadVoices);
+    };
+  }, []);
+
   function refreshSavedChats() {
     setSavedChats(getSavedChats());
   }
@@ -110,6 +142,25 @@ export default function App() {
     },
     []
   );
+
+  // ---- TTS: uppdatera och återställ ----
+  const handleUpdateTtsSettings = useCallback((partial: Partial<TtsSettings>) => {
+    const updated = updateTtsSettings(partial);
+    setTtsSettings(updated);
+  }, []);
+
+  const handleResetTtsSettings = useCallback(() => {
+    const defaults = resetTtsSettings();
+    setTtsSettings(defaults);
+  }, []);
+
+  const handleSpeak = useCallback((text: string) => {
+    speakText(text, ttsSettings);
+  }, [ttsSettings]);
+
+  const handleStopSpeaking = useCallback(() => {
+    stopSpeaking();
+  }, []);
 
   // ---- Skapa ny chat ----
   const handleNewChat = useCallback(() => {
@@ -330,6 +381,11 @@ export default function App() {
             profileId: activeProfile ?? undefined,
             projectId: activeProject ?? undefined,
           });
+
+          // Auto-uppläsning efter fullständigt svar (Bash 13)
+          if (ttsSettings.enabled && ttsSettings.autoReadAssistant && accumulatedContent) {
+            speakText(accumulatedContent, ttsSettings);
+          }
         } catch (err) {
           const wasAborted = err instanceof Error && err.name === "AbortError";
 
@@ -374,6 +430,11 @@ export default function App() {
             profileId: activeProfile ?? undefined,
             projectId: activeProject ?? undefined,
           });
+
+          // Auto-uppläsning efter fullständigt svar (Bash 13)
+          if (ttsSettings.enabled && ttsSettings.autoReadAssistant && responseText) {
+            speakText(responseText, ttsSettings);
+          }
         } catch (err) {
           const errorText =
             err instanceof Error ? err.message : "Okänt fel vid API-anrop. Försök igen.";
@@ -387,7 +448,7 @@ export default function App() {
         }
       }
     },
-    [messages, isLoading, ollamaStatus, activeModel, activeProfile, activeProject, currentChatId, appSettings]
+    [messages, isLoading, ollamaStatus, activeModel, activeProfile, activeProject, currentChatId, appSettings, ttsSettings]
   );
 
   // Hämta titel på aktuellt samtal (för ChatArea-headern)
@@ -444,6 +505,12 @@ export default function App() {
         onUpdateAppSettings={handleUpdateAppSettings}
         onResetSettings={handleResetSettings}
         onApplyDefaults={handleApplyDefaults}
+        ttsSettings={ttsSettings}
+        availableTtsVoices={availableTtsVoices}
+        onUpdateTtsSettings={handleUpdateTtsSettings}
+        onResetTtsSettings={handleResetTtsSettings}
+        onSpeak={handleSpeak}
+        onStopSpeaking={handleStopSpeaking}
       />
 
       <RightPanel
@@ -457,6 +524,7 @@ export default function App() {
         onSelectProfile={setActiveProfile}
         onSelectProject={setActiveProject}
         isCheckingOllama={isCheckingOllama}
+        ttsSettings={ttsSettings}
       />
 
       <StatusBar
@@ -464,6 +532,7 @@ export default function App() {
         activeModel={activeModel}
         activeProfileName={activeProfileName}
         activeProjectName={activeProjectName}
+        ttsSettings={ttsSettings}
       />
     </div>
   );

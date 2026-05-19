@@ -7,6 +7,7 @@ import { formatModelSize } from "../features/ollama/ollamaService";
 import { COMPANION_PROFILES } from "../features/settings/settingsTypes";
 import { DEFAULT_PROJECTS } from "../features/projects/projectTypes";
 import { findModelFamily } from "../data/modelGuideData";
+import type { TtsSettings } from "../features/tts/ttsTypes";
 
 // INSTÄLLNING - Hur många profiler som visas i snabbpanelen (max 4)
 const QUICK_PROFILES = COMPANION_PROFILES.slice(0, 4);
@@ -135,6 +136,7 @@ interface RightPanelProps {
   onSelectProfile: (profileId: string) => void;
   onSelectProject: (projectId: string) => void;
   isCheckingOllama: boolean;
+  ttsSettings?: TtsSettings;
 }
 
 export default function RightPanel({
@@ -148,6 +150,7 @@ export default function RightPanel({
   onSelectProfile,
   onSelectProject,
   isCheckingOllama,
+  ttsSettings,
 }: RightPanelProps) {
   const currentProfile = COMPANION_PROFILES.find((p) => p.id === activeProfile);
   const currentProject = DEFAULT_PROJECTS.find((p) => p.id === activeProject);
@@ -211,6 +214,24 @@ export default function RightPanel({
             )}
           </span>
         </div>
+
+        {/* TTS-status (Bash 13) */}
+        {ttsSettings && (
+          <div className="status-card">
+            <StatusIndicator online={ttsSettings.enabled ? true : null} />
+            <span className="status-card-label">Röst</span>
+            <span
+              className="status-card-value"
+              style={{ color: ttsSettings.enabled ? "var(--accent-text)" : "var(--text-muted)" }}
+            >
+              {ttsSettings.enabled
+                ? ttsSettings.autoReadAssistant
+                  ? "Auto-På"
+                  : "På"
+                : "Av"}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Ollama-kontroll */}

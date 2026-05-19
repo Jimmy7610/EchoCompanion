@@ -6,6 +6,9 @@ import type { ChatMessage } from "../features/chat/chatTypes";
 
 interface MessageBubbleProps {
   message: ChatMessage;
+  onSpeak?: (text: string) => void;
+  onStopSpeaking?: () => void;
+  ttsEnabled?: boolean;
 }
 
 function formatTime(date: Date): string {
@@ -15,8 +18,14 @@ function formatTime(date: Date): string {
   });
 }
 
-export default function MessageBubble({ message }: MessageBubbleProps) {
+export default function MessageBubble({
+  message,
+  onSpeak,
+  onStopSpeaking,
+  ttsEnabled,
+}: MessageBubbleProps) {
   const isUser = message.role === "user";
+  const showTtsActions = !isUser && ttsEnabled && !message.isStreaming && onSpeak;
 
   return (
     <div className={`message-row ${isUser ? "user" : "ai"}`}>
@@ -45,14 +54,38 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             message.content
           )}
         </div>
-        <span className="message-time">
-          {formatTime(message.timestamp)}
-          {message.model && !isUser && (
-            <span style={{ marginLeft: 6, opacity: 0.6 }}>
-              · {message.model}
-            </span>
+
+        <div className="message-meta-row">
+          <span className="message-time">
+            {formatTime(message.timestamp)}
+            {message.model && !isUser && (
+              <span style={{ marginLeft: 6, opacity: 0.6 }}>
+                · {message.model}
+              </span>
+            )}
+          </span>
+
+          {showTtsActions && (
+            <div className="message-actions">
+              <button
+                className="message-action-btn"
+                onClick={() => onSpeak(message.content)}
+                title="Läs upp detta svar"
+              >
+                🔊 Läs upp
+              </button>
+              {onStopSpeaking && (
+                <button
+                  className="message-action-btn"
+                  onClick={onStopSpeaking}
+                  title="Stoppa uppläsning"
+                >
+                  ⏹ Stoppa röst
+                </button>
+              )}
+            </div>
           )}
-        </span>
+        </div>
       </div>
     </div>
   );

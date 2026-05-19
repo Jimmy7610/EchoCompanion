@@ -15,14 +15,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 10 | Ollama options cleanup — num_ctx added, labels clarified, streaming and non-streaming parity |
 | 11 | Desktop packaging readiness — Tauri config, package scripts, appInfo constants, docs |
 | 12 | Local app data storage plan — storage key registry, diagnostics UI, adapter placeholder, migration plan |
+| 13 | Windows TTS first version — Web Speech API, voice select, rate/pitch/volume, auto-read, manual "Läs upp" button |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 13 | Windows TTS first version — use Windows built-in `SpeechSynthesis` (Web Speech API) or PowerShell TTS |
-| 13 | Windows TTS first version — use Windows built-in `SpeechSynthesis` (Web Speech API) or PowerShell TTS |
-| 14 | Piper TTS preparation — offline neural TTS, 0 kr, runs locally |
+| 14 | Piper TTS preparation or simple companion/avatar panel — whichever is safest next |
 | 15 | Simple companion/avatar panel — static or CSS-animated companion presence in the right panel |
 
 

@@ -218,6 +218,20 @@ release bör signeringsnyckelparet roteras. Se komplett guide:
 
 ---
 
+## v0.1.3 — Ren basrelease efter nyckelrotation (Build 31)
+
+v0.1.3 är den första rena signerade releasen med det roterade nyckelparet.
+
+### Viktigt om kompatibilitet
+
+Appar installerade med gammal pubkey (v0.1.1 eller v0.1.2) kan inte ta emot v0.1.3
+via auto-updater eftersom pubkey ändrats. Installera v0.1.3 manuellt.
+Framtida updater-test körs från installerad v0.1.3 till v0.1.4.
+
+Se checklista: [`docs/github-release-v0.1.3-checklist.md`](github-release-v0.1.3-checklist.md)
+
+---
+
 ## Nyckelrotation efter test (Build 30)
 
 v0.1.2 var ett lyckat funktionsttest — men test-nyckelparet ska inte användas för

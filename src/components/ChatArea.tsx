@@ -762,7 +762,7 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
-      {/* Statuschecklista — Build 30 state */}
+      {/* Statuschecklista — Build 31 state */}
       <div className="updater-checklist">
         <div className="updater-checklist-title">Status — Tauri updater</div>
         <div className="updater-checklist-row">
@@ -775,28 +775,27 @@ function InstallerUpdateSection() {
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
-          <span>Signing key — public key konfigurerad, private key ligger lokalt</span>
+          <span>Signing key — ny public key konfigurerad, private key ligger lokalt</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span style={{ color: "var(--warning, #f59e0b)", fontWeight: 600 }}>⏳</span>
+          <span><code className="help-inline-code">latest.json</code> — ska publiceras i GitHub Release v0.1.3</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span style={{ color: "var(--warning, #f59e0b)", fontWeight: 600 }}>⏳</span>
+          <span>Release-kanal — v0.1.3 ska publiceras som ren basrelease</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span style={{ color: "var(--warning, #f59e0b)", fontWeight: 600 }}>⏳</span>
+          <span>Sluttest — nästa riktiga updater-test blir v0.1.3 → v0.1.4</span>
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
-          <span><code className="help-inline-code">latest.json</code> — publicerad i GitHub Release v0.1.2</span>
-        </div>
-        <div className="updater-checklist-row">
-          <span className="updater-checklist-ok">✅</span>
-          <span>Release-kanal — GitHub Release v0.1.2 finns</span>
-        </div>
-        <div className="updater-checklist-row">
-          <span className="updater-checklist-ok">✅</span>
-          <span>Sluttest — genomfört från v0.1.1 till v0.1.2</span>
-        </div>
-        <div className="updater-checklist-row">
-          <span style={{ color: "var(--warning, #f59e0b)", fontWeight: 600 }}>⚠</span>
-          <span>Säkerhetsstatus — ny signing key rekommenderas innan seriös release</span>
+          <span>Nyckel roterad — ny signing key aktiv sedan Build 30</span>
         </div>
         <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          Updater-testet v0.1.1 → v0.1.2 lyckades. Eftersom signing-lösenordet exponerades
-          under test bör ny updater-nyckel roteras innan seriös release. Kör{" "}
-          <code className="help-inline-code">.\scripts\rotate-updater-key.ps1</code> lokalt.
+          Ny updater-nyckel är roterad. v0.1.3 är första rena releasebasen med ny signing key.
+          Äldre installerade testversioner med gamla public key kan behöva installeras om manuellt.
         </p>
       </div>
 

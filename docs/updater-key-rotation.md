@@ -31,6 +31,13 @@ enbart lokalt på Jimmys dator.
 
 ---
 
+## Status (Build 31)
+
+Nyckelrotation genomförd. Ny public key är committat i `src-tauri/tauri.conf.json`
+(commit fa6fa60). v0.1.3 förbereds som första rena release med den nya nyckeln.
+
+---
+
 ## Rotationsflöde (steg för steg)
 
 ### A. Stäng appen och terminaler som kan ha nyckeln laddad

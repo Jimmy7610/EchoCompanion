@@ -1,8 +1,8 @@
 ﻿# ============================================================
-# create-latest-json.ps1 -- Create latest.json for EchoCompanion updater v0.1.2
+# create-latest-json.ps1 -- Create latest.json for EchoCompanion updater v0.1.3
 #
 # Requirements:
-#   - Signed v0.1.2 build has been created by build-signed-release.ps1
+#   - Signed v0.1.3 build has been created by build-signed-release.ps1
 #   - NSIS setup.exe exists in bundle/nsis/
 #   - NSIS setup.exe.sig exists in bundle/nsis/
 #
@@ -23,10 +23,10 @@ $nsisDir   = Join-Path $bundleDir "nsis"
 
 $releaseWorkDir = Join-Path $repoRoot "release-work"
 
-$version       = "0.1.2"
-$releaseTag    = "v0.1.2"
-$setupFileName = "EchoCompanion_0.1.2_x64-setup.exe"
-$sigFileName   = "EchoCompanion_0.1.2_x64-setup.exe.sig"
+$version       = "0.1.3"
+$releaseTag    = "v0.1.3"
+$setupFileName = "EchoCompanion_0.1.3_x64-setup.exe"
+$sigFileName   = "EchoCompanion_0.1.3_x64-setup.exe.sig"
 
 $setupFile      = Join-Path $nsisDir $setupFileName
 $sigFile        = Join-Path $nsisDir $sigFileName
@@ -35,7 +35,7 @@ $latestJsonFile = Join-Path $releaseWorkDir "latest.json"
 $releaseUrl = "https://github.com/Jimmy7610/EchoCompanion/releases/download/$releaseTag/$setupFileName"
 
 Write-Host ""
-Write-Host "=== EchoCompanion: Create latest.json for v0.1.2 ===" -ForegroundColor Cyan
+Write-Host "=== EchoCompanion: Create latest.json for v0.1.3 ===" -ForegroundColor Cyan
 Write-Host ""
 
 if (-not (Test-Path $setupFile)) {
@@ -72,7 +72,7 @@ if ([string]::IsNullOrWhiteSpace($signature)) {
 
 $latest = [ordered]@{
     version  = $version
-    notes    = "Testrelease for EchoCompanion updater end-to-end."
+    notes    = "Clean signed release after updater key rotation."
     pub_date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
     platforms = [ordered]@{
         "windows-x86_64" = [ordered]@{
@@ -97,5 +97,6 @@ Write-Host "  1. $setupFile" -ForegroundColor White
 Write-Host "  2. $sigFile" -ForegroundColor White
 Write-Host "  3. $latestJsonFile" -ForegroundColor White
 Write-Host ""
-Write-Host "See docs/github-release-v0.1.2-checklist.md for the full checklist." -ForegroundColor Cyan
+Write-Host "See docs/github-release-v0.1.3-checklist.md for the full checklist." -ForegroundColor Cyan
 Write-Host ""
+

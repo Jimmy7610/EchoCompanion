@@ -133,6 +133,24 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 31 — v0.1.3 forberedd som ren basrelease
+
+### Vad som gjordes
+
+- Version bumpad till v0.1.3 i `package.json`, `src-tauri/tauri.conf.json`, `src/data/appInfo.ts`
+- `scripts/create-latest-json.ps1` uppdaterad for v0.1.3
+- `docs/github-release-v0.1.3-checklist.md` skapad — checklista for ren basrelease med ny nyckel
+- Statuschecklista i appen uppdaterad: ny nyckel bekraftad, v0.1.3 vantar publicering
+- Inga privata nycklar commitade
+
+### Viktigt om uppdateringskompatibilitet
+
+Appar installerade med gammal pubkey (v0.1.1 eller v0.1.2) kan INTE ta emot v0.1.3
+via auto-updater. Installera v0.1.3 manuellt som ny basinstallation.
+Framtida updater-test: installerad v0.1.3 → v0.1.4.
+
+---
+
 ## Build 30 — Nyckelrotation forbered
 
 ### Vad som gjordes

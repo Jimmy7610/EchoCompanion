@@ -189,26 +189,34 @@ uppdateringsknappen. Privat nyckel forblev lokal under hela flodet.
 - `docs/release-update-workflow.md` — "Resultat v0.1.2"-sektion tillagd med nyckelrotationsrekommendation
 
 **Build 30 tillagt:**
-- `scripts/rotate-updater-key.ps1` — skapar — arkiverar gammal nyckel och genererar ny
+- `scripts/rotate-updater-key.ps1` — arkiverar gammal nyckel och genererar ny
 - `docs/updater-key-rotation.md` — komplett rotationsguide pa svenska
 - `.gitignore` — `.tauri-signing-old-test-key*/` tillagd
 - Statuschecklista i appen: varningsrad om nyckelrotation tillagd
 - Test-nyckelparet betraktas som komprometterat — ska inte anvandas for seriosa releaser
 
+**Build 31 tillagt:**
+- Version bumpad till v0.1.3
+- `scripts/create-latest-json.ps1` uppdaterad for v0.1.3
+- `docs/github-release-v0.1.3-checklist.md` — checklista for forsta rena release med ny nyckel
+- Statuschecklista i appen uppdaterad: roterad nyckel bekriftad, v0.1.3 vantar publicering
+- Ny pubkey ar aktiv i `tauri.conf.json` sedan commit fa6fa60
+
 ---
 
-## Nasta steg (Build 31 — ren release med ny nyckel)
+## Nasta steg (Build 32 — publicera ren v0.1.3 och verifiera basinstallation)
 
 Infor nasta offentliga eller allvarliga release:
 
-1. Kör `.\scripts\rotate-updater-key.ps1` — arkiverar gammal nyckel, genererar ny
-2. Kopiera ENBART publik nyckel till `src-tauri/tauri.conf.json`
-3. Committa `tauri.conf.json` — verifiera att ingen privat nyckel ar stagad forst
-4. Bygg och publicera GitHub Release v0.1.3 med det nya nyckelparet
-5. Installera v0.1.3 manuellt (v0.1.2 med gammal pubkey kan inte ta emot uppdateringen)
+1. Kör `.\scripts\build-signed-release.ps1` med nya nyckeln
+2. Kör `.\scripts\create-latest-json.ps1` — skapar `release-work/latest.json` for v0.1.3
+3. Publicera GitHub Release v0.1.3
+4. Installera v0.1.3 manuellt (ny basinstallation — gammal pubkey kan inte ta emot uppdateringen)
+5. Verifiera app och updater-kanal
 6. Radera arkivmappen `.tauri-signing-old-test-key-*` nar nya nyckeln ar verifierad
+7. Nasta updater-test: installerad v0.1.3 → v0.1.4
 
-Se fullstandig guide: `docs/updater-key-rotation.md`
+Se checklista: `docs/github-release-v0.1.3-checklist.md`
 
 ---
 

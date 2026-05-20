@@ -34,12 +34,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 28 | v0.1.2 updater-test — version bump, latest-json script uppdaterat, build-script bugg fixad, github-release-v0.1.2-checklist.md skapad |
 | 29 | End-to-end updater-test genomfört — v0.1.1 → v0.1.2 lyckades, alla checklistpunkter gröna, nyckelrotation rekommenderas |
 | 30 | Nyckelrotation förberedd — rotate-updater-key.ps1, updater-key-rotation.md, UI-varning, .gitignore uppdaterad |
+| 31 | v0.1.3 förberedd — version bump, create-latest-json uppdaterat, v0.1.3-checklista, UI uppdaterat med roterad nyckelstatus |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 31 | Kör nyckelrotation lokalt, uppdatera pubkey i tauri.conf.json, bygg och publicera ren v0.1.3 release med ny nyckel |
+| 32 | Publicera v0.1.3 ren release och verifiera ny basinstallation — sedan v0.1.3 → v0.1.4 updater-test |
 
 ## Later
 

@@ -32,6 +32,36 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.3 Build 31
+
+### ✅ Klart i Build 31
+- **Version bumpad till v0.1.3** — package.json, src-tauri/tauri.conf.json, src/data/appInfo.ts
+- **scripts/create-latest-json.ps1** — uppdaterad för v0.1.3 (filnamn, URL, release-tag, release notes)
+- **docs/github-release-v0.1.3-checklist.md** — checklista för första rena release med roterad nyckel
+- **Statuschecklista** i Inställningar uppdaterad: ny nyckel bekräftad ✅, v0.1.3 väntar publicering ⏳
+- Ingen privat nyckel commitad, ingen shell-exekvering från appen
+- Build 30 → 31
+
+### Nästa steg (lokalt på Jimmys dator)
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+git pull origin main
+npm install
+$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "DITT_NYA_LOSENORD_HAR"
+.\scripts\build-signed-release.ps1
+.\scripts\create-latest-json.ps1
+```
+Ladda sedan upp till GitHub Release v0.1.3:
+- `EchoCompanion_0.1.3_x64-setup.exe`
+- `EchoCompanion_0.1.3_x64-setup.exe.sig`
+- `latest.json`
+
+> Installera v0.1.3 manuellt som ny basinstallation. Äldre testversioner (v0.1.1/v0.1.2)
+> med gammal pubkey kan inte ta emot uppdateringen via auto-updater.
+
+Se [docs/github-release-v0.1.3-checklist.md](docs/github-release-v0.1.3-checklist.md).
+
+---
 ## Funktioner i v0.1.2 Build 30
 
 ### ✅ Klart i Build 30

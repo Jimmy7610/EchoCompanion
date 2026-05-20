@@ -133,6 +133,25 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 27 — v0.1.1 release-kanal dokumenterad
+
+### Vad som gjordes
+
+- GitHub Release v0.1.1 publicerades lokalt av Jimmy med signerad installer och latest.json
+- Public key konfigurerad i `src-tauri/tauri.conf.json` (committat)
+- Privat nyckel i `.tauri-signing/` — gitignorerad, committas aldrig
+- Statuschecklista i Inställningar → Uppdatera appen uppdaterad: 5 av 6 ✅
+- `docs/release-update-workflow.md` — "Resultat v0.1.1"-sektion tillagd
+- `docs/github-release-v0.1.1-checklist.md` — steg 1–5 markerade som klara
+- Inga nya behörigheter, ingen shell-exekvering, inga API-beroenden
+
+### Vad som återstår
+
+Sluttest kräver äldre installerad version (v0.1.0) eller ny release (v0.1.2).
+Om installerad app redan är v0.1.1 svarar uppdateringsknappen korrekt att ingen ny version finns.
+
+---
+
 ## Build 22 — Production build prep (konfigurationsverifiering)
 
 ### Kommando

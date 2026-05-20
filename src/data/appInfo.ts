@@ -7,7 +7,7 @@ export const APP_NAME = "EchoCompanion"; // INSTÄLLNING - Appens visningsnamn
 
 export const APP_VERSION = "v0.1.1"; // INSTÄLLNING - Versionsnummer — synka med package.json och tauri.conf.json
 
-export const APP_BUILD = "26.1"; // INSTÄLLNING - Öka detta nummer för varje publicerat build
+export const APP_BUILD = "27"; // INSTÄLLNING - Öka detta nummer för varje publicerat build
 
 export const APP_REPOSITORY = "Jimmy7610/EchoCompanion"; // INSTÄLLNING - GitHub-repo
 

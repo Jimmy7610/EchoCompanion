@@ -7,91 +7,61 @@ Alla steg som kräver Rust, signeringsnyckel eller uppladdning körs lokalt av J
 
 ## Förberedelser
 
-- [ ] Installera EchoCompanion v0.1.0 på testdatorn (används för att verifiera uppdateringen)
-  - Ladda ned installer från en äldre build eller bygg den lokalt: `npm run tauri:build`
-  - Kör `EchoCompanion_0.1.0_x64-setup.exe`
-  - Starta appen — verifiera att den visar v0.1.0 Build 25 i Inställningar → App-information
+- [x] Installera EchoCompanion v0.1.0 på testdatorn (används för att verifiera uppdateringen)
 
 ---
 
 ## Steg 1 — Generera signeringsnyckel (engång)
 
-- [ ] Kör på Jimmys dator:
-  ```powershell
-  cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
-  .\scripts\create-updater-key.ps1
-  ```
-- [ ] Scriptet visar din **publika nyckel** i terminalen
-- [ ] Kopiera pubkey-strängen (lång base64-rad)
-- [ ] Öppna `src-tauri/tauri.conf.json`
-- [ ] Ersätt `PLACEHOLDER_REPLACE_WITH_REAL_MINISIGN_PUBKEY` med din pubkey
-- [ ] Spara och committa `tauri.conf.json` (pubkey är inte hemlig)
-- [ ] **Spara privat nyckel säkert** (t.ex. KeePass) — `.tauri-signing/echocompanion.key` är gitignorerad
+- [x] Kör på Jimmys dator: `.\scripts\create-updater-key.ps1`
+- [x] Pubkey kopierad till `src-tauri/tauri.conf.json` och committat
+- [x] Privat nyckel sparad lokalt i `.tauri-signing/` (gitignorerad)
 
 ---
 
 ## Steg 2 — Bygg v0.1.1 med signering
 
-- [ ] Kör på Jimmys dator:
-  ```powershell
-  cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
-  .\scripts\build-signed-release.ps1
-  ```
-- [ ] Vänta ~5–15 minuter (Rust release-kompilering)
-- [ ] Verifiera att dessa filer finns efter bygget:
-  - [ ] `src-tauri/target/release/bundle/nsis/EchoCompanion_0.1.1_x64-setup.exe`
-  - [ ] `src-tauri/target/release/bundle/nsis/EchoCompanion_0.1.1_x64-setup.nsis.zip`
-  - [ ] `src-tauri/target/release/bundle/nsis/EchoCompanion_0.1.1_x64-setup.nsis.zip.sig`
+- [x] `.\scripts\build-signed-release.ps1` kördes lokalt
+- [x] `EchoCompanion_0.1.1_x64-setup.exe` skapad
+- [x] `EchoCompanion_0.1.1_x64-setup.exe.sig` skapad
 
 ---
 
 ## Steg 3 — Skapa latest.json
 
-- [ ] Kör på Jimmys dator:
-  ```powershell
-  .\scripts\create-latest-json.ps1
-  ```
-- [ ] Verifiera att `release-work/latest.json` skapades
-- [ ] Kontrollera att filen innehåller rätt version (`0.1.1`) och en riktig signatur (ej tom)
+- [x] `latest.json` skapad och innehåller rätt version och signatur
 
 ---
 
 ## Steg 4 — Skapa GitHub Release
 
-- [ ] Gå till: `https://github.com/Jimmy7610/EchoCompanion/releases/new`
-- [ ] Skapa tag: `v0.1.1`
-- [ ] Rubrik: `EchoCompanion v0.1.1`
-- [ ] Release notes (matcha `notes` i latest.json):
-  ```
-  Testrelease för EchoCompanion updater.
-  ```
-- [ ] Ladda upp **alla** dessa filer:
-  - [ ] `EchoCompanion_0.1.1_x64-setup.exe`
-  - [ ] `EchoCompanion_0.1.1_x64-setup.nsis.zip`
-  - [ ] `EchoCompanion_0.1.1_x64-setup.nsis.zip.sig`
-  - [ ] `latest.json` (från `release-work/latest.json`)
-- [ ] Publicera releasen
+- [x] GitHub Release `v0.1.1` publicerad
+- [x] `EchoCompanion_0.1.1_x64-setup.exe` uppladdad
+- [x] `EchoCompanion_0.1.1_x64-setup.exe.sig` uppladdad
+- [x] `latest.json` uppladdad
 
 ---
 
 ## Steg 5 — Verifiera endpoint
 
-- [ ] Öppna i webbläsaren:
+- [x] `latest.json` nåbar via:
   `https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json`
-- [ ] Bekräfta att JSON-filen returneras med version `0.1.1`
-- [ ] Kontrollera att repot är **publikt** (annars behövs autentisering för Tauri updater)
+- [x] JSON returnerar version `0.1.1`
 
 ---
 
-## Steg 6 — Testa uppdateringsflödet
+## Steg 6 — Testa uppdateringsflödet (återstår)
 
-- [ ] Starta den installerade **v0.1.0**-appen
+> **OBS:** Eftersom den lokala installerade appen redan kan vara v0.1.1 behöver nästa
+> riktiga updater-test antingen göras från en installerad v0.1.0 eller med en ny v0.1.2 release.
+
+- [ ] Starta den installerade **v0.1.0**-appen (eller vänta på v0.1.2)
 - [ ] Gå till **Inställningar → Uppdatera appen**
 - [ ] Klicka **"Sök och installera uppdatering"**
-- [ ] Appen ska hitta v0.1.1 och visa nedladdningsknapp
+- [ ] Appen ska hitta ny version och visa nedladdningsknapp
 - [ ] Klicka för att installera
 - [ ] Starta om appen
-- [ ] Verifiera i Inställningar → App-information: visar `v0.1.1 Build 26`
+- [ ] Verifiera i Inställningar → App-information: visar ny version och nytt Build-nummer
 - [ ] Verifiera att Ollama-anslutning fortfarande fungerar
 - [ ] Verifiera att chatthistorik är bevarad
 - [ ] Verifiera att backup-export fungerar

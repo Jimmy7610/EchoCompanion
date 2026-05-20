@@ -1,5 +1,5 @@
 // ============================================================
-// tauriUpdater.ts — Wrapper för Tauri updater-plugin (Build 26)
+// tauriUpdater.ts — Wrapper för Tauri updater-plugin (Build 27)
 //
 // Degraderar graciöst i webbläsarläge.
 // Appen kör inga kommandon automatiskt — uppdatering kräver
@@ -12,12 +12,10 @@ const BROWSER_MSG =
   "Installer-uppdatering fungerar endast i Tauri desktop-läge. Använd Git-uppdatering under utveckling.";
 
 const NO_CHANNEL_MSG =
-  "Updater-kanalen saknar fortfarande signerad latest.json eller GitHub Release. " +
-  "Se scripts/build-signed-release.ps1 och docs/github-release-v0.1.1-checklist.md.";
+  "Updater-kanalen kunde inte läsas. Kontrollera att latest.json finns i GitHub Release.";
 
 const BAD_SIGNATURE_MSG =
-  "Signaturen kunde inte verifieras. Kontrollera att pubkey i tauri.conf.json matchar " +
-  "den privata nyckel som användes vid bygget och att .sig-filen är korrekt.";
+  "Signaturen kunde inte verifieras. Kontrollera public key och .sig-filen.";
 
 function isTauri(): boolean {
   return typeof window !== "undefined" && "__TAURI__" in window;
@@ -49,7 +47,10 @@ export async function checkForInstallerUpdate(): Promise<UpdateCheckResult> {
         message: `Ny version tillgänglig: ${update.version}`,
       };
     }
-    return { available: false, message: "Ingen ny signerad release hittades." };
+    return {
+      available: false,
+      message: "Ingen ny signerad release hittades. Om du redan kör senaste versionen är detta normalt.",
+    };
   } catch (err) {
     const raw = err instanceof Error ? err.message : String(err);
     if (raw.includes("PLACEHOLDER") || raw.includes("pubkey") || raw.includes("InvalidPublicKey")) {
@@ -59,10 +60,7 @@ export async function checkForInstallerUpdate(): Promise<UpdateCheckResult> {
       return { available: false, message: BAD_SIGNATURE_MSG };
     }
     if (raw.includes("404") || raw.includes("fetch") || raw.includes("network") || raw.includes("latest.json")) {
-      return {
-        available: false,
-        message: "Updater-kanalen saknar fortfarande signerad latest.json eller GitHub Release.",
-      };
+      return { available: false, message: NO_CHANNEL_MSG };
     }
     return { available: false, message: `Kontroll misslyckades: ${raw}` };
   }

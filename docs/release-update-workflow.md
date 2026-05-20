@@ -201,9 +201,31 @@ Om en uppdatering orsakar problem:
 
 ---
 
+## Resultat v0.1.1
+
+GitHub Release v0.1.1 publicerades med följande artefakter:
+
+- `EchoCompanion_0.1.1_x64-setup.exe` — NSIS-installer
+- `EchoCompanion_0.1.1_x64-setup.exe.sig` — signaturfil
+- `latest.json` — uppdateringsmetadata
+
+`latest.json` är tillgänglig via Tauri updater endpoint:
+```
+https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
+```
+
+Den privata nyckeln förblir lokal i `.tauri-signing/` och committas aldrig.
+
+Nästa riktiga updater-test sker antingen från en installerad v0.1.0 eller via en
+ny v0.1.2 release. Om installerad app redan är v0.1.1 är det korrekt att knappen
+svarar "ingen ny uppdatering finns".
+
+---
+
 ## Relaterade filer
 
 - [`docs/latest.example.json`](latest.example.json) — säker exempelfil med platshållarvärden
 - [`docs/tauri-updater-plan.md`](tauri-updater-plan.md) — teknisk plan och statustabeller
+- [`docs/github-release-v0.1.1-checklist.md`](github-release-v0.1.1-checklist.md) — release-checklista
 - [`src-tauri/tauri.conf.json`](../src-tauri/tauri.conf.json) — pubkey och endpoint-konfiguration
 - [`src/features/updater/tauriUpdater.ts`](../src/features/updater/tauriUpdater.ts) — TypeScript-wrapper

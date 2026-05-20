@@ -137,7 +137,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 
 ---
 
-## Nuvarande status (Build 26)
+## Nuvarande status (Build 27)
 
 | Steg | Status |
 |------|--------|
@@ -146,14 +146,15 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 | Plugin registrerat i lib.rs | ✅ Tillagt |
 | Capabilities-fil med `updater:default` | ✅ Skapad |
 | tauri.conf.json endpoints konfigurerat | ✅ Tillagt |
-| Pubkey inlagd | ❌ Platshållare — kräver nyckelgenerering |
-| Signeringsnyckel genererad | ❌ Inte genererat än |
-| `latest.json` skapad | ❌ Inte skapad än |
-| GitHub Release med signerad bundle | ❌ Inte publicerat än |
-| Uppdateraren är aktiv och funktionell | ❌ Kräver stegen ovan |
+| Pubkey inlagd | ✅ Konfigurerad i tauri.conf.json |
+| Signeringsnyckel genererad | ✅ Genererad lokalt (.tauri-signing/, gitignorerad) |
+| `latest.json` skapad | ✅ Publicerad i GitHub Release v0.1.1 |
+| GitHub Release med signerad bundle | ✅ v0.1.1 publicerad |
+| Uppdateraren är aktiv och funktionell | ⚠ Kanal aktiv — sluttest återstår |
 
-Knappen "Sök och installera uppdatering" i appen är kopplad till den riktiga plugin-API:n.
-Den visar ett informativt felmeddelande tills pubkey och latest.json finns på plats.
+Knappen "Sök och installera uppdatering" är ansluten till den riktiga plugin-API:n och
+release-kanalen finns. Om installerad app redan är v0.1.1 svarar knappen korrekt att
+ingen ny uppdatering finns. Sluttest kräver äldre installerad version eller ny v0.1.2.
 
 **Build 25 tillagt:**
 - `.gitignore` — signeringssekret (`*.key`, `*.key.pub`, `*.sig`, `.tauri-signing/`, `release-work/`, `latest.local.json`) exkluderade
@@ -164,23 +165,26 @@ Den visar ett informativt felmeddelande tills pubkey och latest.json finns på p
 **Build 26 tillagt:**
 - Version bumpad till v0.1.1 (`package.json`, `tauri.conf.json`, `appInfo.ts`)
 - `"createUpdaterArtifacts": true` tillagd i `tauri.conf.json` bundle-sektion
-- `scripts/create-updater-key.ps1` — genererar nyckelpar lokalt, visar pubkey, visar aldrig privat nyckel
-- `scripts/build-signed-release.ps1` — kontrollerar förutsättningar, sätter `TAURI_SIGNING_PRIVATE_KEY` från lokal fil, kör hela byggkedjan
-- `scripts/create-latest-json.ps1` — läser .sig-filen och genererar `release-work/latest.json`
-- `docs/github-release-v0.1.1-checklist.md` — fullständig checklista för release och end-to-end-test
-- Förbättrade felmeddelanden i `tauriUpdater.ts` (kanal saknas, signaturfel)
+- `scripts/create-updater-key.ps1`, `build-signed-release.ps1`, `create-latest-json.ps1`
+- `docs/github-release-v0.1.1-checklist.md`
+
+**Build 27 tillagt:**
+- GitHub Release v0.1.1 publicerad med installer, .sig och latest.json
+- Public key konfigurerad i tauri.conf.json
+- Privat nyckel ligger lokalt i `.tauri-signing/` (gitignorerad)
+- Statuschecklista i appen uppdaterad: 5 av 6 punkter ✅
+- Felmeddelanden uppdaterade i `tauriUpdater.ts`
 
 ---
 
-## Nästa steg (Build 27 — publicera och testa)
+## Nästa steg (Build 28 — sluttest)
 
-1. Kör `.\scripts\create-updater-key.ps1` lokalt — kopiera pubkey till `tauri.conf.json`
-2. Kör `.\scripts\build-signed-release.ps1` — skapar signerade artefakter
-3. Kör `.\scripts\create-latest-json.ps1` — skapar `release-work/latest.json`
-4. Publicera GitHub Release `v0.1.1` med alla filer (se `docs/github-release-v0.1.1-checklist.md`)
-5. Testa: installera v0.1.0, klicka "Sök uppdatering" — ska hitta och installera v0.1.1
+1. Bygg v0.1.2 med signering: `.\scripts\build-signed-release.ps1`
+2. Skapa `latest.json` för v0.1.2: `.\scripts\create-latest-json.ps1`
+3. Publicera GitHub Release `v0.1.2`
+4. Testa från installerad v0.1.1: klicka "Sök uppdatering" — ska hitta v0.1.2
 
-Se fullständig guide: `docs/github-release-v0.1.1-checklist.md`
+Se checklista: `docs/github-release-v0.1.1-checklist.md`
 
 ---
 

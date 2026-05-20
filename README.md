@@ -32,6 +32,24 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.1 Build 27
+
+### ✅ Klart i Build 27
+- **GitHub Release v0.1.1 publicerad** — installer, signatur och latest.json uppladdade
+- **Public key konfigurerad** — src-tauri/tauri.conf.json uppdaterad med riktig minisign pubkey
+- **Privat nyckel lokal** — .tauri-signing/echocompanion.key gitignorerad, committas aldrig
+- **Statuschecklista uppdaterad** — 5 av 6 punkter gröna: plugin, koppling, signing key, latest.json, release-kanal
+- **Felmeddelanden förtydligade** i 	auriUpdater.ts — tydligare svenska texter vid "ingen uppdatering" och kanalfel
+- **docs/release-update-workflow.md** — "Resultat v0.1.1"-sektion tillagd
+- **docs/github-release-v0.1.1-checklist.md** — steg 1–5 markerade som klara
+- Inga nya behörigheter, ingen shell-exekvering, ingen privat nyckel i repot
+- Build 26.1 → 27
+
+### ⚠ Sluttest återstår
+Om installerad app redan är v0.1.1 svarar uppdateringsknappen korrekt att ingen ny version
+finns. Fullt end-to-end-test kräver installerad v0.1.0 eller ny v0.1.2 release.
+
+---
 ## Funktioner i v0.1.1 Build 26
 
 ### ✅ Klart i Build 26

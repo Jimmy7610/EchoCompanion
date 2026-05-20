@@ -30,12 +30,13 @@ Zero-budget, local-first Windows AI companion. All features use free, open-sourc
 | 25 | Updater release prep — .gitignore signing secrets, latest.example.json, release-update-workflow.md (Swedish), status checklist in updater UI |
 | 26 | v0.1.1 signed release scripts — create-updater-key.ps1, build-signed-release.ps1, create-latest-json.ps1, github-release-v0.1.1-checklist.md, version bump to v0.1.1 |
 | 26.1 | Fix PowerShell scripts — rewrite as pure ASCII, save with UTF-8 BOM, fix parser errors in PS 5.1 |
+| 27 | v0.1.1 release-kanal — GitHub Release publicerad, public key konfigurerad, statuschecklista uppdaterad, sluttest återstår |
 
 ## Upcoming
 
 | Build | Focus |
 |-------|-------|
-| 27 | Publish v0.1.1 GitHub Release and test updater button end-to-end |
+| 28 | Skapa v0.1.2 signerad release och testa updater end-to-end från installerad v0.1.1 |
 
 ## Later
 

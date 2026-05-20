@@ -41,7 +41,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENFMURENzEwQzNERkRGNEMKUldSTTM5L0RFTmNkenQxYisrN2NBQ1JPQWU5YzdTWVhwaUlMa0ppOHh3bDdBbHd2OUhHK21uWHgK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU2QjQzMEZDODZEREE4QkIKUldTN3FOMkcvREMwNW4wTk5saTBvc05OOEUzOE1aYmlQcy9uTEtseUNjeWRLTHR6bHc3TUdoTCsK",
       "endpoints": [
         "https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json"
       ],

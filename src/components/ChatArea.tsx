@@ -762,7 +762,7 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
-      {/* Statuschecklista — Build 29 state */}
+      {/* Statuschecklista — Build 30 state */}
       <div className="updater-checklist">
         <div className="updater-checklist-title">Status — Tauri updater</div>
         <div className="updater-checklist-row">
@@ -789,9 +789,14 @@ function InstallerUpdateSection() {
           <span className="updater-checklist-ok">✅</span>
           <span>Sluttest — genomfört från v0.1.1 till v0.1.2</span>
         </div>
+        <div className="updater-checklist-row">
+          <span style={{ color: "var(--warning, #f59e0b)", fontWeight: 600 }}>⚠</span>
+          <span>Säkerhetsstatus — ny signing key rekommenderas innan seriös release</span>
+        </div>
         <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          Senaste updater-test: v0.1.1 → v0.1.2 lyckades. Om du redan kör senaste versionen
-          kan knappen korrekt svara att ingen ny uppdatering finns.
+          Updater-testet v0.1.1 → v0.1.2 lyckades. Eftersom signing-lösenordet exponerades
+          under test bör ny updater-nyckel roteras innan seriös release. Kör{" "}
+          <code className="help-inline-code">.\scripts\rotate-updater-key.ps1</code> lokalt.
         </p>
       </div>
 

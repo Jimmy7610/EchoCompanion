@@ -188,20 +188,27 @@ uppdateringsknappen. Privat nyckel forblev lokal under hela flodet.
 - `docs/github-release-v0.1.2-checklist.md` — fullstandigt ifylld med resultat
 - `docs/release-update-workflow.md` — "Resultat v0.1.2"-sektion tillagd med nyckelrotationsrekommendation
 
+**Build 30 tillagt:**
+- `scripts/rotate-updater-key.ps1` — skapar — arkiverar gammal nyckel och genererar ny
+- `docs/updater-key-rotation.md` — komplett rotationsguide pa svenska
+- `.gitignore` — `.tauri-signing-old-test-key*/` tillagd
+- Statuschecklista i appen: varningsrad om nyckelrotation tillagd
+- Test-nyckelparet betraktas som komprometterat — ska inte anvandas for seriosa releaser
+
 ---
 
-## Nasta steg (Build 30 — nyckelrotation)
+## Nasta steg (Build 31 — ren release med ny nyckel)
 
 Infor nasta offentliga eller allvarliga release:
 
-1. Generera nytt nyckelpar: `.\scripts\create-updater-key.ps1`
-   (ta bort gammalt `.tauri-signing/echocompanion.key` forst)
-2. Ersatt pubkey i `src-tauri/tauri.conf.json` med den nya publika nyckeln
-3. Committa `tauri.conf.json`
-4. Bygg framtida releaser med den nya privata nyckeln
-5. Radera den gamla privata nyckeln lokalt
+1. Kör `.\scripts\rotate-updater-key.ps1` — arkiverar gammal nyckel, genererar ny
+2. Kopiera ENBART publik nyckel till `src-tauri/tauri.conf.json`
+3. Committa `tauri.conf.json` — verifiera att ingen privat nyckel ar stagad forst
+4. Bygg och publicera GitHub Release v0.1.3 med det nya nyckelparet
+5. Installera v0.1.3 manuellt (v0.1.2 med gammal pubkey kan inte ta emot uppdateringen)
+6. Radera arkivmappen `.tauri-signing-old-test-key-*` nar nya nyckeln ar verifierad
 
-Se fullstandig guide: `docs/release-update-workflow.md`
+Se fullstandig guide: `docs/updater-key-rotation.md`
 
 ---
 

@@ -32,5 +32,6 @@ Thumbs.db
 *.key.pub
 *.sig
 .tauri-signing/
+.tauri-signing-old-test-key*/
 release-work/
 latest.local.json

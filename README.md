@@ -32,6 +32,27 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
+## Funktioner i v0.1.2 Build 30
+
+### ✅ Klart i Build 30
+- **scripts/rotate-updater-key.ps1** — nytt skript: arkiverar gammal test-nyckel, genererar nytt nyckelpar, instruerar om pubkey-uppdatering i tauri.conf.json
+- **docs/updater-key-rotation.md** — komplett rotationsguide på svenska: varför, vad som hände, exakta steg, konsekvenser för befintliga installationer
+- **.gitignore** — `.tauri-signing-old-test-key*/` tillagd för arkiverade nycklar
+- **Statuschecklista** i Inställningar: lugn varningsrad "ny signing key rekommenderas innan seriös release"
+- **docs/release-update-workflow.md** — "Nyckelrotation efter test"-sektion tillagd
+- Privat nyckel commitades aldrig, ingen shell-exekvering från appen
+- Build 29 → 30
+
+### Nästa steg (lokalt på Jimmys dator)
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+git pull origin main
+.\scripts\rotate-updater-key.ps1
+```
+Kopiera sedan ENBART den nya publika nyckeln till `src-tauri/tauri.conf.json`.
+Se [docs/updater-key-rotation.md](docs/updater-key-rotation.md).
+
+---
 ## Funktioner i v0.1.2 Build 29
 
 ### ✅ Klart i Build 29

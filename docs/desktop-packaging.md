@@ -133,6 +133,30 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 30 — Nyckelrotation forbered
+
+### Vad som gjordes
+
+- `scripts/rotate-updater-key.ps1` skapad — arkiverar gammal nyckel och genererar ny
+- `docs/updater-key-rotation.md` skapad — komplett rotationsguide pa svenska
+- `.gitignore` uppdaterad: `.tauri-signing-old-test-key*/` tillagd
+- Statuschecklista i Inställningar: varningsrad om nyckelrotation tillagd (gul ⚠)
+- Test-nyckelparet (v0.1.2) betraktas som komprometterat
+- Inga privata nycklar commitade, ingen shell-exekvering fran appen
+
+### Lokal körning (Jimmy)
+
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+git pull origin main
+.\scripts\rotate-updater-key.ps1
+```
+
+Kopiera sedan den nya publika nyckeln till `src-tauri/tauri.conf.json`.
+Se `docs/updater-key-rotation.md` for detaljerade instruktioner.
+
+---
+
 ## Build 29 — End-to-end updater-test genomfört
 
 ### Vad som gjordes

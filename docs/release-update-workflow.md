@@ -213,18 +213,44 @@ Första riktiga end-to-end updater-testet lyckades (Build 29).
 ### Nyckelrotation rekommenderas
 
 Signeringslösenordet exponerades under testningen. Inför en offentlig eller allvarlig
-release bör signeringsnyckelparet roteras:
+release bör signeringsnyckelparet roteras. Se komplett guide:
+[`docs/updater-key-rotation.md`](updater-key-rotation.md)
 
-1. Generera ett nytt nyckelpar: `.\scripts\create-updater-key.ps1`
-   (ta bort det gamla `.tauri-signing/echocompanion.key` först)
-2. Ersätt pubkey i `src-tauri/tauri.conf.json` med den nya publika nyckeln
-3. Committa `tauri.conf.json`
-4. Bygg alla framtida releaser med den nya privata nyckeln
-5. Gamla releaser med den komprometterade nyckeln ska inte längre distribueras
+---
 
-> Den komprometterade privata nyckeln ska raderas lokalt efter rotation.
+## Nyckelrotation efter test (Build 30)
 
-Se checklista: `docs/github-release-v0.1.2-checklist.md`
+v0.1.2 var ett lyckat funktionsttest — men test-nyckelparet ska inte användas för
+seriösa eller offentliga releaser.
+
+### Vad som ska göras
+
+1. Kör `.\scripts\rotate-updater-key.ps1` lokalt
+   - Arkiverar gammal `.tauri-signing/` → `.tauri-signing-old-test-key-DATUM`
+   - Genererar nytt nyckelpar i `.tauri-signing/`
+2. Kopiera ENBART den nya publika nyckeln till `src-tauri/tauri.conf.json`
+3. Committa `tauri.conf.json` — verifiera att ingen privat nyckel är stagad
+4. Bygg nästa release (v0.1.3) med det nya nyckelparet
+5. Installera v0.1.3 manuellt (befintliga appar med gammal pubkey kan inte ta emot uppdateringen via auto-updater)
+
+### Konsekvens för befintliga installationer
+
+En app byggd med gammal pubkey kan bara acceptera uppdateringar signerade med gammal
+privat nyckel. Eftersom v0.1.2 är en testrelease utan offentlig distribution är den
+enklaste vägen att installera v0.1.3 manuellt från den nya releasen.
+
+Framtida releaser från v0.1.3 och uppåt fungerar med ny pubkey.
+
+### Vad som ALDRIG ska committas
+
+```
+.tauri-signing/
+.tauri-signing-old-test-key*/
+```
+
+Bägge är gitignorerade. Verifiera med `git status --ignored`.
+
+Se fullständig guide: [`docs/updater-key-rotation.md`](updater-key-rotation.md)
 
 ---
 

@@ -137,7 +137,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 
 ---
 
-## Nuvarande status (Build 27)
+## Nuvarande status (Build 28)
 
 | Steg | Status |
 |------|--------|
@@ -150,7 +150,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 | Signeringsnyckel genererad | ✅ Genererad lokalt (.tauri-signing/, gitignorerad) |
 | `latest.json` skapad | ✅ Publicerad i GitHub Release v0.1.1 |
 | GitHub Release med signerad bundle | ✅ v0.1.1 publicerad |
-| Uppdateraren är aktiv och funktionell | ⚠ Kanal aktiv — sluttest återstår |
+| Uppdateraren är aktiv och funktionell | ⚠ Kanal aktiv — v0.1.2 end-to-end-test återstår |
 
 Knappen "Sök och installera uppdatering" är ansluten till den riktiga plugin-API:n och
 release-kanalen finns. Om installerad app redan är v0.1.1 svarar knappen korrekt att
@@ -171,20 +171,26 @@ ingen ny uppdatering finns. Sluttest kräver äldre installerad version eller ny
 **Build 27 tillagt:**
 - GitHub Release v0.1.1 publicerad med installer, .sig och latest.json
 - Public key konfigurerad i tauri.conf.json
-- Privat nyckel ligger lokalt i `.tauri-signing/` (gitignorerad)
-- Statuschecklista i appen uppdaterad: 5 av 6 punkter ✅
-- Felmeddelanden uppdaterade i `tauriUpdater.ts`
+- Statuschecklista i appen uppdaterad: 5 av 6 ✅
+
+**Build 28 tillagt:**
+- Version bumpad till v0.1.2
+- `scripts/create-latest-json.ps1` uppdaterad för v0.1.2
+- `scripts/build-signed-release.ps1` — bugg fixad (TAURI_SIGNING_PRIVATE_KEY rensas korrekt)
+- `docs/github-release-v0.1.2-checklist.md` — fullständig checklista för end-to-end-test
+- Statuschecklista i appen: release-kanal visar v0.1.1 publicerad, v0.1.2 planeras
 
 ---
 
-## Nästa steg (Build 28 — sluttest)
+## Nästa steg (Build 29 — efter end-to-end-test)
 
-1. Bygg v0.1.2 med signering: `.\scripts\build-signed-release.ps1`
-2. Skapa `latest.json` för v0.1.2: `.\scripts\create-latest-json.ps1`
+1. Kör `.\scripts\build-signed-release.ps1` lokalt (kräver Rust + privat nyckel)
+2. Kör `.\scripts\create-latest-json.ps1` — skapar `release-work/latest.json`
 3. Publicera GitHub Release `v0.1.2`
-4. Testa från installerad v0.1.1: klicka "Sök uppdatering" — ska hitta v0.1.2
+4. Testa från installerad v0.1.1: klicka "Sök uppdatering" — ska hitta och installera v0.1.2
+5. Dokumentera resultatet och polera update-UX
 
-Se checklista: `docs/github-release-v0.1.1-checklist.md`
+Se fullständig guide: `docs/github-release-v0.1.2-checklist.md`
 
 ---
 

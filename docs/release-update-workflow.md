@@ -201,6 +201,15 @@ Om en uppdatering orsakar problem:
 
 ---
 
+## Resultat v0.1.2 (planerat)
+
+v0.1.2 byggs och publiceras som GitHub Release för att slutföra end-to-end-testet.
+Testa från installerad v0.1.1 → klicka "Sök uppdatering" → v0.1.2 installeras.
+
+Se fullständig checklista: `docs/github-release-v0.1.2-checklist.md`
+
+---
+
 ## Resultat v0.1.1
 
 GitHub Release v0.1.1 publicerades med följande artefakter:

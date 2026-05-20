@@ -133,6 +133,35 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 28 — v0.1.2 förberedd för end-to-end updater-test
+
+### Vad som gjordes
+
+- Version bumpad till `v0.1.2` i `package.json`, `src-tauri/tauri.conf.json`, `src/data/appInfo.ts`
+- `scripts/create-latest-json.ps1` uppdaterad för v0.1.2 (filnamn, URL, release-tag)
+- `scripts/build-signed-release.ps1` — bugg fixad: `TAURI_SIGNING_PRIVATE_KEY` rensas nu korrekt vid fel och efter bygget
+- `docs/github-release-v0.1.2-checklist.md` skapad — fullständig checklista för build, release och end-to-end-test
+- Statuschecklista i Inställningar → Uppdatera appen uppdaterad för Build 28-tillstånd
+- Inga nya behörigheter, ingen shell-exekvering, ingen privat nyckel i repot
+
+### Lokal körning (Jimmy)
+
+```powershell
+cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
+git pull origin main
+npm install
+
+# Sätt lösenord om nyckeln har ett:
+# $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "DITT_LOSENORD"
+
+.\scripts\build-signed-release.ps1
+.\scripts\create-latest-json.ps1
+```
+
+Ladda sedan upp till GitHub Release v0.1.2. Se `docs/github-release-v0.1.2-checklist.md`.
+
+---
+
 ## Build 27 — v0.1.1 release-kanal dokumenterad
 
 ### Vad som gjordes

@@ -762,9 +762,9 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
-      {/* Statuschecklista — Build 27 state */}
+      {/* Statuschecklista — Build 28 state */}
       <div className="updater-checklist">
-        <div className="updater-checklist-title">Status — v0.1.1 release-kanal</div>
+        <div className="updater-checklist-title">Status — v0.1.2 updater-test</div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
           <span>Updater-plugin — installerad</span>
@@ -779,19 +779,16 @@ function InstallerUpdateSection() {
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
-          <span><code className="help-inline-code">latest.json</code> — publicerad i GitHub Release v0.1.1</span>
-        </div>
-        <div className="updater-checklist-row">
-          <span className="updater-checklist-ok">✅</span>
-          <span>Release-kanal — GitHub Release v0.1.1 finns</span>
+          <span>Release-kanal — v0.1.1 publicerad, v0.1.2 ska publiceras för sluttest</span>
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-missing">❌</span>
-          <span>Sluttest — återstår med äldre installerad version eller v0.1.2</span>
+          <span>Sluttest — körs från installerad v0.1.1 till v0.1.2</span>
         </div>
         <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          Release-kanalen för v0.1.1 finns nu. Om appen redan är v0.1.1 kan
-          uppdateringsknappen korrekt svara att ingen ny uppdatering finns.
+          v0.1.2 är testversionen för första riktiga end-to-end updater-testet. Bygg och
+          publicera v0.1.2 på GitHub Releases, klicka sedan "Sök uppdatering" från
+          installerad v0.1.1.
         </p>
       </div>
 

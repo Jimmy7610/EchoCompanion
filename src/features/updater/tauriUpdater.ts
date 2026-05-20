@@ -1,5 +1,5 @@
 // ============================================================
-// tauriUpdater.ts — Wrapper för Tauri updater-plugin (Build 27)
+// tauriUpdater.ts — Wrapper för Tauri updater-plugin (Build 29)
 //
 // Degraderar graciöst i webbläsarläge.
 // Appen kör inga kommandon automatiskt — uppdatering kräver

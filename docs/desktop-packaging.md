@@ -133,6 +133,21 @@ The required Windows resource file path is: `src-tauri/icons/icon.ico`
 
 ---
 
+## Build 29 — End-to-end updater-test genomfört
+
+### Vad som gjordes
+
+- End-to-end-test lyckades: installerad v0.1.1 hittade och installerade v0.1.2 via uppdateringsknappen
+- Statuschecklista i Inställningar uppdaterad: alla 6 punkter gröna
+- `docs/github-release-v0.1.2-checklist.md` fullstandigt ifylld med resultat
+- `docs/release-update-workflow.md` — "Resultat v0.1.2"-sektion tillagd med nyckelrotationsrekommendation
+- Inga nya behorigheter, ingen shell-exekvering, privat nyckel forblev lokal
+
+> ⚠ **Nyckelrotation rekommenderas** infor nasta offentliga release.
+> Se `docs/release-update-workflow.md`.
+
+---
+
 ## Build 28 — v0.1.2 förberedd för end-to-end updater-test
 
 ### Vad som gjordes

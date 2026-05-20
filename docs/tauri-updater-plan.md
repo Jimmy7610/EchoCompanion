@@ -137,7 +137,7 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 
 ---
 
-## Nuvarande status (Build 28)
+## Nuvarande status (Build 29)
 
 | Steg | Status |
 |------|--------|
@@ -148,13 +148,15 @@ https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json
 | tauri.conf.json endpoints konfigurerat | ✅ Tillagt |
 | Pubkey inlagd | ✅ Konfigurerad i tauri.conf.json |
 | Signeringsnyckel genererad | ✅ Genererad lokalt (.tauri-signing/, gitignorerad) |
-| `latest.json` skapad | ✅ Publicerad i GitHub Release v0.1.1 |
-| GitHub Release med signerad bundle | ✅ v0.1.1 publicerad |
-| Uppdateraren är aktiv och funktionell | ⚠ Kanal aktiv — v0.1.2 end-to-end-test återstår |
+| `latest.json` skapad | ✅ Publicerad i GitHub Release v0.1.2 |
+| GitHub Release med signerad bundle | ✅ v0.1.2 publicerad |
+| Uppdateraren är aktiv och funktionell | ✅ Sluttest genomfört: v0.1.1 → v0.1.2 lyckades |
 
-Knappen "Sök och installera uppdatering" är ansluten till den riktiga plugin-API:n och
-release-kanalen finns. Om installerad app redan är v0.1.1 svarar knappen korrekt att
-ingen ny uppdatering finns. Sluttest kräver äldre installerad version eller ny v0.1.2.
+End-to-end-testet (Build 29) lyckades. v0.1.1 hittade och installerade v0.1.2 via
+uppdateringsknappen. Privat nyckel forblev lokal under hela flodet.
+
+> ⚠ **Nyckelrotation rekommenderas** infor nasta offentliga release.
+> Se `docs/release-update-workflow.md` for instruktioner.
 
 **Build 25 tillagt:**
 - `.gitignore` — signeringssekret (`*.key`, `*.key.pub`, `*.sig`, `.tauri-signing/`, `release-work/`, `latest.local.json`) exkluderade
@@ -180,17 +182,26 @@ ingen ny uppdatering finns. Sluttest kräver äldre installerad version eller ny
 - `docs/github-release-v0.1.2-checklist.md` — fullständig checklista för end-to-end-test
 - Statuschecklista i appen: release-kanal visar v0.1.1 publicerad, v0.1.2 planeras
 
+**Build 29 tillagt:**
+- End-to-end-test genomfört och verifierat: v0.1.1 → v0.1.2 lyckades
+- Statuschecklista i appen: alla 6 punkter ✅
+- `docs/github-release-v0.1.2-checklist.md` — fullstandigt ifylld med resultat
+- `docs/release-update-workflow.md` — "Resultat v0.1.2"-sektion tillagd med nyckelrotationsrekommendation
+
 ---
 
-## Nästa steg (Build 29 — efter end-to-end-test)
+## Nasta steg (Build 30 — nyckelrotation)
 
-1. Kör `.\scripts\build-signed-release.ps1` lokalt (kräver Rust + privat nyckel)
-2. Kör `.\scripts\create-latest-json.ps1` — skapar `release-work/latest.json`
-3. Publicera GitHub Release `v0.1.2`
-4. Testa från installerad v0.1.1: klicka "Sök uppdatering" — ska hitta och installera v0.1.2
-5. Dokumentera resultatet och polera update-UX
+Infor nasta offentliga eller allvarliga release:
 
-Se fullständig guide: `docs/github-release-v0.1.2-checklist.md`
+1. Generera nytt nyckelpar: `.\scripts\create-updater-key.ps1`
+   (ta bort gammalt `.tauri-signing/echocompanion.key` forst)
+2. Ersatt pubkey i `src-tauri/tauri.conf.json` med den nya publika nyckeln
+3. Committa `tauri.conf.json`
+4. Bygg framtida releaser med den nya privata nyckeln
+5. Radera den gamla privata nyckeln lokalt
+
+Se fullstandig guide: `docs/release-update-workflow.md`
 
 ---
 

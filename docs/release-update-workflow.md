@@ -201,12 +201,30 @@ Om en uppdatering orsakar problem:
 
 ---
 
-## Resultat v0.1.2 (planerat)
+## Resultat v0.1.2
 
-v0.1.2 byggs och publiceras som GitHub Release för att slutföra end-to-end-testet.
-Testa från installerad v0.1.1 → klicka "Sök uppdatering" → v0.1.2 installeras.
+Första riktiga end-to-end updater-testet lyckades (Build 29).
 
-Se fullständig checklista: `docs/github-release-v0.1.2-checklist.md`
+- Den installerade appen (v0.1.1) hittade och installerade v0.1.2 via uppdateringsknappen
+- `latest.json` och signaturen fungerade korrekt
+- Privat nyckel förblev lokal under hela flödet
+- Framtida releaser kan följa exakt samma workflow
+
+### Nyckelrotation rekommenderas
+
+Signeringslösenordet exponerades under testningen. Inför en offentlig eller allvarlig
+release bör signeringsnyckelparet roteras:
+
+1. Generera ett nytt nyckelpar: `.\scripts\create-updater-key.ps1`
+   (ta bort det gamla `.tauri-signing/echocompanion.key` först)
+2. Ersätt pubkey i `src-tauri/tauri.conf.json` med den nya publika nyckeln
+3. Committa `tauri.conf.json`
+4. Bygg alla framtida releaser med den nya privata nyckeln
+5. Gamla releaser med den komprometterade nyckeln ska inte längre distribueras
+
+> Den komprometterade privata nyckeln ska raderas lokalt efter rotation.
+
+Se checklista: `docs/github-release-v0.1.2-checklist.md`
 
 ---
 

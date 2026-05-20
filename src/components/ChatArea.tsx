@@ -762,9 +762,9 @@ function InstallerUpdateSection() {
         </div>
       </div>
 
-      {/* Statuschecklista — Build 28 state */}
+      {/* Statuschecklista — Build 29 state */}
       <div className="updater-checklist">
-        <div className="updater-checklist-title">Status — v0.1.2 updater-test</div>
+        <div className="updater-checklist-title">Status — Tauri updater</div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
           <span>Updater-plugin — installerad</span>
@@ -779,16 +779,19 @@ function InstallerUpdateSection() {
         </div>
         <div className="updater-checklist-row">
           <span className="updater-checklist-ok">✅</span>
-          <span>Release-kanal — v0.1.1 publicerad, v0.1.2 ska publiceras för sluttest</span>
+          <span><code className="help-inline-code">latest.json</code> — publicerad i GitHub Release v0.1.2</span>
         </div>
         <div className="updater-checklist-row">
-          <span className="updater-checklist-missing">❌</span>
-          <span>Sluttest — körs från installerad v0.1.1 till v0.1.2</span>
+          <span className="updater-checklist-ok">✅</span>
+          <span>Release-kanal — GitHub Release v0.1.2 finns</span>
+        </div>
+        <div className="updater-checklist-row">
+          <span className="updater-checklist-ok">✅</span>
+          <span>Sluttest — genomfört från v0.1.1 till v0.1.2</span>
         </div>
         <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          v0.1.2 är testversionen för första riktiga end-to-end updater-testet. Bygg och
-          publicera v0.1.2 på GitHub Releases, klicka sedan "Sök uppdatering" från
-          installerad v0.1.1.
+          Senaste updater-test: v0.1.1 → v0.1.2 lyckades. Om du redan kör senaste versionen
+          kan knappen korrekt svara att ingen ny uppdatering finns.
         </p>
       </div>
 

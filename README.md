@@ -32,30 +32,19 @@ EchoCompanion är en Windows skrivbordsapp som låter dig chatta med lokala AI-m
 
 ---
 
-## Funktioner i v0.1.2 Build 28
+## Funktioner i v0.1.2 Build 29
 
-### ✅ Klart i Build 28
-- **Version bumpad till v0.1.2** — package.json, src-tauri/tauri.conf.json, src/data/appInfo.ts
-- **scripts/create-latest-json.ps1** — uppdaterad för v0.1.2 (filnamn, URL, release-tag)
-- **scripts/build-signed-release.ps1** — bugg fixad: TAURI_SIGNING_PRIVATE_KEY rensades inte på alla felvägar (använde fel variabelnamn _PATH); nu korrekt
-- **docs/github-release-v0.1.2-checklist.md** — komplett checklista: pull, bygg, latest.json, GitHub Release, end-to-end-test från v0.1.1
-- **Statuschecklista** i Inställningar uppdaterad: release-kanal visar v0.1.1 publicerad, v0.1.2 nästa; sluttest tydligare formulerat
-- Inga privata nycklar i repot, inga shell-kommandon från appen
-- Build 27 → 28
+### ✅ Klart i Build 29
+- **End-to-end updater-test genomfört** — installerad v0.1.1 hittade och installerade v0.1.2 via uppdateringsknappen
+- **Statuschecklista** i Inställningar: alla 6 punkter gröna
+- **docs/github-release-v0.1.2-checklist.md** — fullstandigt ifylld med resultat
+- **docs/release-update-workflow.md** — "Resultat v0.1.2"-sektion tillagd, nyckelrotation rekommenderas
+- **docs/tauri-updater-plan.md** — status uppdaterad till Build 29, alla steg klara
+- Privat nyckel forblev lokal under hela flodet
+- Build 28 → 29
 
-### ⚠ End-to-end-test återstår
-Jimmy kör lokalt:
-`powershell
-cd C:\Users\Jimmy\Documents\GitHub\EchoCompanion
-git pull origin main
-npm install
-#  = "DITT_LOSENORD_HAR"  # om nyckel har losen
-.\scripts\build-signed-release.ps1
-.\scripts\create-latest-json.ps1
-`
-Ladda sedan upp EchoCompanion_0.1.2_x64-setup.exe, EchoCompanion_0.1.2_x64-setup.exe.sig
-och latest.json till GitHub Release v0.1.2.
-Se [docs/github-release-v0.1.2-checklist.md](docs/github-release-v0.1.2-checklist.md).
+> ⚠ **Nyckelrotation rekommenderas** infor nasta offentliga release.
+> Se [docs/release-update-workflow.md](docs/release-update-workflow.md).
 
 ---
 ## Funktioner i v0.1.1 Build 27

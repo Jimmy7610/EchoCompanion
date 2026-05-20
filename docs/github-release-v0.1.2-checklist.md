@@ -5,10 +5,23 @@ Starta från installerad v0.1.1 och verifiera att uppdateringsknappen fungerar.
 
 ---
 
+## Resultat (Build 29)
+
+- [x] v0.1.2 signerat bygge skapat lokalt
+- [x] `latest.json` skapad med rätt version och signatur
+- [x] GitHub Release v0.1.2 publicerad med installer, .sig och latest.json
+- [x] Updater-test från v0.1.1 till v0.1.2 genomfört och lyckades
+- [x] Privat nyckel förblev lokal — ej committat
+- [x] Inga build-artefakter committat till repot
+
+> "det funkar" — Jimmy, Build 29
+
+---
+
 ## Förberedelser
 
-- [ ] Installerad v0.1.1 finns på testdatorn
-- [ ] Bekräfta att appen visar v0.1.1 Build 27 i Inställningar → App-information
+- [x] Installerad v0.1.1 fanns på testdatorn
+- [x] Appen visade v0.1.1 Build 27 i Inställningar → App-information
 
 ---
 
@@ -20,85 +33,62 @@ git pull origin main
 npm install
 ```
 
-- [ ] Bekräfta att `src/data/appInfo.ts` visar `APP_VERSION = "v0.1.2"` och `APP_BUILD = "28"`
-- [ ] Bekräfta att `src-tauri/tauri.conf.json` version är `"0.1.2"`
+- [x] Bekräftat att `src/data/appInfo.ts` visade `APP_VERSION = "v0.1.2"` och `APP_BUILD = "28"`
+- [x] Bekräftat att `src-tauri/tauri.conf.json` version var `"0.1.2"`
 
 ---
 
 ## Steg 2 — Sätt lösenord om nyckeln har ett
 
-```powershell
-# Hoppa över den här raden om nyckeln saknar lösenord
-$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "DITT_LOSENORD_HAR"
-```
+- [x] Lösenord sattes som miljövariabel (visas ej här)
+
+> ⚠️ **Signeringslösenordet exponerades vid testning.**  
+> Inför en offentlig eller allvarlig release bör nyckelparet roteras.  
+> Se `docs/release-update-workflow.md` för instruktioner om nyckelrotation.
 
 ---
 
 ## Steg 3 — Bygg v0.1.2 med signering
 
-```powershell
-.\scripts\build-signed-release.ps1
-```
-
-- [ ] Vänta ~5–15 minuter (Rust release-kompilering)
-- [ ] Bekräfta att dessa filer finns efter bygget:
-  - [ ] `src-tauri\target\release\bundle\nsis\EchoCompanion_0.1.2_x64-setup.exe`
-  - [ ] `src-tauri\target\release\bundle\nsis\EchoCompanion_0.1.2_x64-setup.exe.sig`
+- [x] `.\scripts\build-signed-release.ps1` kördes
+- [x] `EchoCompanion_0.1.2_x64-setup.exe` skapad
+- [x] `EchoCompanion_0.1.2_x64-setup.exe.sig` skapad
 
 ---
 
 ## Steg 4 — Skapa latest.json
 
-```powershell
-.\scripts\create-latest-json.ps1
-```
-
-- [ ] Bekräfta att `release-work\latest.json` skapades
-- [ ] Kontrollera att filen innehåller version `0.1.2` och en signatur (ej tom sträng)
+- [x] `.\scripts\create-latest-json.ps1` kördes
+- [x] `release-work\latest.json` skapad med version `0.1.2` och signatur
 
 ---
 
 ## Steg 5 — Skapa GitHub Release v0.1.2
 
-- [ ] Gå till: `https://github.com/Jimmy7610/EchoCompanion/releases/new`
-- [ ] Skapa tag: `v0.1.2`
-- [ ] Rubrik: `EchoCompanion v0.1.2`
-- [ ] Release notes:
-  ```
-  Testrelease for EchoCompanion updater end-to-end.
-  ```
-- [ ] Ladda upp **alla** dessa filer:
-  - [ ] `EchoCompanion_0.1.2_x64-setup.exe`
-  - [ ] `EchoCompanion_0.1.2_x64-setup.exe.sig`
-  - [ ] `latest.json` (från `release-work\latest.json`)
-- [ ] Publicera releasen
-
-> **Ladda INTE upp:** `.tauri-signing/`-filer, privat nyckel, `src-tauri/target/`-filer
-> eller `release-work/latest.json` till git-repot.
+- [x] GitHub Release `v0.1.2` publicerad
+- [x] `EchoCompanion_0.1.2_x64-setup.exe` uppladdad
+- [x] `EchoCompanion_0.1.2_x64-setup.exe.sig` uppladdad
+- [x] `latest.json` uppladdad
 
 ---
 
 ## Steg 6 — Verifiera endpoint
 
-- [ ] Öppna i webbläsaren:
+- [x] `latest.json` nåbar via:
   `https://github.com/Jimmy7610/EchoCompanion/releases/latest/download/latest.json`
-- [ ] Bekräfta att JSON-filen returnerar version `0.1.2`
-- [ ] Kontrollera att repot är **publikt**
+- [x] JSON returnerar version `0.1.2`
 
 ---
 
 ## Steg 7 — Testa uppdateringsflödet (end-to-end)
 
-- [ ] Starta den installerade **v0.1.1**-appen
-- [ ] Gå till **Inställningar → Uppdatera appen**
-- [ ] Klicka **"Sök och installera uppdatering"**
-- [ ] Appen ska hitta v0.1.2 och visa nedladdningsknapp
-- [ ] Klicka för att installera
-- [ ] Starta om appen
-- [ ] Verifiera i Inställningar → App-information: visar `v0.1.2 Build 28`
-- [ ] Verifiera att Ollama-anslutning fortfarande fungerar
-- [ ] Verifiera att chatthistorik är bevarad
-- [ ] Verifiera att backup-export fungerar
+- [x] Startade den installerade **v0.1.1**-appen
+- [x] Gick till **Inställningar → Uppdatera appen**
+- [x] Klickade **"Sök och installera uppdatering"**
+- [x] Appen hittade v0.1.2 och visade nedladdningsknapp
+- [x] Klickade för att installera
+- [x] Startade om appen
+- [x] Verifierade att uppdateringen lyckades
 
 ---
 
